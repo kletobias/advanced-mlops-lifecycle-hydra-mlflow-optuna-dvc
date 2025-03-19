@@ -1,11 +1,13 @@
 # dependencies/templates/generate_dvc_yaml_core.py
 import logging
-from typing import List
-import jinja2
 import os
 import time
+from typing import List
+
+import jinja2
 
 logger = logging.getLogger(__name__)
+
 
 def generate_dvc_yaml_core(
     stages_list: List,
@@ -13,7 +15,6 @@ def generate_dvc_yaml_core(
     template_name: str,
     dvc_yaml_file_path: str,
 ) -> None:
-
     logger.info("Entering function 'generate_dvc_yaml_core'")
     loader = jinja2.FileSystemLoader(searchpath=search_path)
     env = jinja2.Environment(loader=loader, autoescape=False)
@@ -25,4 +26,7 @@ def generate_dvc_yaml_core(
         f.write(rendered)
 
     if os.path.exists(dvc_yaml_file_path):
-        logger.info("Exiting function 'generate_dvc_yaml_core', most recent change: dvc.yaml %s", time.time() - os.path.getmtime(dvc_yaml_file_path))
+        logger.info(
+            "Exiting function 'generate_dvc_yaml_core', most recent change: dvc.yaml %s",
+            time.time() - os.path.getmtime(dvc_yaml_file_path),
+        )
