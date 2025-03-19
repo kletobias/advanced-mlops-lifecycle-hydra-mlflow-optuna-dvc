@@ -1,0 +1,5 @@
+outs:
+- md5: 0a0d26ae5631a4752d10150339d6595a
+  size: 66
+  hash: md5
+  path: 0_ingestion.yaml

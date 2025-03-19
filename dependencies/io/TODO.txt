@@ -1,0 +1,21 @@
+Remove from this:
+
+/Users/tobias/.local/projects/portfolio_medical_drg_ny/dependencies/io
+├── TODO.txt
+├── __pycache__
+│   ├── csv_to_dataframe.cpython-312.pyc
+│   ├── dataframe_to_csv.cpython-312.pyc
+x   ├── dataframe_to_sqlite.cpython-312.pyc
+x   ├── dataframe_to_sqlite_table.cpython-312.pyc
+x   ├── read_sqlite_to_dataframe.cpython-312.pyc
+x   ├── sqlite_table_to_dataframe.cpython-312.pyc
+x   └── sqlite_table_to_new_db.cpython-312.pyc
+├── csv_to_dataframe.py
+├── dataframe_to_csv.py
+x── dataframe_to_json.py
+x── dataframe_to_sqlite_table.py
+x── json_to_new_sqlite_db.py
+x── sqlite_table_to_dataframe.py
+x── sqlite_table_to_new_db.py
+
+2 directories, 15 files

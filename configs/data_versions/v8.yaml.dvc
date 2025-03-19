@@ -1,0 +1,5 @@
+outs:
+- md5: b621ef2b916d7003c6755099fed670bf
+  size: 836
+  hash: md5
+  path: v8.yaml

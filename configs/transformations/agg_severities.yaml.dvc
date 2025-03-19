@@ -1,0 +1,5 @@
+outs:
+- md5: 7d3274528193d657d11f94beb62edcd1
+  size: 672
+  hash: md5
+  path: agg_severities.yaml

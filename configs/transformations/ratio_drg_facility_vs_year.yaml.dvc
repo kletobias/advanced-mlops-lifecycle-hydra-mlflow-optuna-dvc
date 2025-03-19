@@ -1,0 +1,5 @@
+outs:
+- md5: 31a586028cf4c4cf31643dce373d970b
+  size: 478
+  hash: md5
+  path: ratio_drg_facility_vs_year.yaml

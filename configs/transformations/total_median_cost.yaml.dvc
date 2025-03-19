@@ -1,0 +1,5 @@
+outs:
+- md5: 021e9228b65a59ef3b5c0502b9dee694
+  size: 168
+  hash: md5
+  path: total_median_cost.yaml

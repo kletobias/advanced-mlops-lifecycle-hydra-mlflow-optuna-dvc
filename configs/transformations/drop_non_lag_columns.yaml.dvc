@@ -1,0 +1,5 @@
+outs:
+- md5: add048768f6c41ed9e1afb45d6e7a6ba
+  size: 391
+  hash: md5
+  path: drop_non_lag_columns.yaml

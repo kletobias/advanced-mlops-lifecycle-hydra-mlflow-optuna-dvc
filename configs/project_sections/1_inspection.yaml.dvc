@@ -1,0 +1,5 @@
+outs:
+- md5: 6fb8627626e0956bcffab7057090577a
+  size: 68
+  hash: md5
+  path: 1_inspection.yaml

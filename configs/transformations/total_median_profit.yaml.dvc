@@ -1,0 +1,5 @@
+outs:
+- md5: 75491c9f01837ff536772d46ee840250
+  size: 178
+  hash: md5
+  path: total_median_profit.yaml

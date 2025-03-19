@@ -1,0 +1,5 @@
+outs:
+- md5: a4f0e4fe52fc6f3b63fec4ed0089d078
+  size: 50
+  hash: md5
+  path: 5_modeling.yaml

@@ -1,0 +1,5 @@
+outs:
+- md5: 258d575cae7fabdf3e1e6dd3f35a66e9
+  size: 19
+  hash: md5
+  path: v0.yaml

@@ -1,0 +1,5 @@
+outs:
+- md5: 80c9bdbb14764ce109a03eaa4114cf42
+  size: 528
+  hash: md5
+  path: yearly_discharge_bin.yaml
