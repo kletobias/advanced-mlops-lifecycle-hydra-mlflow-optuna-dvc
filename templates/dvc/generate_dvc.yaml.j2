@@ -1,0 +1,20 @@
+{# dvc_template.yaml.j2 #}
+{%- raw -%}
+stages:
+{%- endraw %}
+{%- for stage in stages %}
+  {{ stage.name }}:
+    cmd: {{ stage.cmd_python }} {{ stage.script }}{% if stage.overrides %} {{ stage.overrides }}{% endif %}
+    deps:
+{%- for dep in stage.deps %}
+      - {{ dep }}
+{%- endfor %}
+    outs:{% if stage.outs|length == 0 %} []{% else %}
+{%- for out in stage.outs %}
+      - {{ out }}
+{%- endfor %}
+{% endif %}
+{%- if not loop.last %}
+
+{%- endif %}
+{%- endfor %}
