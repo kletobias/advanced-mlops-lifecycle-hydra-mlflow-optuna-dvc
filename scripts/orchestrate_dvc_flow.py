@@ -220,7 +220,7 @@ def main(cfg: RootConfig):
     invalid = [s for s in user_stages if s not in defined_stages]
     if invalid:
         valid_str = ", ".join(defined_stages)
-        logger.error(f"Invalid stage(s): {invalid}. Valid: {valid_str}")
+        logger.error("Invalid stage(s): %s. Valid stage(s): %s",invalid, valid_str)
         raise RuntimeError(
             f"Invalid stage(s) requested: {invalid}. Valid stages: {valid_str}"
         )
