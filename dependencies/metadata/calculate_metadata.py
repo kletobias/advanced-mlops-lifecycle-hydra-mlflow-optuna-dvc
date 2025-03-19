@@ -7,7 +7,6 @@ from typing import Any
 
 import pandas as pd
 
-from config_schemas.RootConfig import RootConfig
 from dependencies.general.make_relative_file_path import anonymize_path
 from dependencies.logging_utils.log_function_call import log_function_call
 from dependencies.metadata.compute_file_hash import compute_file_hash
