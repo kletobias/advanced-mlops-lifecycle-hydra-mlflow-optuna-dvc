@@ -52,7 +52,6 @@ def generate_dvc_yaml(
     search_path: str,
     template_name: str,
     dvc_yaml_file_path: str,
-    experiment_directory_path: str,
     allow_dvc_changes: bool = False,
 ):
     """
@@ -82,7 +81,6 @@ def generate_dvc_yaml(
         search_path,
         template_name,
         dvc_yaml_file_path,
-        experiment_directory_path,
     )
 
     if not original_exists:
@@ -157,7 +155,6 @@ def dvc_flow(
     search_path: str,
     template_name: str,
     dvc_yaml_file_path: str,
-    experiment_directory_path: str,
     stages_to_run: Optional[List[str]] = None,
     force_run: bool = False,
     pipeline_run: bool = False,
@@ -194,7 +191,6 @@ def dvc_flow(
             search_path=search_path,
             template_name=template_name,
             dvc_yaml_file_path=dvc_yaml_file_path,
-            experiment_directory_path=experiment_directory_path,
             allow_dvc_changes=allow_dvc_changes,
         )
     else:
@@ -237,7 +233,6 @@ def main(cfg: RootConfig):
     search_path = cfg.pipeline.search_path
     template_name = cfg.pipeline.template_name
     dvc_yaml_file_path = cfg.pipeline.dvc_yaml_file_path
-    experiment_directory_path = cfg.pipeline.experiment_directory_path
     log_file_path = cfg.pipeline.log_file_path
     force_run = cfg.pipeline.force_run
     pipeline_run = cfg.pipeline.pipeline_run
@@ -251,7 +246,6 @@ def main(cfg: RootConfig):
             search_path=search_path,
             template_name=template_name,
             dvc_yaml_file_path=dvc_yaml_file_path,
-            experiment_directory_path=experiment_directory_path,
             stages_to_run=user_stages,
             force_run=force_run,
             pipeline_run=pipeline_run,
