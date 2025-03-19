@@ -172,7 +172,6 @@ def dvc_flow(
     logger.info("Flow start")
     set_environment_vars()
 
-    # Initialize the log file (overwrite)
     with open(log_file_path, "w") as f:
         f.write(log_file_path + "\n")
 
@@ -209,7 +208,6 @@ def dvc_flow(
 def main(cfg: RootConfig):
     logger = setup_logging(cfg)
 
-    # Make Prefect logs appear in the same place:
     logging.getLogger("prefect").propagate = True
     logging.getLogger("prefect").setLevel(cfg.logging_utils.level)
 
@@ -220,14 +218,12 @@ def main(cfg: RootConfig):
     invalid = [s for s in user_stages if s not in defined_stages]
     if invalid:
         valid_str = ", ".join(defined_stages)
-        logger.error("Invalid stage(s): %s. Valid stage(s): %s",invalid, valid_str)
+        logger.error("Invalid stage(s): %s. Valid stage(s): %s", invalid, valid_str)
         raise RuntimeError(
             f"Invalid stage(s) requested: {invalid}. Valid stages: {valid_str}"
         )
 
     logger.info("User stages valid")
-
-    # Extract any config values needed by the flow
 
     stages_list = cfg.pipeline.stages
     search_path = cfg.pipeline.search_path
