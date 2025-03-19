@@ -1,9 +1,8 @@
-#!/Users/tobias/micromamba/envs/practice/bin/python
 # scripts/orchestrate_dvc_flow.py
 import logging
 import os
 import subprocess
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import hydra
 from prefect import flow, get_run_logger, task
@@ -154,7 +153,7 @@ def run_dvc_repro(
 @flow(name="DVC Orchestration Flow")
 def dvc_flow(
     log_file_path: str,
-    stages_list: List,
+    stages_list: Any,
     search_path: str,
     template_name: str,
     dvc_yaml_file_path: str,
