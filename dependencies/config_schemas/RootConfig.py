@@ -1,5 +1,5 @@
 # dependencies/config_schemas/RootConfig.py
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from hydra.core.config_store import ConfigStore
@@ -31,6 +31,7 @@ class DataVersionsConfig:
     data_version_output: str
     description: str
     dataset_url: str
+    data_version: Optional[str] = None
 
 
 @dataclass
@@ -159,6 +160,33 @@ class DataStorageConfig:
     output_file_path_db: str
     output_metadata_file_path: str
 
+@dataclass
+class StageConfig:
+    name: str
+    cmd_python: Optional[str] = None
+    script: Optional[str] = None
+    overrides: Optional[Dict[str, Any]] = field(default_factory=dict)
+    deps: Optional[List[str]] = field(default_factory=list)
+    outs: Optional[List[str]] = field(default_factory=list)
+
+@dataclass
+class Pipeline:
+    stages: Optional[List[StageConfig]] = field(default_factory=list)
+    stages_list: Optional[List[StageConfig]] = field(default_factory=list)
+    stages_to_run: Optional[List[str]] = field(default_factory=list)
+    force_run: Optional[bool] = None
+    pipeline_run: Optional[bool] = None
+    allow_dvc_changes: Optional[bool] = None
+    skip_generation: Optional[bool] = None
+    search_path: Optional[str] = None
+    template_name: Optional[str] = None
+    dvc_yaml_file_path: Optional[str] = None
+    log_file_path: Optional[str] = None
+
+
+@dataclass
+class PipelineConfig:
+    pipeline: Optional[Pipeline] = None
 
 @dataclass
 class RootConfig:
@@ -172,6 +200,7 @@ class RootConfig:
     project_sections: ProjectSectionConfig
     transformations: TransformationsConfig
     utility_functions: UtilityFunctionsConfig
+    pipeline: PipelineConfig
 
 
 cs = ConfigStore.instance()
@@ -186,6 +215,7 @@ cs.store(group="ml_experiments", name="base_schema", node=MLExperimentsConfig)
 cs.store(group="paths", name="default_schema", node=PathsConfig)
 cs.store(group="project_sections", name="example", node=ProjectSectionConfig)
 cs.store(group="setup", name="base_schema", node=SetupConfig)
+cs.store(group="pipeline", name="base_schema", node=PipelineConfig)
 
 # Register the final RootConfig so Hydra knows how to instantiate it
 cs.store(name="root_config", node=RootConfig)
