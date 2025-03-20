@@ -1,8 +1,6 @@
-# === config_schemas/RootConfig.py ===
-# UPDATED to align with the universal-step approach and typed transformation configs
-
-from dataclasses import dataclass, field
-from typing import Any, Optional, List, Dict
+# dependencies/config_schemas/RootConfig.py
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
 from hydra.core.config_store import ConfigStore
 
@@ -27,32 +25,12 @@ from dependencies.transformations.yearly_discharge_bin import YearlyDischargeBin
 
 
 @dataclass
-class DownloadConfig:
-    dataset: str
-    target_dir: str
-    zip_filename: str
-    csv_filename: str
-
-
-@dataclass
-class DefaultDatabaseTableNamesConfig:
-    input_data: str
-    output_data: str
-
-
-@dataclass
 class DataVersionsConfig:
     name: str
     data_version_input: str
     data_version_output: str
     description: str
-    default_database_table_names: DefaultDatabaseTableNamesConfig
-    download: DownloadConfig
-
-
-@dataclass
-class HydraJobLoggingConfig:
-    handlers: Dict[str, Dict[str, str]]
+    dataset_url: str
 
 
 @dataclass
@@ -60,7 +38,6 @@ class HydraConfig:
     job: Dict[str, str]
     run: Dict[str, str]
     sweep: Dict[str, str]
-    job_logging: HydraJobLoggingConfig
 
 
 @dataclass
@@ -68,61 +45,44 @@ class LoggingUtilsConfig:
     log_directory_path: str
     log_file_path: str
     formatter: str
-    level: str
-
-
-@dataclass
-class CVConfig:
-    type: str
-    n_splits: int
-    shuffle: bool
-    random_state: int
-
-
-@dataclass
-class MLFlowConfig:
-    output_directory_path: str
-    experiment_id: str
-    experiment_directory_path: str
-    artifact_directory_path: str
-    permutation_importances_filename: str
-    tracking_uri: Optional[str]
-    feature_importances_artifact_sub_dir: str
-    final_model_artifact_sub_dir: str
+    level: int
+    log_cfg_job: Dict[str, Any]
 
 
 @dataclass
 class MLExperimentsConfig:
-    cv: CVConfig
-    mlflow: MLFlowConfig
+    rng_seed: int
+    n_jobs_study: int
+    n_jobs_final_model: int
+    target_col_modeling: str
+    year_col: str
+    train_range: List[int]
+    val_range: List[int]
+    test_range: List[int]
+    experiment_prefix: str
+    experiment_id: str
+    artifact_directory_path: str
+    permutation_importances_filename: str
+    randomforest_importances_filename: str
     top_n_importances: int
-
-
-@dataclass
-class ModelsConfig:
-    models_in_project: List[str]
-
-
-@dataclass
-class OutputsConfig:
-    script_outputs_directory: str
-    timestamp: str
-    script_cfg_job_file_path: str
+    optuna_n_trials: int
+    cv_splits: int
+    direction: str
+    scoring: Dict[str, str]
 
 
 @dataclass
 class PathsDirectoriesConfig:
     project_root: str
-    dependencies: str
-    configs: str
     bin: str
+    configs: str
     data: str
-    outputs: str
-    src: str
-    templates: str
+    dependencies: str
+    documentation: str
     logs: str
-    models: str
-    docs: str
+    outputs: str
+    scripts: str
+    templates: str
 
 
 @dataclass
@@ -139,31 +99,7 @@ class ProjectSectionConfig:
 
 @dataclass
 class SetupConfig:
-    script_template_directory_path: str
-    script_template_filename: str
-    script_template_file_path: str
     script_base_name: str
-    script_filename: str
-    script_directory_path: str
-    script_file_path: str
-
-
-@dataclass
-class DataStorageReadcsvoptionsConfig:
-    low_memory: bool
-
-
-@dataclass
-class DataStorageConfig:
-    input_file_path_csv: str
-    input_file_path_json: str
-    input_file_path_db: str
-    input_metadata_file_path: str
-    output_file_path_csv: str
-    output_file_path_json: str
-    output_file_path_db: str
-    output_metadata_file_path: str
-    read_csv_options: DataStorageReadcsvoptionsConfig
 
 
 # Each field is an optional typed config for that transformation,
@@ -188,8 +124,40 @@ class TransformationsConfig:
 
 
 @dataclass
+class CsvToDataframeConfig:
+    csv_file_path: str
+    low_memory: bool
+
+
+@dataclass
+class DataframeToCsvConfig:
+    output_file_path_csv: str
+    include_index: bool
+
+
+@dataclass
+class CalculateAndSaveMetadataConfig:
+    data_file_path: str
+    output_metadata_file_path: str
+
+
+@dataclass
 class UtilityFunctionsConfig:
-    pass
+    csv_to_dataframe: CsvToDataframeConfig
+    dataframe_to_csv: DataframeToCsvConfig
+    calculate_and_save_metadata: CalculateAndSaveMetadataConfig
+
+
+@dataclass
+class DataStorageConfig:
+    input_file_path_csv: str
+    input_file_path_json: str
+    input_file_path_db: str
+    input_metadata_file_path: str
+    output_file_path_csv: str
+    output_file_path_json: str
+    output_file_path_db: str
+    output_metadata_file_path: str
 
 
 @dataclass
@@ -199,8 +167,6 @@ class RootConfig:
     hydra: HydraConfig
     logging_utils: LoggingUtilsConfig
     ml_experiments: MLExperimentsConfig
-    models: ModelsConfig
-    outputs: OutputsConfig
     paths: PathsConfig
     setup: SetupConfig
     project_sections: ProjectSectionConfig
@@ -217,8 +183,6 @@ cs.store(group="data_versions", name="base_schema", node=DataVersionsConfig)
 cs.store(group="hydra", name="default_schema", node=HydraConfig)
 cs.store(group="logging_utils", name="default_schema", node=LoggingUtilsConfig)
 cs.store(group="ml_experiments", name="base_schema", node=MLExperimentsConfig)
-cs.store(group="models", name="base_schema", node=ModelsConfig)
-cs.store(group="outputs", name="default_schema", node=OutputsConfig)
 cs.store(group="paths", name="default_schema", node=PathsConfig)
 cs.store(group="project_sections", name="example", node=ProjectSectionConfig)
 cs.store(group="setup", name="base_schema", node=SetupConfig)
