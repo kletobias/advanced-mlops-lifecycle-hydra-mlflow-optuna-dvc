@@ -25,7 +25,6 @@ src/data_inspection/outputs/
 /mlruns
 files/
 *.txt
-*.log
 /outputs/mlflow/
 /outputs/modeling/
 /outputs/transformation/

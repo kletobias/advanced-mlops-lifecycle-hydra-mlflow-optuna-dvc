@@ -50,7 +50,12 @@ This repository contains a fully reproducible, config-driven pipeline for analyz
 
 Below is a minimal way to get up and running.
 
-1. Install Dependencies
+**1. Install Dependencies**
+
+
+> **All the following commands assume that you have completed this step and that you have activated the `ny` environment (or whatever you name it).**
+
+**With Conda**
 
 ```sh
 # Create a conda environment from env.yaml
@@ -58,13 +63,39 @@ conda env create -f env.yaml
 conda activate ny
 ```
 
-2. Pull Data via DVC (if you have a remote):
+**With Micromamba**:
 
 ```sh
-dvc pull
+# Create a conda environment from env.yaml
+micromamba env create -f env.yaml
+micromamba activate ny
 ```
 
-Or run ingestion for v0 if you rely on Kaggle:
+**2. Pull Data via `dvc pull` from our S3 bucket**
+
+Eveything is pre-configured. It pulls from our public s3 bucket, after configuring it as a new dvc remote if needed.
+
+```sh
+# Outputs will populate data/, configs/, among others.
+python dependencies/io/pull_dvc_s3.py
+```
+
+**3. Pull the entire mlruns folder from our S3 bucket**
+
+- Get all final artifacts (permutation importances, RandomForestRegressor importances, model.pkl, ...)
+- You can query it using the MLflow query (sql like) syntax [Mlflow - Search Syntax Overview](https://mlflow.org/docs/latest/search-runs/#search-syntax-overview)
+- New Optuna trials that you run get added to it without any further setup needed, and artifacts logged just like the already present data.
+
+```sh
+# Output is populated directory `mlruns/` in your project root.
+python dependencies/io/pull_mlruns_s3.py
+```
+
+
+
+Or run ingestion for data version v0 if you rely on Kaggle:
+
+> *For this step you need a kaggle api key.*
 
 ```sh
 python scripts/universal_step.py \
@@ -73,9 +104,12 @@ python scripts/universal_step.py \
     io_policy.READ_INPUT=False
 ```
 
-3. Run the Entire Pipeline
+**3. Run the Entire Pipeline**
+
+Update the pipeline [base.yaml](configs/pipeline/base.yaml)
 
 ```sh
+# This executes all steps in dvc.yaml (INCLUDING THE KAGGLE DOWNLOAD)
 dvc repro --force -P
 ```
 
@@ -108,7 +142,7 @@ Logs are saved under `logs/runs/${now:%Y-%m-%d_%H-%M-%S}/${setup.script_base_nam
 
 For this run: [./logs/runs/2025-03-20_17-30-59/lag_columns.log](logs/runs/2025-03-20_17-30-59/lag_columns.log)
 
-```log
+```text
 Running stage 'v10_lag_columns':
 > /Users/tobias/.local/share/mamba/envs/practice/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
 [2025-03-20 17:30:59,271][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
@@ -177,7 +211,80 @@ python scripts/universal_step.py \
 
 Each trial logs metrics (like RMSE, R²) and artifacts to ./mlruns by default.
 
-⸻
+#### Example: Permutation Importances logged as Artifact
+
+The universal importance metric we use is permutation importances
+
+```csv
+feature,importances
+w_total_median_profit_lag1,0.10964554607356722
+w_total_mean_profit_lag1,0.10563058193740327
+w_total_median_profit_rolling2,0.08264136737424133
+w_total_mean_profit_rolling2,0.055836704844702115
+w_total_mean_cost_rolling2,0.013683989835306897
+w_total_mean_cost_lag1,0.010790000561158775
+w_total_median_cost_rolling2,0.009244236750888502
+w_total_median_cost_lag1,0.00867279031657484
+sum_discharges_rolling2,0.0026856946195632724
+sum_discharges_lag1,0.0025191493380667617
+...
+```
+
+#### Example: RandomForestRegressor Importances logged as Artifact
+
+`rf_optuna_trial.py` takes advantage of the fact that there is another feature importances metric native to the RandomForest estimator. It logs that as well.
+
+```csv
+feature,importance
+w_total_median_profit_lag1,0.2170874864655451
+w_total_mean_profit_lag1,0.20730719583731547
+w_total_median_profit_rolling2,0.20122115990233386
+w_total_mean_profit_rolling2,0.1522267096323898
+w_total_mean_cost_rolling2,0.059487923298292424
+w_total_mean_cost_lag1,0.047090312814948604
+w_total_median_cost_rolling2,0.034416037187213325
+w_total_median_cost_lag1,0.029658001263519133
+sum_discharges_lag1,0.010165206374812752
+sum_discharges_rolling2,0.009809536146385413
+...
+```
+
+#### Example: Prefect logs from an entire pipeline run
+
+```sh
+(ny) ~ $ python scripts/orchestrate_dvc_flow.py pipeline=orchestrate_dvc_flo
+run=true pipeline.pipeline_run=true logging_utils.level=20
+[2025-03-21 16:37:51,456][dependencies.general.mkdir_if_not_exists][INFO] - 
+/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:37:51,456][root][INFO] - Reading config, validating user stag
+[2025-03-21 16:37:51,456][root][INFO] - User stages valid
+16:37:51.854 | INFO    | prefect.engine - Created flow run 'horned-shellfish
+16:37:51.876 | INFO    | Flow run 'horned-shellfish' - Flow start
+16:37:51.899 | INFO    | Flow run 'horned-shellfish' - Created task run 'set
+16:37:51.900 | INFO    | Flow run 'horned-shellfish' - Executing 'set_enviro
+16:37:51.925 | INFO    | Task run 'set_environment_vars-0' - Setting environ
+16:37:51.938 | INFO    | Task run 'set_environment_vars-0' - Finished in sta
+16:37:51.967 | INFO    | Flow run 'horned-shellfish' - Created task run 'ens
+16:37:51.968 | INFO    | Flow run 'horned-shellfish' - Executing 'ensure_dvc
+16:37:51.991 | INFO    | Task run 'ensure_dvc_is_clean-0' - Checking for unc
+16:37:52.006 | INFO    | Task run 'ensure_dvc_is_clean-0' - No uncommitted D
+16:37:52.023 | INFO    | Task run 'ensure_dvc_is_clean-0' - Finished in stat
+16:37:52.037 | INFO    | Flow run 'horned-shellfish' - Created task run 'gen
+16:37:52.038 | INFO    | Flow run 'horned-shellfish' - Executing 'generate_d
+16:37:52.062 | INFO    | Task run 'generate_dvc_yaml-0' - Attempting to gene
+16:37:52.063 | INFO    | Task run 'generate_dvc_yaml-0' - Backing up existin
+16:37:52.083 | INFO    | Task run 'generate_dvc_yaml-0' - No differences det
+16:37:52.096 | INFO    | Task run 'generate_dvc_yaml-0' - Finished in state 
+16:37:52.108 | INFO    | Flow run 'horned-shellfish' - Created task run 'run
+16:37:52.109 | INFO    | Flow run 'horned-shellfish' - Executing 'run_dvc_re
+16:37:52.134 | INFO    | Task run 'run_dvc_repro-0' - Running DVC repro
+16:37:52.134 | INFO    | Task run 'run_dvc_repro-0' - Pipeline mode is ON
+16:37:52.134 | INFO    | Task run 'run_dvc_repro-0' - Force mode is ON
+16:37:52.135 | INFO    | Task run 'run_dvc_repro-0' - No specific stages => 
+17:52:48.384 | INFO    | Task run 'run_dvc_repro-0' - Finished in state Completed()
+17:52:48.385 | INFO    | Flow run 'horned-shellfish' - Flow done
+17:52:48.407 | INFO    | Flow run 'horned-shellfish' - Finished in state Completed('All states completed.')
+```
 
 ## Highlights and Why It’s Not “Just Scripts”
 	1.	Config-Driven: Hydra decouples parameters from code. No rewriting CSV paths or columns.

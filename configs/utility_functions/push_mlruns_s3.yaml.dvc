@@ -1,0 +1,5 @@
+outs:
+- md5: 00c06ae47831a6cae67424965c454c49
+  size: 402
+  hash: md5
+  path: push_mlruns_s3.yaml

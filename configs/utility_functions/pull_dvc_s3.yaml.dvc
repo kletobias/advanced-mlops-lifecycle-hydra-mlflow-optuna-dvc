@@ -1,0 +1,5 @@
+outs:
+- md5: 027c184138ac7b1c7f972fd9811a7de5
+  size: 37
+  hash: md5
+  path: pull_dvc_s3.yaml
