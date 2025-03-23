@@ -1,14 +1,4 @@
 stages:
-  v0_download_and_save_data:
-    cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=download_and_save_data transformations=download_and_save_data io_policy.READ_INPUT=False
-    deps:
-      - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
-      - ./dependencies/ingestion/download_and_save_data.py
-      - ./configs/data_versions/v0.yaml
-    outs:
-      - ./data/v0/v0.csv
-      - ./data/v0/v0_metadata.json
-
   v0_sanitize_column_names:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1
     deps:
