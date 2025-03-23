@@ -45,13 +45,11 @@ This repository contains a fully reproducible, config-driven pipeline for analyz
 └── ...
 ```
 
-
 ## Quickstart
 
 Below is a minimal way to get up and running.
 
 **1. Install Dependencies**
-
 
 > **All the following commands assume that you have completed this step and that you have activated the `ny` environment (or whatever you name it).**
 
@@ -63,7 +61,7 @@ conda env create -f env.yaml
 conda activate ny
 ```
 
-**With Micromamba**:
+With Micromamba:
 
 ```sh
 # Create a conda environment from env.yaml
@@ -71,9 +69,26 @@ micromamba env create -f env.yaml
 micromamba activate ny
 ```
 
+Environment creation is only tested on Mac ARM64 architecture using micromamba 2.0.7, Python 3.12.9.
+
+In case of problems, a workaround is pinning Python 3.11, and installing as you go.
+
+If environment creation fails on Linux x86_64:
+
+```sh
+conda config --add channels conda-forge
+conda config --add channels defaults
+conda config --set channel_priority flexible
+conda install -n base -c conda-forge mamba
+mamba env create -f env.yaml
+mamba activate ny
+```
+
 **2. Pull Data via `dvc pull` from our S3 bucket**
 
-Eveything is pre-configured. It pulls from our public s3 bucket, after configuring it as a new dvc remote if needed.
+> **IMPORTANT: This step is critical! Make sure you have `dvc-s3` installed**
+
+Eveything is pre-configured. It pulls from our public s3 bucket, after configuring it as a new dvc remote if needed. 
 
 ```sh
 # Outputs will populate data/, configs/, among others.
@@ -81,6 +96,8 @@ python dependencies/io/pull_dvc_s3.py
 ```
 
 **3. Pull the entire mlruns folder from our S3 bucket**
+
+> **IMPORTANT: This step is critical!**
 
 - Get all final artifacts (permutation importances, RandomForestRegressor importances, model.pkl, ...)
 - You can query it using the MLflow query (sql like) syntax [Mlflow - Search Syntax Overview](https://mlflow.org/docs/latest/search-runs/#search-syntax-overview)
@@ -106,22 +123,24 @@ python scripts/universal_step.py \
 
 **3. Run the Entire Pipeline**
 
-Update the pipeline [base.yaml](configs/pipeline/base.yaml)
+Update the pipeline [base.yaml](configs/pipeline/base.yaml). We have commented out the download and save data using the kaggle api. You should have all data versions after running step 3.
+
+Unless any deps/outs `dvc.yaml` changed, you must use `--force -P` to run the entire pipeline sequentially from start to finish.
 
 ```sh
-# This executes all steps in dvc.yaml (INCLUDING THE KAGGLE DOWNLOAD)
+# This executes all steps in dvc.yaml
 dvc repro --force -P
 ```
 
 This executes each stage in configs/pipeline/base.yaml sequentially, producing new CSV files (and metadata) for each data version.
 
-4. Run a Single Transformation in dvc.yaml (example: add lag columns on v10)
+**4. Run a Single Transformation in dvc.yaml (example: add lag columns on v10)**
 
 ```sh
 dvc repro --force -s v10_lag_columns
 ```
 
-The above code executes the following:
+The above line is equivalent to executing the `universal_step.py` with the needed overrides.
 
 ```sh
 python scripts/universal_step.py \
