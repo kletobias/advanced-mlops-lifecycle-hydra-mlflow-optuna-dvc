@@ -181,7 +181,7 @@ Example:
 <details>
 <summary>Sample Log Output</summary>
 
-
+```sh
 Running stage 'v10_lag_columns':
 > /Users/tobias/.local/share/mamba/envs/practice/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions=v10 data_versions=v11
 [2025-03-20 17:30:59,271][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
@@ -197,6 +197,7 @@ Running stage 'v10_lag_columns':
 [2025-03-20 17:31:12,279][__main__][INFO] - Successfully executed step: lag_columns
 Updating lock file 'dvc.lock'
 Use `dvc push` to send your updates to remote storage.
+```
 
 </details>
 
@@ -209,14 +210,16 @@ Check these logs to confirm data was read, transformations ran, CSV outputs were
 
 After pulling data from S3, DVC sees no changes to the code or data, so dvc repro normally skips everything.
 By adding `--force -P`, you ensure all pipeline stages run anyway, in topological order:
-	•	`--force`: Re-runs stages that might otherwise appear up to date.
-	•	`-P`: Tells DVC to run the pipeline from first to last (rather than just re-running single stages or skipping branches).
+- `--force`: Re-runs stages that might otherwise appear up to date.
+- `-P`: Tells DVC to run the pipeline from first to last (rather than just re-running single stages or skipping branches).
 
 Why We Use `--force` (But Not `-P`) for a Single Stage
 
 When you only want to re-run one stage (e.g., v10_lag_columns), you can do:
 
-dvc repro `--force` -s v10_lag_columns
+```sh
+dvc repro --force -s v10_lag_columns
+```
 
 You still use `--force` to avoid the “Data and pipelines are up to date” message, but you don’t need `-P` because you’re not executing the entire pipeline—just that one stage.
 
