@@ -1,0 +1,62 @@
+base_name: chapter_3_how_runtime_overrides_work
+extension: md
+title: "Chapter 3 - How Runtime Overrides Work"
+content:
+- section: 0
+  name: "Core Concept of Hydra Overrides"
+  content:
+  - |
+    ### 3.1 Core Concept
+
+    - **Dynamic Parameter Switching**  
+      By default, `config.yaml` sets a baseline for each group (e.g., `data_versions=base`, `models=rf_optuna_trial_params`). With Hydra, you can override them at runtime. For example:
+      ```sh
+      python scripts/universal_step.py \
+        +setup.script_base_name=lag_columns \
+        data_versions=v10 \
+        transformations=lag_columns
+      ```
+      This single command changes your script’s behavior from one config to another without editing any YAML file directly.
+
+    - **Single vs. Multiple Overrides**  
+      You can stack multiple overrides, e.g.:
+      ```sh
+      python scripts/universal_step.py \
+        +setup.script_base_name=drop_rare_drgs \
+        data_versions=v6 \
+        model_params=rf_optuna_trial_params
+      ```
+      Hydra merges them in memory, so the pipeline uses version `v6` data while preparing for a random forest trial.  
+
+    - **Fewer Scripts, More Flexibility**  
+      Instead of writing new code for each scenario, you create or modify config files. The pipeline adjusts automatically at runtime—no duplication of logic.
+
+- section: 1
+  name: "Practical Examples"
+  content:
+  - |
+    ### 3.2 Practical Examples of Overrides
+
+    - **Switching Data Versions**  
+      When you want to run your transformations on `v13` data, you pass `data_versions=v13`. The `universal_step.py` script then sees `cfg.data_versions.data_version_input='v13'` and automatically picks the correct CSV path (`./data/v13/v13.csv`).
+
+    - **Toggling Output Writing**  
+      If you only want to read data and not save output (e.g., for debugging), you can override I/O policies:
+      ```sh
+      python scripts/universal_step.py \
+        +setup.script_base_name=drop_rare_drgs \
+        io_policy.WRITE_OUTPUT=false
+      ```
+      This stops the pipeline from creating new CSVs or metadata files, ideal for quick checks.
+
+    - **Model Tuning with Optuna**  
+      If you’d like to switch from default random-forest hyperparameters to an Optuna-driven search, set `model_params=rf_optuna_trial_params`:
+      ```sh
+      python scripts/universal_step.py \
+        +setup.script_base_name=rf_optuna_trial \
+        data_versions=v11 \
+        model_params=rf_optuna_trial_params
+      ```
+      No code changes required—just a single override pointing to a YAML file with all the hyperparameter search details.
+
+    These override patterns mean your entire ML pipeline, from data ingestion through model training, is fully configurable at runtime. It’s both simpler and more powerful than copying or rewriting scripts for every new scenario.
