@@ -1,0 +1,53 @@
+base_name: chapter_1_high_level_overview
+extension: md
+title: "Chapter 1 - High-Level Overview"
+content:
+- section: 0
+  name: "Objectives and Motivations"
+  content:
+  - |
+    ### 1.1 Objectives and Motivations
+
+    - **Robust Reproducibility**  
+      The pipeline ensures all data transformations are tracked via DVC. Any version of the dataset or code can be exactly reproduced, which is essential for stable, verifiable ML pipelines in production.
+
+    - **Flexibility and Maintainability**  
+      Hydra and Omegaconf power hierarchical configurations: you can shift between data versions (`v0`, `v1`...) or transformations (`drop_rare_drgs`, `lag_columns`, `rolling_columns`) just by changing a single line in a YAML config instead of rewriting scripts.
+
+    - **Single Source of Truth**  
+      Paths, hyperparameters, and experiment details live in config groups rather than scattered across code. This keeps the pipeline maintainable—no duplication of parameters.
+
+    - **End-to-End Logging and Experiment Tracking**  
+      MLflow hooks into each experiment to log artifacts (pickle models, permutation importances) and metrics (RMSE, R2), making it straightforward to roll back or compare runs.
+
+- section: 1
+  name: "Architecture Highlights"
+  content:
+  - |
+    ### 1.2 Architecture at a Glance
+
+    - **Modular Transformations**  
+      Every data-manipulation step is a dedicated Python module under `dependencies/transformations/`. The pipeline calls them with Hydra overrides, so it’s easy to add or remove transformations without altering the central code.
+
+    - **Universal Execution Script**  
+      A single `universal_step.py` file processes any transformation. It reads what to do from Hydra configs, loads input data, runs the specified transformation function, and writes output plus metadata. This pattern unifies ingestion, cleaning, feature engineering, and modeling steps under the same script.
+
+    - **DVC Data Lineage**  
+      Each transformation stage is also declared in the pipeline (`configs/pipeline/base.yaml`). DVC ensures a reproducible sequence of transformations. A new data version always references exactly which code and hyperparameters created it.
+
+    - **Optuna Hyperparameter Optimization**  
+      Two lines of config can switch from “random search” to a more advanced approach. The pipeline orchestrates parallel trials for model tuning while respecting available CPU cores (validated via custom concurrency checks).
+
+    - **Metadata-Driven**  
+      Every output CSV is accompanied by a JSON file capturing row counts, column data types, hashing for integrity checks, etc. This supports audits or debugging if the data is later found to be inconsistent.
+
+    - **Seamless MLflow Integration**  
+      Each ML training run logs to the same MLflow folder. The best model is automatically saved as a .pkl artifact, with optional random forest or permutation-based feature importances logged to CSV. Simple queries in MLflow show how hyperparameters affected performance historically.
+
+    - **Config Grouping and Overrides**  
+      The code is decoupled from environment specifics: data version, hyperparameters, logging levels, etc. By altering Hydra overrides, you can run the same pipeline with different storage backends or hyperparameter sets without rewriting any logic.
+
+    - **Scalable for Large Teams**  
+      Clear separation of concerns (data transformation, logging, model training) and advanced version control (DVC + Git) means multiple developers can iterate on different transformations or models concurrently, each pinned to a distinct data version.
+
+    These design choices demonstrate a thorough MLOps-oriented approach—one that ensures both reproducibility and agility for rapid experimentation in a real-world setting.
