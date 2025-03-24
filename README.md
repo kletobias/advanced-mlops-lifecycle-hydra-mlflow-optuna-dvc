@@ -5,6 +5,8 @@ This repository contains a fully reproducible, config-driven pipeline for analyz
 
 ## Key Features
 
+MLOps: End-to-end Pipeline management
+
 - Hydra Configuration
     All parameters (data paths, transformations, hyperparameters) are separated from the code. Simply override them at runtime to switch between data versions (e.g., v0, v1, …) or transformations (lag_columns, drop_rare_drgs, etc.).
 
@@ -206,7 +208,7 @@ Check these logs to confirm data was read, transformations ran, CSV outputs were
 
 ---
 
-### Why We Use `--force -P` for the Entire Pipeline
+### Why We Use --force -P for the Entire Pipeline
 
 After pulling data from S3, DVC sees no changes to the code or data, so dvc repro normally skips everything.
 By adding `--force -P`, you ensure all pipeline stages run anyway, in topological order:
