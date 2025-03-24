@@ -1,0 +1,68 @@
+base_name: chapter_4_data_versioning_with_dvc
+extension: md
+title: "Chapter 4 - Data Versioning with DVC"
+content:
+- section: 0
+  name: "Why DVC?"
+  content:
+  - |
+    ### 4.1 Why DVC?
+
+    - **Fully Versioned Data Lineage**  
+      Each transformation (drop columns, add lag features, etc.) is declared in YAML files under `configs/pipeline/`. DVC captures these pipeline stages—linking outputs (like `v10.csv`) to both the script and the previous dataset version. Anyone can restore or reproduce the exact data state used for a past model run.
+
+    - **Parallel Storage Options**  
+      You can push or pull data to/from multiple remotes: an S3 bucket (for shared team access) or a local NAS (for offline or on-prem uses). Switching between them only involves adjusting DVC’s remote config.
+
+    - **Seamless Syncing**  
+      Data file changes (`csv`, `json`, even large DB files) are deduplicated and stored in an efficient content-addressable way. This keeps repository size manageable while ensuring reproducibility.
+
+    - **Confidence in Production**  
+      Because each data artifact is hashed and tracked, you avoid “data drift”—you’ll know exactly which rows were used to train any given model, enabling more reliable maintenance, auditing, or model retraining.
+- section: 1
+  name: "Practical Steps"
+  content:
+  - |
+    ### 4.2 Practical Steps for Data Version Control
+
+    1. **Configure DVC Remotes**  
+       ```sh
+       dvc remote add -d s3_remote s3://mybucket/my_prefix
+       dvc remote add nas_remote /path/to/my_nas
+       ```
+       You can switch between them or use both. For example, to pull from S3:
+       ```sh
+       dvc pull -r s3_remote
+       ```
+       Or to push updates to the NAS:
+       ```sh
+       dvc push -r nas_remote
+       ```
+
+    2. **Declare Pipeline Stages**  
+       `configs/pipeline/base.yaml` enumerates each stage:
+       ```yaml
+       - name: v10_lag_columns
+         cmd_python: ${cmd_python}
+         script: ${universal_step_script}
+         overrides: setup.script_base_name=lag_columns transformations=lag_columns ...
+         ...
+       ```
+       This means your pipeline code references a single source of truth for how data flows from one version to the next. DVC looks at this file to know which outputs (e.g., `./data/v10/v10.csv`) must be tracked.
+
+    3. **Reproduce the Entire Pipeline**  
+       Running:
+       ```sh
+       dvc repro
+       ```
+       verifies each stage. If any dependencies changed (like `lag_columns.py` or `v9.csv`), DVC rebuilds the affected outputs. If the data and code are up-to-date, DVC skips unnecessary steps.
+
+    4. **Publishing Changes**  
+       After you confirm everything is correct:
+       ```sh
+       git commit -am "feat: add lag_columns stage"
+       dvc push -r s3_remote
+       ```
+       This ensures both code and data are safely versioned. Teammates can then `git pull` + `dvc pull` to replicate your work environment locally or on their server.
+
+    By structuring your project around DVC pipelines and remote storage, you gain ironclad reproducibility, easy collaboration, and a clear evolutionary path for each dataset version—critical elements for any senior-level MLOps workflow. 
