@@ -1,0 +1,47 @@
+base_name: chapter_2_config_groups_and_rationale
+extension: md
+title: "Chapter 2 - Config Groups and Rationale"
+content:
+- section: 0
+  name: "Overall Structure"
+  content:
+  - |
+    ### 2.1 Overall Structure
+
+    - **Separation of Concerns**  
+      Config files are split into logical groups: `data_versions/`, `models/`, `ml_experiments/`, `transformations/`, etc. Each group handles a well-defined aspect of the pipeline (e.g., which dataset version to read, how hyperparameters are set for RandomForest vs. Ridge, how transformations are chained).
+
+    - **Override-Driven**  
+      By default, `config.yaml` references `defaults: [...]`. But at runtime, you can override any part of these defaults (for example, switching from `v7` to `v10` data) without editing code. This makes the pipeline highly flexible for new data or new model types.
+
+    - **Reduced Duplication**  
+      Each configuration property lives in exactly one file—no repeated paths or hyperparameters in multiple scripts. Hydra merges them at runtime into a single “global” config. When you want a new data version, you simply add a `v11.yaml` file describing how it differs from the previous version.
+
+    - **Future-Proof**  
+      This modular approach scales as you add more transformations, new data splits, or additional advanced hyperparameter search spaces. You won’t have to refactor your entire codebase—just extend or create new config files.
+
+- section: 1
+  name: "Notable Folders"
+  content:
+  - |
+    ### 2.2 Notable Folders
+
+    - **`configs/data_versions/`**  
+      Each `.yaml` documents the evolution of the dataset. Files like `v0.yaml`, `v1.yaml`... `v12.yaml` describe transformations or new features introduced at each step. DVC references these versions, so you can reproduce any specific state of the data.
+
+    - **`configs/transformations/`**  
+      Mappings for each Python transformation function. For example, `lag_columns.yaml` defines which columns to shift, while `rolling_columns.yaml` sets rolling windows. The main pipeline references these transformations in a stage-wise manner.
+
+    - **`configs/model_params/`**  
+      Holds hyperparameter definitions (e.g., `rf_optuna_trial_params.yaml`). If you want to tune the random forest, you only modify that file—no code changes required. The pipeline dynamically passes these parameters into the model training step.
+
+    - **`configs/pipeline/`**  
+      Ties everything together. `base.yaml` enumerates each stage in the data transformation sequence, while specialized YAMLs (like `orchestrate_dvc_flow.yaml`) define how DVC is orchestrated. Each stage points to a script plus overrides for `setup.script_base_name`.
+
+    - **`configs/ml_experiments/`**  
+      Centralizes experiment-level settings: random seeds, train/val/test ranges, or the name of the MLflow experiment folder. Makes it easy to manage or switch between multiple experiment setups.
+
+    - **`configs/logging_utils/`**  
+      Central control for log formatting and logging levels. All pipeline steps reference the same logging config, ensuring consistent logs across ingestion, transformation, and training scripts.
+
+    Together, these config folders ensure that every important parameter is discoverable, documented, and easily overridden—solidifying maintainability and clarity for both current and future collaborators.
