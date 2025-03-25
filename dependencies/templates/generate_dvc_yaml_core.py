@@ -14,13 +14,14 @@ def generate_dvc_yaml_core(
     search_path: str,
     template_name: str,
     dvc_yaml_file_path: str,
+    plots_list: List = None
 ) -> None:
     logger.info("Entering function 'generate_dvc_yaml_core'")
     loader = jinja2.FileSystemLoader(searchpath=search_path)
     env = jinja2.Environment(loader=loader, autoescape=False)
     template = env.get_template(template_name)
 
-    rendered = template.render(stages=stages_list)
+    rendered = template.render(stages=stages_list, plots=plots_list)
 
     with open(dvc_yaml_file_path, "w", encoding="utf-8") as f:
         f.write(rendered)
@@ -31,6 +32,7 @@ def generate_dvc_yaml_core(
             time.time() - os.path.getmtime(dvc_yaml_file_path),
         )
 
+
 if __name__ == "__main__":
     from omegaconf import DictConfig
     import hydra
@@ -39,12 +41,20 @@ if __name__ == "__main__":
         sys.argv[0],
         'pipeline=orchestrate_dvc_flow'
     ]
-    @hydra.main(version_base=None, config_path='../../configs',config_name='config')
-    def main(cfg:DictConfig):
+
+    @hydra.main(version_base=None, config_path='../../configs', config_name='config')
+    def main(cfg: DictConfig):
         stages_list = cfg.pipeline.stages
         search_path = cfg.pipeline.search_path
         template_name = cfg.pipeline.template_name
         dvc_yaml_file_path = cfg.pipeline.dvc_yaml_file_path
-        generate_dvc_yaml_core(stages_list,search_path,template_name,dvc_yaml_file_path)
+        plots_list = cfg.pipeline.get('plots', None)
+        generate_dvc_yaml_core(
+            stages_list,
+            search_path,
+            template_name,
+            dvc_yaml_file_path,
+            plots_list=plots_list
+        )
 
     main()
