@@ -2,7 +2,7 @@
 **/.DS_Store
 # Ignore any YYYY-MM-DD named directory under outputs that has hydra logs in it.
 **/outputs/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
-logs/
+*.log
 __pycache__/
 *.pyc
 src/data_inspection/outputs/
