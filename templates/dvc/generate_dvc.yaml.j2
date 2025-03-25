@@ -5,6 +5,12 @@ stages:
 {%- for stage in stages %}
   {{ stage.name }}:
     cmd: {{ stage.cmd_python }} {{ stage.script }}{% if stage.overrides %} {{ stage.overrides }}{% endif %}
+{%- if stage.desc %}
+    desc: {{ stage.desc }}
+{%- endif %}
+{%- if stage.frozen %}
+    frozen: true
+{%- endif %}
     deps:
 {%- for dep in stage.deps %}
       - {{ dep }}
