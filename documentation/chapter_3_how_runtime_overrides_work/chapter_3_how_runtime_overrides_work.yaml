@@ -1,10 +1,10 @@
 base_name: chapter_3_how_runtime_overrides_work
 extension: md
 title: "Chapter 3 - How Runtime Overrides Work"
-content:
-- section: 0
-  name: "Core Concept of Hydra Overrides"
-  content:
+content_chapter:
+- section_num: 0
+  section_name: "Core Concept of Hydra Overrides"
+  content_section:
   - |
     ### 3.1 Core Concept
 
@@ -31,9 +31,9 @@ content:
     - **Fewer Scripts, More Flexibility**  
       Instead of writing new code for each scenario, you create or modify config files. The pipeline adjusts automatically at runtime—no duplication of logic.
 
-- section: 1
-  name: "Practical Examples"
-  content:
+- section_num: 1
+  section_name: "Practical Examples"
+  content_section:
   - |
     ### 3.2 Practical Examples of Overrides
 

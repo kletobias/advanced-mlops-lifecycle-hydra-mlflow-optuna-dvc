@@ -1,10 +1,10 @@
 base_name: chapter_4_data_versioning_with_dvc
 extension: md
 title: "Chapter 4 - Data Versioning with DVC"
-content:
-- section: 0
-  name: "Why DVC?"
-  content:
+content_chapter:
+- section_num: 0
+  section_name: "Why DVC?"
+  content_section:
   - |
     ### 4.1 Why DVC?
 
@@ -19,9 +19,9 @@ content:
 
     - **Confidence in Production**  
       Because each data artifact is hashed and tracked, you avoid “data drift”—you’ll know exactly which rows were used to train any given model, enabling more reliable maintenance, auditing, or model retraining.
-- section: 1
-  name: "Practical Steps"
-  content:
+- section_num: 1
+  section_name: "Practical Steps"
+  content_section:
   - |
     ### 4.2 Practical Steps for Data Version Control
 

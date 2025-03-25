@@ -1,10 +1,10 @@
 base_name: chapter_2_config_groups_and_rationale
 extension: md
 title: "Chapter 2 - Config Groups and Rationale"
-content:
-- section: 0
-  name: "Overall Structure"
-  content:
+content_chapter:
+- section_num: 0
+  section_name: "Overall Structure"
+  content_section:
   - |
     ### 2.1 Overall Structure
 
@@ -20,9 +20,9 @@ content:
     - **Future-Proof**  
       This modular approach scales as you add more transformations, new data splits, or additional advanced hyperparameter search spaces. You won’t have to refactor your entire codebase—just extend or create new config files.
 
-- section: 1
-  name: "Notable Folders"
-  content:
+- section_num: 1
+  section_name: "Notable Folders"
+  content_section:
   - |
     ### 2.2 Notable Folders
 

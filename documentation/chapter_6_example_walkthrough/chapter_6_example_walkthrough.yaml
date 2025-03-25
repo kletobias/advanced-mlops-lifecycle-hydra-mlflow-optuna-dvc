@@ -1,10 +1,10 @@
 base_name: chapter_6_example_walkthrough
 extension: md
 title: "Chapter 6 - Example Walkthrough"
-content:
-- section: 0
-  name: "Adding Lag Columns (v10 → v11)"
-  content:
+content_chapter:
+- section_num: 0
+  section_name: "Adding Lag Columns (v10 → v11)"
+  content_section:
   - |
     ### 6.1 Single Transformation in Practice
 
@@ -47,9 +47,9 @@ content:
     4. **Why Lag Columns?**  
        This step shifts certain numeric columns by one “year” within each `[facility_id, apr_drg_code]` group. It’s a common technique for time-series or sequential analysis, letting you reference previous-year values in the current year’s modeling.
 
-- section: 1
-  name: "Tying It All Together"
-  content:
+- section_num: 1
+  section_name: "Tying It All Together"
+  content_section:
   - |
     ### 6.2 From Config to Final Artifacts
 

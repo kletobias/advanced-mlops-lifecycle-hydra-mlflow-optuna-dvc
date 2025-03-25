@@ -1,10 +1,10 @@
 base_name: chapter_1_high_level_overview
 extension: md
 title: "Chapter 1 - High-Level Overview"
-content:
-- section: 0
-  name: "Objectives and Motivations"
-  content:
+content_chapter:
+- section_num: 0
+  section_name: "Objectives and Motivations"
+  content_section:
   - |
     ### 1.1 Objectives and Motivations
 
@@ -20,9 +20,9 @@ content:
     - **End-to-End Logging and Experiment Tracking**  
       MLflow hooks into each experiment to log artifacts (pickle models, permutation importances) and metrics (RMSE, R2), making it straightforward to roll back or compare runs.
 
-- section: 1
-  name: "Architecture Highlights"
-  content:
+- section_num: 1
+  section_name: "Architecture Highlights"
+  content_section:
   - |
     ### 1.2 Architecture at a Glance
 

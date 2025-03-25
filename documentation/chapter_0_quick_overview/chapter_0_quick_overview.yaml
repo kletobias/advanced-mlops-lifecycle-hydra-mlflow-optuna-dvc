@@ -1,12 +1,12 @@
 base_name: README
 extension: md
 title: README.md
-content:
-- section: 0
-  name: Key Features
-  subsection:
-  - name: Key Features - Quick Overview
-    content:
+content_chapter:
+- section_num: 0
+  section_name: Key Features
+  sub_section:
+  - sub_section_name: Key Features - Quick Overview
+    content_sub_section:
     - |
       - Hydra Configuration
         All parameters (data paths, transformations, hyperparameters) are separated from the code in a single source of truth. With Hydra’s override syntax, you can quickly switch between data versions (e.g., v0, v1, …) or transformations (lag_columns, drop_rare_drgs, etc.) at runtime, without modifying your core Python scripts.
@@ -22,15 +22,15 @@ content:
     - |
       - Metadata Logging
         Every time you generate a new CSV, the pipeline creates a JSON metadata file (including row count, column types, file hash, etc.). This extra layer of traceability helps ensure that any data artifacts you produce can be audited or reproduced later on.
-  - name: 'Why Aim for this "Trifecta"?'
-    content:
+  - sub_section_name: 'Why Aim for this "Trifecta"?'
+    content_sub_section:
     - |
       Hydra, Optuna, and MLflow each solve critical but distinct challenges in a modern MLOps pipeline. Hydra provides flexible, hierarchical configuration management that ensures a single source of truth and reduces repetitive boilerplate. Optuna streamlines hyperparameter tuning through efficient search algorithms and automatic trial management. MLflow takes care of experiment tracking, artifact logging, and model versioning, making it simple to compare runs or roll back to a previous state. By weaving these tools into a unified workflow, you reap the benefits of advanced experimentation, reproducibility, and clean code organization—all while scaling to more complex data engineering and modeling tasks.
     - |
       In short, this “trifecta” setup saves you time, reduces errors, and achieves scalable MLOps practices at both small and large organizations.
   - subsub_section:
-    - name: 'End-to-End Pipeline Management'
-      content:
+    - subsub_section_name: 'End-to-End Pipeline Management'
+      content_subsub_section:
       - '**Single Source of Truth With Hydra**'
       - |
         One of the biggest pitfalls in MLOps is duplicating configuration values or scattering them across various scripts. Here, we use structured configs (with Python dataclasses) and Hydra’s override syntax to maintain one definition for each variable. When you need to change a path or hyperparameter, you do it once, and it propagates everywhere else automatically.
@@ -49,8 +49,8 @@ content:
         ```
       - |
         This flexibility empowers you to iterate quickly without diving into complex code changes.
-    - name: 'Why Companies Struggle'
-      content:
+    - subsub_section_name: 'Why Companies Struggle'
+      content_subsub_section:
       - |
         Organizations often fail at building a cohesive MLOps practice because they adopt these tools in isolation or rely on ad hoc scripts. Configuration drift and inconsistent versioning are common outcomes, making reproducing experiments or sharing code with new team members an uphill battle. This project addresses these pitfalls by maintaining a strict single source of truth, unifying the entire pipeline, and ensuring every stage is both reproducible and extensible.
       - |

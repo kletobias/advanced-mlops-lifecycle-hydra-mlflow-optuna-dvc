@@ -1,10 +1,10 @@
 base_name: chapter_5_modular_code_organization
 extension: md
 title: "Chapter 5 - Modular Code Organization"
-content:
-- section: 0
-  name: "“Dependencies” Folder"
-  content:
+content_chapter:
+- section_num: 0
+  section_name: "“Dependencies” Folder"
+  content_section:
   - |
     ### 5.1 “Dependencies” Folder
 
@@ -22,9 +22,9 @@ content:
 
     - **Modeling**  
       Models and hyperparameter search methods (e.g., `rf_optuna_trial.py`, `ridge_optuna_trial.py`) reside in `dependencies/modeling/`. They all follow a similar structure, so you can easily add new algorithms (like XGBoost) without major refactoring.
-- section: 1
-  name: "“scripts/” Folder"
-  content:
+- section_num: 1
+  section_name: "“scripts/” Folder"
+  content_section:
   - |
     ### 5.2 “scripts/” Folder
 
