@@ -10,7 +10,7 @@ content_chapter:
 
     This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag columns.
 
-    1. **Relevant Config**  
+    1. **Relevant Config**
        ```yaml
        # configs/data_versions/v10.yaml
        data_version: v10
@@ -29,7 +29,7 @@ content_chapter:
        shift_periods: 1
        ```
 
-    2. **Runtime Command**  
+    2. **Runtime Command**
        ```sh
        python scripts/universal_step.py \
          +setup.script_base_name=lag_columns \
@@ -39,12 +39,12 @@ content_chapter:
        ```
        This tells Hydra to load `v10.yaml` for input, `v11.yaml` for output, and run the `lag_columns` transformation.
 
-    3. **Outputs**  
-       - A new CSV: `./data/v11/v11.csv`  
+    3. **Outputs**
+       - A new CSV: `./data/v11/v11.csv`
          (with columns like `sum_discharges_lag1`, `severity_1_portion_lag1`, etc.)
        - A metadata JSON: `v11_metadata.json` (row count, file hash, etc.)
 
-    4. **Why Lag Columns?**  
+    4. **Why Lag Columns?**
        This step shifts certain numeric columns by one “year” within each `[facility_id, apr_drg_code]` group. It’s a common technique for time-series or sequential analysis, letting you reference previous-year values in the current year’s modeling.
 
 - section_num: 1
@@ -53,11 +53,11 @@ content_chapter:
   - |
     ### 6.2 From Config to Final Artifacts
 
-    - **Single Command, Complex Pipeline**  
+    - **Single Command, Complex Pipeline**
       With `dvc repro --force -P`, you can re-run the entire chain from ingestion (`v0.csv`) all the way through this lag step (`v11.csv`) if the code or data changed. DVC checks each stage in `configs/pipeline/base.yaml` and executes it in order.
 
-    - **Metadata and Logging**  
+    - **Metadata and Logging**
       Each pipeline step calls shared logging utilities, so you can find the transformation logs in `logs/runs/<timestamp>/lag_columns.log`. Metadata JSON files confirm exactly how many rows and columns each version has and record a file hash for data integrity.
 
-    - **Experiment Management**  
+    - **Experiment Management**
       If you then run `rf_optuna_trial` on `v11.csv`, you can experiment with new features (the lag columns) and see if model metrics improve, all tracked by MLflow. Switching to a different data version or a different transformation pipeline is just another override. This flexible approach highlights how config-driven design accelerates experimentation while preserving reproducibility.
