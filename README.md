@@ -5,8 +5,6 @@ This repository contains a fully reproducible, config-driven pipeline for analyz
 
 ## Key Features
 
-MLOps: End-to-end Pipeline management
-
 - Hydra Configuration
     All parameters (data paths, transformations, hyperparameters) are separated from the code. Simply override them at runtime to switch between data versions (e.g., v0, v1, …) or transformations (lag_columns, drop_rare_drgs, etc.).
 
@@ -47,11 +45,13 @@ MLOps: End-to-end Pipeline management
 └── ...
 ```
 
+
 ## Quickstart
 
 Below is a minimal way to get up and running.
 
-### 1. Install Dependencies
+**1. Install Dependencies**
+
 
 > **All the following commands assume that you have completed this step and that you have activated the `ny` environment (or whatever you name it).**
 
@@ -63,7 +63,7 @@ conda env create -f env.yaml
 conda activate ny
 ```
 
-With Micromamba:
+**With Micromamba**:
 
 ```sh
 # Create a conda environment from env.yaml
@@ -71,92 +71,63 @@ micromamba env create -f env.yaml
 micromamba activate ny
 ```
 
-Environment creation is only tested on Mac ARM64 architecture using micromamba 2.0.7, Python 3.12.9.
+**2. Pull Data via `dvc pull` from our S3 bucket**
 
-In case of problems, a workaround is pinning Python 3.11, and installing as you go.
-
-If environment creation fails on Linux x86_64:
+Eveything is pre-configured. It pulls from our public s3 bucket, after configuring it as a new dvc remote if needed.
 
 ```sh
-conda config --add channels conda-forge
-conda config --add channels defaults
-conda config --set channel_priority flexible
-conda install -n base -c conda-forge mamba
-mamba env create -f env.yaml
-mamba activate ny
-```
-
----
-
-### 2. Pull Data via dvc pull from Our S3 Bucket
-
-> IMPORTANT: Make sure you have dvc-s3 installed first.
-
-By default, our pipeline is configured to use data from a public S3 bucket. The script below sets up the remote DVC configuration if needed, then pulls the dataset:
-
-```sh
-# Outputs will populate data/, configs/, etc.
+# Outputs will populate data/, configs/, among others.
 python dependencies/io/pull_dvc_s3.py
 ```
 
----
+**3. Pull the entire mlruns folder from our S3 bucket**
 
-### 3. Pull the Entire mlruns Folder from S3
-
-> IMPORTANT: This step is also critical.
-
-By pulling the mlruns folder, you’ll retrieve final artifacts, including permutation importances, RandomForestRegressor importances, model .pkl files, and so on. You can explore them locally using MLflow’s query syntax (e.g., “search runs” or “view artifacts”). Any new Optuna trials you run will automatically log to the same mlruns folder—no extra configuration needed.
+- Get all final artifacts (permutation importances, RandomForestRegressor importances, model.pkl, ...)
+- You can query it using the MLflow query (sql like) syntax [Mlflow - Search Syntax Overview](https://mlflow.org/docs/latest/search-runs/#search-syntax-overview)
+- New Optuna trials that you run get added to it without any further setup needed, and artifacts logged just like the already present data.
 
 ```sh
-# This populates `mlruns/` in your project root.
+# Output is populated directory `mlruns/` in your project root.
 python dependencies/io/pull_mlruns_s3.py
 ```
 
-(Optional) Ingestion for Data Version v0 via Kaggle
 
-Requires a Kaggle API key.
 
-If you want to reproduce the original ingestion logic (instead of pulling data from S3), run:
+Or run ingestion for data version v0 if you rely on Kaggle:
+
+> *For this step you need a kaggle api key.*
 
 ```sh
 python scripts/universal_step.py \
     +setup.script_base_name=download_and_save_data \
-    data_versions=v0 \
+    data_versions=v0  \
     io_policy.READ_INPUT=False
 ```
 
-We typically rely on the S3-hosted data to avoid Kaggle dependencies. If you do want to replicate Kaggle ingestion, uncomment the step in your pipeline config or run it directly.
+**3. Run the Entire Pipeline**
 
-⸻
+Update the pipeline [base.yaml](configs/pipeline/base.yaml), if you want to make changes to it.
 
-### 4. Run the Entire Pipeline
-
-Check out configs/pipeline/base.yaml to see each transformation stage in sequence.
-After pulling data from S3, DVC will often detect no changes (i.e., everything is up to date). If you want to force all stages to run anyway:
+Remove the first step in [base.yaml](configs/pipeline/base.yaml), if you don't have a working kaggle api setup. Run dvc pull as outlined in step 2 first, then regenerate [dvc.yaml](dvc.yaml) using the code below:
 
 ```sh
+
+```
+
+```sh
+# This executes all steps in dvc.yaml (INCLUDING THE KAGGLE DOWNLOAD)
 dvc repro --force -P
 ```
 
-- `--force`: Tells DVC to re-run stages even if they appear up to date.
-- `-P` (pipeline mode): Executes all stages topologically, from start to finish (no parallel branches).
+This executes each stage in configs/pipeline/base.yaml sequentially, producing new CSV files (and metadata) for each data version.
 
-Without --force, you’d likely see "Data and pipelines are up to date", since pulling from S3 leaves no further changes for DVC to process.
-
----
-
-### 5. Run a Single Transformation (Example: Add Lag Columns on v10)
-
-To run only the v10_lag_columns stage:
+4. Run a Single Transformation in dvc.yaml (example: add lag columns on v10)
 
 ```sh
 dvc repro --force -s v10_lag_columns
 ```
 
-- We still use `--force` so DVC re-runs the stage, ignoring any checks about freshness.
-- No `-P` here, because we’re not executing the entire pipeline—just one stage.
-
-The command above is equivalent to manually calling:
+The above code executes the following:
 
 ```sh
 python scripts/universal_step.py \
@@ -166,26 +137,20 @@ python scripts/universal_step.py \
   data_versions.data_version_output=v11
 ```
 
-Hydra loads configs/transformations/lag_columns.yaml to take v10 data as input and produce v11 data:
-- Input: ./data/v10/v10.csv
-- Output: ./data/v11/v11.csv
-- Metadata: ./data/v11/v11_metadata.json
+Hydra will load configs/transformations/lag_columns.yaml, v10 data as input, and produce v11 data.
+- Input data is loaded from [./data/v10/v10.csv](/data/v10/v10.csv)
+- Output data v11 is written to [./data/v11/v11.csv](/data/v11/v11.csv)
+- Output data v11's metadata is written to [./data/v11/v11_metadata.json](/data/v11/v11_metadata.json)
 
----
+5. Check Logs
 
-### 6. Check Logs
+Logs are saved under `logs/runs/${now:%Y-%m-%d_%H-%M-%S}/${setup.script_base_name}` (see details under [Logging Configuration](#logging-configuration))
 
-Logs are saved under `logs/runs/${now:%Y-%m-%d_%H-%M-%S}/${setup.script_base_name}` (see Logging Configuration for details).
+For this run: [./logs/runs/2025-03-20_17-30-59/lag_columns.log](logs/runs/2025-03-20_17-30-59/lag_columns.log)
 
-Example:
-./logs/runs/2025-03-20_17-30-59/lag_columns.log
-
-<details>
-<summary>Sample Log Output</summary>
-
-```sh
+```text
 Running stage 'v10_lag_columns':
-> /Users/tobias/.local/share/mamba/envs/practice/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions=v10 data_versions=v11
+> /Users/tobias/.local/share/mamba/envs/practice/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
 [2025-03-20 17:30:59,271][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
 /Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
 [2025-03-20 17:30:59,838][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v10/v10.csv, created df
@@ -196,38 +161,10 @@ Running stage 'v10_lag_columns':
 [2025-03-20 17:31:12,048][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 85b89b3126ee6cfa18ad5fc716081f6baad1a3abf3470cd505ff588309c1c30e
 [2025-03-20 17:31:12,278][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11.csv
 [2025-03-20 17:31:12,279][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11_metadata.json
-[2025-03-20 17:31:12,279][__main__][INFO] - Successfully executed step: lag_columns
+[2025-03-20 17:31:12,279][__main__][INFO] - Sucessfully executed step: lag_columns
 Updating lock file 'dvc.lock'
 Use `dvc push` to send your updates to remote storage.
 ```
-
-</details>
-
-
-Check these logs to confirm data was read, transformations ran, CSV outputs were saved, and metadata was generated.
-
----
-
-### Why We Use --force -P for the Entire Pipeline
-
-After pulling data from S3, DVC sees no changes to the code or data, so dvc repro normally skips everything.
-By adding `--force -P`, you ensure all pipeline stages run anyway, in topological order:
-- `--force`: Re-runs stages that might otherwise appear up to date.
-- `-P`: Tells DVC to run the pipeline from first to last (rather than just re-running single stages or skipping branches).
-
-Why We Use `--force` (But Not `-P`) for a Single Stage
-
-When you only want to re-run one stage (e.g., v10_lag_columns), you can do:
-
-```sh
-dvc repro --force -s v10_lag_columns
-```
-
-You still use `--force` to avoid the “Data and pipelines are up to date” message, but you don’t need `-P` because you’re not executing the entire pipeline—just that one stage.
-
----
-
-By following these steps and explanations, you can fully reproduce or re-run any portion of the pipeline—whether it’s a single transformation or the entire chain—even if the original data is already up to date.
 
 ### Logging Configuration
 
