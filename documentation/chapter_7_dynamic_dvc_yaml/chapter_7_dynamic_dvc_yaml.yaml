@@ -1,10 +1,10 @@
 base_name: chapter_7_dynamic_dvc_yaml
 extension: md
 title: "Chapter 7 - Dynamic DVC YAML Generation"
-content:
-- section: 0
-  name: "Why Generate DVC YAML on the Fly?"
-  content:
+content_chapter:
+- section_num: 0
+  section_name: "Why Generate DVC YAML on the Fly?"
+  content_section:
   - |
     ### 7.1 Motivation and Key Benefits
 
@@ -20,9 +20,9 @@ content:
     - **Full Customization**  
       Because it’s template-driven, you can easily tweak how your DVC file is formatted: add or remove sections (e.g., for metrics or checkpoints), rename `outs` to `metrics` or `plots`, etc. This is especially helpful if your pipeline expands to more advanced DVC features.
 
-- section: 1
-  name: "How It Works"
-  content:
+- section_num: 1
+  section_name: "How It Works"
+  content_section:
   - |
     ### 7.2 How This Mechanism Operates
 
@@ -50,9 +50,9 @@ content:
     4. **Flow Orchestration**  
        The logic to generate or regenerate `dvc.yaml` on demand is controlled by your Hydra config. For instance, if `skip_generation=false`, it calls `generate_dvc_yaml_core(...)`. If `allow_dvc_changes=true`, it replaces any existing `dvc.yaml` with the new one. This means you can set rules about when and how the file updates.
 
-- section: 2
-  name: "Notable Advantages"
-  content:
+- section_num: 2
+  section_name: "Notable Advantages"
+  content_section:
   - |
     ### 7.3 Notable Advantages
 
