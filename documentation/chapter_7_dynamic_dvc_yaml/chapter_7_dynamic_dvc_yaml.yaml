@@ -1,71 +1,63 @@
 base_name: chapter_7_dynamic_dvc_yaml
 extension: md
-title: "Chapter 7 - Dynamic DVC YAML Generation"
+title: Chapter 7 - Dynamic DVC YAML Generation
 content_chapter:
 - section_num: 0
-  section_name: "Why Generate DVC YAML on the Fly?"
+  section_name: Why Generate DVC YAML on the Fly?
   content_section:
-  - |
-    ### 7.1 Motivation and Key Benefits
-
-    - **Automatic Pipeline Updates**  
-      As soon as you change or add a stage in `configs/pipeline/base.yaml`, the pipeline automatically regenerates `dvc.yaml` with the updated dependencies, commands, and outputs—no manual edits required.
-
-    - **DRY (Don’t Repeat Yourself)**  
-      Instead of copying stage definitions in both Hydra configs and a static `dvc.yaml`, you maintain them in one place (`pipeline/base.yaml`). A simple template (`generate_dvc.yaml.j2`) uses the same definitions to produce a valid DVC file.
-
-    - **No Hardcoding**  
-      If your Python script path, overrides, or environment variables change, you only update the Hydra config. The Jinja2 template and `generate_dvc_yaml_core.py` will ensure `dvc.yaml` always matches your latest pipeline design.
-
-    - **Full Customization**  
-      Because it’s template-driven, you can easily tweak how your DVC file is formatted: add or remove sections (e.g., for metrics or checkpoints), rename `outs` to `metrics` or `plots`, etc. This is especially helpful if your pipeline expands to more advanced DVC features.
-
+  - "### 7.1 Motivation and Key Benefits\n\n- **Automatic Pipeline Updates**  \n \
+    \ As soon as you change or add a stage in `configs/pipeline/base.yaml`, the pipeline\
+    \ automatically regenerates `dvc.yaml` with the updated dependencies, commands,\
+    \ and outputs—no manual edits required.\n\n- **DRY (Don’t Repeat Yourself)** \
+    \ \n  Instead of copying stage definitions in both Hydra configs and a static\
+    \ `dvc.yaml`, you maintain them in one place (`pipeline/base.yaml`). A simple\
+    \ template (`generate_dvc.yaml.j2`) uses the same definitions to produce a valid\
+    \ DVC file.\n\n- **No Hardcoding**  \n  If your Python script path, overrides,\
+    \ or environment variables change, you only update the Hydra config. The Jinja2\
+    \ template and `generate_dvc_yaml_core.py` will ensure `dvc.yaml` always matches\
+    \ your latest pipeline design.\n\n- **Full Customization**  \n  Because it’s template-driven,\
+    \ you can easily tweak how your DVC file is formatted: add or remove sections\
+    \ (e.g., for metrics or checkpoints), rename `outs` to `metrics` or `plots`, etc.\
+    \ This is especially helpful if your pipeline expands to more advanced DVC features."
 - section_num: 1
-  section_name: "How It Works"
+  section_name: How It Works
   content_section:
-  - |
-    ### 7.2 How This Mechanism Operates
-
-    1. **Central Pipeline Config**  
-       In `configs/pipeline/base.yaml`, each stage is declared with fields like `name`, `cmd_python`, `script`, `overrides`, `deps`, and `outs`. These fields describe exactly what DVC needs to know: how to run a stage, which inputs it depends on, and which outputs it tracks.
-
-    2. **Hydra + Omegaconf**  
-       When you run something like:
-       ```sh
-       python scripts/orchestrate_dvc_flow.py pipeline=orchestrate_dvc_flow
-       ```
-       Hydra reads `orchestrate_dvc_flow.yaml`, merges it with your pipeline definitions in `base.yaml`, and creates one unified config. This merged config includes a list of all stages you want in `dvc.yaml`.
-
-    3. **Jinja2 Template**  
-       The script `generate_dvc_yaml_core.py` loads a Jinja2 template (`generate_dvc.yaml.j2`). It iterates over the `stages` list from the Hydra config, then renders:
-       ```text
-       stages:
-         v1_drop_description_columns:
-           cmd: ...
-           deps: ...
-           outs: ...
-       ```
-       and so on for each stage. This process ensures everything in your pipeline config ends up in the final `dvc.yaml`.
-
-    4. **Flow Orchestration**  
-       The logic to generate or regenerate `dvc.yaml` on demand is controlled by your Hydra config. For instance, if `skip_generation=false`, it calls `generate_dvc_yaml_core(...)`. If `allow_dvc_changes=true`, it replaces any existing `dvc.yaml` with the new one. This means you can set rules about when and how the file updates.
-
+  - "### 7.2 How This Mechanism Operates\n\n1. **Central Pipeline Config**  \n   In\
+    \ `configs/pipeline/base.yaml`, each stage is declared with fields like `name`,\
+    \ `cmd_python`, `script`, `overrides`, `deps`, and `outs`. These fields describe\
+    \ exactly what DVC needs to know: how to run a stage, which inputs it depends\
+    \ on, and which outputs it tracks.\n\n2. **Hydra + Omegaconf**  \n   When you\
+    \ run something like:\n   ```sh\n   python scripts/orchestrate_dvc_flow.py pipeline=orchestrate_dvc_flow\n\
+    \   ```\n   Hydra reads `orchestrate_dvc_flow.yaml`, merges it with your pipeline\
+    \ definitions in `base.yaml`, and creates one unified config. This merged config\
+    \ includes a list of all stages you want in `dvc.yaml`.\n\n3. **Jinja2 Template**\
+    \  \n   The script `generate_dvc_yaml_core.py` loads a Jinja2 template (`generate_dvc.yaml.j2`).\
+    \ It iterates over the `stages` list from the Hydra config, then renders:\n  \
+    \ ```text\n   stages:\n     v1_drop_description_columns:\n       cmd: ...\n  \
+    \     deps: ...\n       outs: ...\n   ```\n   and so on for each stage. This process\
+    \ ensures everything in your pipeline config ends up in the final `dvc.yaml`.\n\
+    \n4. **Flow Orchestration**  \n   The logic to generate or regenerate `dvc.yaml`\
+    \ on demand is controlled by your Hydra config. For instance, if `skip_generation=false`,\
+    \ it calls `generate_dvc_yaml_core(...)`. If `allow_dvc_changes=true`, it replaces\
+    \ any existing `dvc.yaml` with the new one. This means you can set rules about\
+    \ when and how the file updates."
 - section_num: 2
-  section_name: "Notable Advantages"
+  section_name: Notable Advantages
   content_section:
-  - |
-    ### 7.3 Notable Advantages
-
-    - **Reduced Maintenance**  
-      When adding new transformations or renaming scripts, you only modify the pipeline config. The DVC YAML automatically stays in sync, preventing errors or missing dependencies in a manually curated file.
-
-    - **Easier Collaboration**  
-      Teammates can add or alter stages without manually editing `dvc.yaml`. They just push the updated YAML config in `configs/pipeline/*.yaml`; your template-driven generator handles the rest.
-
-    - **Scalability**  
-      If your pipeline doubles in size, you simply add more entries in the config. Hydra+Jinja2 will seamlessly produce the expanded `dvc.yaml` with minimal overhead, keeping the pipeline structure consistent.
-
-    - **Modular Extension**  
-      You can further extend the Jinja2 template (e.g., adding a “metrics” section) or the Python script (e.g., to compare old vs. new `dvc.yaml` and only accept changes if `--allow-dvc-changes=true`). This approach is inherently flexible.
-
-    By integrating Hydra, Omegaconf, and Jinja2, you maintain a single “source of truth” for your pipeline, avoiding duplication and streamlining the entire process of DVC stage management. This is a hallmark of advanced MLOps design—where configuration, code, and data versioning all align seamlessly to reduce friction for the team. 
+  - "### 7.3 Notable Advantages\n\n- **Reduced Maintenance**  \n  When adding new\
+    \ transformations or renaming scripts, you only modify the pipeline config. The\
+    \ DVC YAML automatically stays in sync, preventing errors or missing dependencies\
+    \ in a manually curated file.\n\n- **Easier Collaboration**  \n  Teammates can\
+    \ add or alter stages without manually editing `dvc.yaml`. They just push the\
+    \ updated YAML config in `configs/pipeline/*.yaml`; your template-driven generator\
+    \ handles the rest.\n\n- **Scalability**  \n  If your pipeline doubles in size,\
+    \ you simply add more entries in the config. Hydra+Jinja2 will seamlessly produce\
+    \ the expanded `dvc.yaml` with minimal overhead, keeping the pipeline structure\
+    \ consistent.\n\n- **Modular Extension**  \n  You can further extend the Jinja2\
+    \ template (e.g., adding a “metrics” section) or the Python script (e.g., to compare\
+    \ old vs. new `dvc.yaml` and only accept changes if `--allow-dvc-changes=true`).\
+    \ This approach is inherently flexible.\n\nBy integrating Hydra, Omegaconf, and\
+    \ Jinja2, you maintain a single “source of truth” for your pipeline, avoiding\
+    \ duplication and streamlining the entire process of DVC stage management. This\
+    \ is a hallmark of advanced MLOps design—where configuration, code, and data versioning\
+    \ all align seamlessly to reduce friction for the team. "

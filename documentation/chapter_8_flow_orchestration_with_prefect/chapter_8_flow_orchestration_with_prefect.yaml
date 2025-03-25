@@ -1,61 +1,61 @@
 base_name: chapter_8_flow_orchestration_with_prefect
 extension: md
-title: "Chapter 8 - Flow Orchestration with Prefect"
+title: Chapter 8 - Flow Orchestration with Prefect
 content_chapter:
 - section_num: 0
-  section_name: "Introduction to Prefect Flow"
+  section_name: Introduction to Prefect Flow
   content_section:
-  - |
-    ### 8.1 Why Use Prefect for Orchestration?
-
-    - **Higher-Level Pipeline Control**  
-      Prefect wraps your data pipeline steps in tasks and flows, providing easier concurrency, retries, and centralized logging. This is especially useful when you have multiple pipeline triggers or want to schedule jobs more flexibly than with basic shell scripts.
-
-    - **Modular, Composable Tasks**  
-      Steps like `ensure_dvc_is_clean()`, `generate_dvc_yaml()`, and `run_dvc_repro()` each become a dedicated Prefect task. Prefect then manages dependencies between tasks, handles exceptions, and logs results. You can mix these tasks with other pipelines or cloud-based orchestrations.
-
-    - **Integration With Hydra + DVC**  
-      Prefect doesn’t replace Hydra or DVC; it wraps them. Hydra still manages your configuration structure, while DVC handles data versioning. Prefect’s role is orchestrating the entire end-to-end flow, ensuring each stage runs in a controlled order with proper logging.
-
+  - "### 8.1 Why Use Prefect for Orchestration?\n\n- **Higher-Level Pipeline Control**\
+    \  \n  Prefect wraps your data pipeline steps in tasks and flows, providing easier\
+    \ concurrency, retries, and centralized logging. This is especially useful when\
+    \ you have multiple pipeline triggers or want to schedule jobs more flexibly than\
+    \ with basic shell scripts.\n\n- **Modular, Composable Tasks**  \n  Steps like\
+    \ `ensure_dvc_is_clean()`, `generate_dvc_yaml()`, and `run_dvc_repro()` each become\
+    \ a dedicated Prefect task. Prefect then manages dependencies between tasks, handles\
+    \ exceptions, and logs results. You can mix these tasks with other pipelines or\
+    \ cloud-based orchestrations.\n\n- **Integration With Hydra + DVC**  \n  Prefect\
+    \ doesn’t replace Hydra or DVC; it wraps them. Hydra still manages your configuration\
+    \ structure, while DVC handles data versioning. Prefect’s role is orchestrating\
+    \ the entire end-to-end flow, ensuring each stage runs in a controlled order with\
+    \ proper logging."
 - section_num: 1
-  section_name: "How the Flow Works"
+  section_name: How the Flow Works
   content_section:
-  - |
-    ### 8.2 Orchestration Flow Explained
-
-    1. **Tasks vs. Flow**  
-       In `orchestrate_dvc_flow.py`, each function—like `generate_dvc_yaml`—is annotated with `@task`. Prefect uses these to build a graph of how your pipeline executes. The `@flow` decorator then defines the higher-level sequence of tasks as one orchestrated run.
-
-    2. **Setting Environment Variables**  
-       The `set_environment_vars()` task sets `HYDRA_FULL_ERROR` and `OC_CAUSE` so you get full tracebacks if something goes wrong, making debugging easier.
-
-    3. **Ensure Clean DVC State**  
-       The `ensure_dvc_is_clean()` task checks for uncommitted DVC changes in `git status`. If it finds any, it raises an exception to prevent partial commits or inconsistent states.
-
-    4. **Generating the DVC YAML File**  
-       - If `skip_generation` is `false`, we call `generate_dvc_yaml(...)`.  
-       - This uses the Hydra config’s `stages_list` and a Jinja2 template to build the `dvc.yaml` automatically.  
-       - If the new file differs from the old one and `allow_dvc_changes` is `false`, it reverts changes for safety. Otherwise, it accepts them.
-
-    5. **Running `dvc repro`**  
-       Once DVC is clean and the YAML file is up to date, `run_dvc_repro()` triggers the pipeline. You can force a re-run of all stages with `--force`, or only re-run a subset of stages (e.g., `v10_lag_columns`).
-
-    6. **Final Execution**  
-       The entire process is contained in `dvc_flow(...)`. At the very end, logs are saved to a file specified by your Hydra config, and you’ll see a summary in the console. This modular design means you can schedule this flow in Prefect Cloud or run it locally with the same code.
-
+  - "### 8.2 Orchestration Flow Explained\n\n1. **Tasks vs. Flow**  \n   In `orchestrate_dvc_flow.py`,\
+    \ each function—like `generate_dvc_yaml`—is annotated with `@task`. Prefect uses\
+    \ these to build a graph of how your pipeline executes. The `@flow` decorator\
+    \ then defines the higher-level sequence of tasks as one orchestrated run.\n\n\
+    2. **Setting Environment Variables**  \n   The `set_environment_vars()` task sets\
+    \ `HYDRA_FULL_ERROR` and `OC_CAUSE` so you get full tracebacks if something goes\
+    \ wrong, making debugging easier.\n\n3. **Ensure Clean DVC State**  \n   The `ensure_dvc_is_clean()`\
+    \ task checks for uncommitted DVC changes in `git status`. If it finds any, it\
+    \ raises an exception to prevent partial commits or inconsistent states.\n\n4.\
+    \ **Generating the DVC YAML File**  \n   - If `skip_generation` is `false`, we\
+    \ call `generate_dvc_yaml(...)`.  \n   - This uses the Hydra config’s `stages_list`\
+    \ and a Jinja2 template to build the `dvc.yaml` automatically.  \n   - If the\
+    \ new file differs from the old one and `allow_dvc_changes` is `false`, it reverts\
+    \ changes for safety. Otherwise, it accepts them.\n\n5. **Running `dvc repro`**\
+    \  \n   Once DVC is clean and the YAML file is up to date, `run_dvc_repro()` triggers\
+    \ the pipeline. You can force a re-run of all stages with `--force`, or only re-run\
+    \ a subset of stages (e.g., `v10_lag_columns`).\n\n6. **Final Execution**  \n\
+    \   The entire process is contained in `dvc_flow(...)`. At the very end, logs\
+    \ are saved to a file specified by your Hydra config, and you’ll see a summary\
+    \ in the console. This modular design means you can schedule this flow in Prefect\
+    \ Cloud or run it locally with the same code."
 - section_num: 2
-  section_name: "Why This Matters"
+  section_name: Why This Matters
   content_section:
-  - |
-    ### 8.3 Why This Matters for MLOps
-
-    - **Consistency**  
-      Every run starts by validating DVC cleanliness and regenerating the pipeline if needed. This eliminates “accidental stale pipelines” where you forget to update `dvc.yaml`.
-
-    - **Traceability**  
-      Prefect logs each task’s start/end, enabling you to see where failures occur. Combined with Hydra’s structured configs and DVC’s data versioning, you get a full audit trail of code, data, and pipeline changes.
-
-    - **Scalability**  
-      For larger teams or more complex pipelines, Prefect’s concurrency, scheduling, and cloud-based run management keep things organized. You can extend the flow with additional tasks (e.g., model evaluation, MLflow artifact checks) without rewriting your entire pipeline.
-
-    By orchestrating the entire DVC pipeline with Prefect, you gain a robust control plane for your transformations. Hydra ensures configs remain DRY, DVC tracks data lineage, and Prefect coordinates execution. This layered approach is a hallmark of production-grade MLOps solutions.
+  - "### 8.3 Why This Matters for MLOps\n\n- **Consistency**  \n  Every run starts\
+    \ by validating DVC cleanliness and regenerating the pipeline if needed. This\
+    \ eliminates “accidental stale pipelines” where you forget to update `dvc.yaml`.\n\
+    \n- **Traceability**  \n  Prefect logs each task’s start/end, enabling you to\
+    \ see where failures occur. Combined with Hydra’s structured configs and DVC’s\
+    \ data versioning, you get a full audit trail of code, data, and pipeline changes.\n\
+    \n- **Scalability**  \n  For larger teams or more complex pipelines, Prefect’s\
+    \ concurrency, scheduling, and cloud-based run management keep things organized.\
+    \ You can extend the flow with additional tasks (e.g., model evaluation, MLflow\
+    \ artifact checks) without rewriting your entire pipeline.\n\nBy orchestrating\
+    \ the entire DVC pipeline with Prefect, you gain a robust control plane for your\
+    \ transformations. Hydra ensures configs remain DRY, DVC tracks data lineage,\
+    \ and Prefect coordinates execution. This layered approach is a hallmark of production-grade\
+    \ MLOps solutions."

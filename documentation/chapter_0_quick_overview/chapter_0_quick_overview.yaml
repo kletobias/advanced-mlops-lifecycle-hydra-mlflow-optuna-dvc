@@ -7,51 +7,74 @@ content_chapter:
   sub_section:
   - sub_section_name: Key Features - Quick Overview
     content_sub_section:
-    - |
-      - Hydra Configuration
-        All parameters (data paths, transformations, hyperparameters) are separated from the code in a single source of truth. With Hydra’s override syntax, you can quickly switch between data versions (e.g., v0, v1, …) or transformations (lag_columns, drop_rare_drgs, etc.) at runtime, without modifying your core Python scripts.
-    - |
-      - Data Versioning with DVC
-        Each pipeline stage (e.g., ingestion, transformation, modeling) is declared in configs/pipeline/base.yaml. DVC then tracks every data transformation, ensuring that any version of the dataset or code can be reproduced exactly. This eliminates confusion around which data was used for which experiment.
-    - |
-      - Experiment Tracking with MLflow
-        Scripts like rf_optuna_trial.py or ridge_optuna_trial.py automatically log metrics and artifacts (model pickles, permutation importances, etc.) to MLflow. This makes it easy to compare multiple runs side by side, roll back to past models, or share results with your team.
-    - |
-      - Modular Transformations
-        Each transformation is a small, testable function in dependencies/transformations/. The configuration for which columns to shift, which DRGs to drop, and other parameters lives in matching YAML files under configs/transformations/. This approach keeps transformations atomic and easy to swap in and out.
-    - |
-      - Metadata Logging
-        Every time you generate a new CSV, the pipeline creates a JSON metadata file (including row count, column types, file hash, etc.). This extra layer of traceability helps ensure that any data artifacts you produce can be audited or reproduced later on.
-  - sub_section_name: 'Why Aim for this "Trifecta"?'
+    - "- Hydra Configuration\n  All parameters (data paths, transformations, hyperparameters)\
+      \ are separated from the code in a single source of truth. With Hydra’s override\
+      \ syntax, you can quickly switch between data versions (e.g., v0, v1, …) or\
+      \ transformations (lag_columns, drop_rare_drgs, etc.) at runtime, without modifying\
+      \ your core Python scripts."
+    - "- Data Versioning with DVC\n  Each pipeline stage (e.g., ingestion, transformation,\
+      \ modeling) is declared in configs/pipeline/base.yaml. DVC then tracks every\
+      \ data transformation, ensuring that any version of the dataset or code can\
+      \ be reproduced exactly. This eliminates confusion around which data was used\
+      \ for which experiment."
+    - "- Experiment Tracking with MLflow\n  Scripts like rf_optuna_trial.py or ridge_optuna_trial.py\
+      \ automatically log metrics and artifacts (model pickles, permutation importances,\
+      \ etc.) to MLflow. This makes it easy to compare multiple runs side by side,\
+      \ roll back to past models, or share results with your team."
+    - "- Modular Transformations\n  Each transformation is a small, testable function\
+      \ in dependencies/transformations/. The configuration for which columns to shift,\
+      \ which DRGs to drop, and other parameters lives in matching YAML files under\
+      \ configs/transformations/. This approach keeps transformations atomic and easy\
+      \ to swap in and out."
+    - "- Metadata Logging\n  Every time you generate a new CSV, the pipeline creates\
+      \ a JSON metadata file (including row count, column types, file hash, etc.).\
+      \ This extra layer of traceability helps ensure that any data artifacts you\
+      \ produce can be audited or reproduced later on."
+  - sub_section_name: Why Aim for this "Trifecta"?
     content_sub_section:
-    - |
-      Hydra, Optuna, and MLflow each solve critical but distinct challenges in a modern MLOps pipeline. Hydra provides flexible, hierarchical configuration management that ensures a single source of truth and reduces repetitive boilerplate. Optuna streamlines hyperparameter tuning through efficient search algorithms and automatic trial management. MLflow takes care of experiment tracking, artifact logging, and model versioning, making it simple to compare runs or roll back to a previous state. By weaving these tools into a unified workflow, you reap the benefits of advanced experimentation, reproducibility, and clean code organization—all while scaling to more complex data engineering and modeling tasks.
-    - |
-      In short, this “trifecta” setup saves you time, reduces errors, and achieves scalable MLOps practices at both small and large organizations.
+    - Hydra, Optuna, and MLflow each solve critical but distinct challenges in a modern
+      MLOps pipeline. Hydra provides flexible, hierarchical configuration management
+      that ensures a single source of truth and reduces repetitive boilerplate. Optuna
+      streamlines hyperparameter tuning through efficient search algorithms and automatic
+      trial management. MLflow takes care of experiment tracking, artifact logging,
+      and model versioning, making it simple to compare runs or roll back to a previous
+      state. By weaving these tools into a unified workflow, you reap the benefits
+      of advanced experimentation, reproducibility, and clean code organization—all
+      while scaling to more complex data engineering and modeling tasks.
+    - In short, this “trifecta” setup saves you time, reduces errors, and achieves
+      scalable MLOps practices at both small and large organizations.
   - subsub_section:
-    - subsub_section_name: 'End-to-End Pipeline Management'
+    - subsub_section_name: End-to-End Pipeline Management
       content_subsub_section:
       - '**Single Source of Truth With Hydra**'
-      - |
-        One of the biggest pitfalls in MLOps is duplicating configuration values or scattering them across various scripts. Here, we use structured configs (with Python dataclasses) and Hydra’s override syntax to maintain one definition for each variable. When you need to change a path or hyperparameter, you do it once, and it propagates everywhere else automatically.
+      - One of the biggest pitfalls in MLOps is duplicating configuration values or
+        scattering them across various scripts. Here, we use structured configs (with
+        Python dataclasses) and Hydra’s override syntax to maintain one definition
+        for each variable. When you need to change a path or hyperparameter, you do
+        it once, and it propagates everywhere else automatically.
       - '**Clean Separation of Concerns**'
-      - |
-        Our Python code is universal rather than specific to any single pipeline stage. We centralize logic in flexible, modular functions (e.g., transformations, model trainers, data ingestion routines) and tie them together with Hydra configs. This makes it trivial to add new functionality—like a novel data transformation or an entirely different model architecture—without duplicating scripts for each experiment.
+      - Our Python code is universal rather than specific to any single pipeline stage.
+        We centralize logic in flexible, modular functions (e.g., transformations,
+        model trainers, data ingestion routines) and tie them together with Hydra
+        configs. This makes it trivial to add new functionality—like a novel data
+        transformation or an entirely different model architecture—without duplicating
+        scripts for each experiment.
       - '**Override Syntax for Rapid Experimentation**'
-      - |
-        Switching data versions or transformations can be done with a few flags at runtime, rather than rewriting script after script. For example:
-      - |
-        ```sh
-        python scripts/universal_step.py \
-          +setup.script_base_name=rf_optuna_trial \
-          data_versions=v10 \
-          model_params=rf_optuna_trial_params
-        ```
-      - |
-        This flexibility empowers you to iterate quickly without diving into complex code changes.
-    - subsub_section_name: 'Why Companies Struggle'
+      - 'Switching data versions or transformations can be done with a few flags at
+        runtime, rather than rewriting script after script. For example:'
+      - "```sh\npython scripts/universal_step.py \\\n  setup.script_base_name=rf_optuna_trial\
+        \ \\\n  data_versions=v10 \\\n  model_params=rf_optuna_trial_params\n```"
+      - This flexibility empowers you to iterate quickly without diving into complex
+        code changes.
+    - subsub_section_name: Why Companies Struggle
       content_subsub_section:
-      - |
-        Organizations often fail at building a cohesive MLOps practice because they adopt these tools in isolation or rely on ad hoc scripts. Configuration drift and inconsistent versioning are common outcomes, making reproducing experiments or sharing code with new team members an uphill battle. This project addresses these pitfalls by maintaining a strict single source of truth, unifying the entire pipeline, and ensuring every stage is both reproducible and extensible.
-      - |
-        By following these principles and leveraging the synergy of Hydra, Optuna, and MLflow, you build a solid foundation for any enterprise-scale MLOps workflow—one that’s modular, reproducible, and effortless to extend as your data and modeling needs evolve.
+      - Organizations often fail at building a cohesive MLOps practice because they
+        adopt these tools in isolation or rely on ad hoc scripts. Configuration drift
+        and inconsistent versioning are common outcomes, making reproducing experiments
+        or sharing code with new team members an uphill battle. This project addresses
+        these pitfalls by maintaining a strict single source of truth, unifying the
+        entire pipeline, and ensuring every stage is both reproducible and extensible.
+      - By following these principles and leveraging the synergy of Hydra, Optuna,
+        and MLflow, you build a solid foundation for any enterprise-scale MLOps workflow—one
+        that’s modular, reproducible, and effortless to extend as your data and modeling
+        needs evolve.

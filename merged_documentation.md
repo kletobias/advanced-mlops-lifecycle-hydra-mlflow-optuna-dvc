@@ -1,4 +1,3 @@
-<!--merged_documentation.md-->
 # Comprehensive Documentation
 
 ## README.md
@@ -10,30 +9,23 @@
 - Hydra Configuration
   All parameters (data paths, transformations, hyperparameters) are separated from the code in a single source of truth. With Hydra’s override syntax, you can quickly switch between data versions (e.g., v0, v1, …) or transformations (lag_columns, drop_rare_drgs, etc.) at runtime, without modifying your core Python scripts.
 
-
 - Data Versioning with DVC
   Each pipeline stage (e.g., ingestion, transformation, modeling) is declared in configs/pipeline/base.yaml. DVC then tracks every data transformation, ensuring that any version of the dataset or code can be reproduced exactly. This eliminates confusion around which data was used for which experiment.
-
 
 - Experiment Tracking with MLflow
   Scripts like rf_optuna_trial.py or ridge_optuna_trial.py automatically log metrics and artifacts (model pickles, permutation importances, etc.) to MLflow. This makes it easy to compare multiple runs side by side, roll back to past models, or share results with your team.
 
-
 - Modular Transformations
   Each transformation is a small, testable function in dependencies/transformations/. The configuration for which columns to shift, which DRGs to drop, and other parameters lives in matching YAML files under configs/transformations/. This approach keeps transformations atomic and easy to swap in and out.
 
-
 - Metadata Logging
   Every time you generate a new CSV, the pipeline creates a JSON metadata file (including row count, column types, file hash, etc.). This extra layer of traceability helps ensure that any data artifacts you produce can be audited or reproduced later on.
-
 
 #### Why Aim for this "Trifecta"?
 
 Hydra, Optuna, and MLflow each solve critical but distinct challenges in a modern MLOps pipeline. Hydra provides flexible, hierarchical configuration management that ensures a single source of truth and reduces repetitive boilerplate. Optuna streamlines hyperparameter tuning through efficient search algorithms and automatic trial management. MLflow takes care of experiment tracking, artifact logging, and model versioning, making it simple to compare runs or roll back to a previous state. By weaving these tools into a unified workflow, you reap the benefits of advanced experimentation, reproducibility, and clean code organization—all while scaling to more complex data engineering and modeling tasks.
 
-
 In short, this “trifecta” setup saves you time, reduces errors, and achieves scalable MLOps practices at both small and large organizations.
-
 
 #### Sub-Section
 
@@ -43,35 +35,28 @@ In short, this “trifecta” setup saves you time, reduces errors, and achieves
 
 One of the biggest pitfalls in MLOps is duplicating configuration values or scattering them across various scripts. Here, we use structured configs (with Python dataclasses) and Hydra’s override syntax to maintain one definition for each variable. When you need to change a path or hyperparameter, you do it once, and it propagates everywhere else automatically.
 
-
 **Clean Separation of Concerns**
 
 Our Python code is universal rather than specific to any single pipeline stage. We centralize logic in flexible, modular functions (e.g., transformations, model trainers, data ingestion routines) and tie them together with Hydra configs. This makes it trivial to add new functionality—like a novel data transformation or an entirely different model architecture—without duplicating scripts for each experiment.
-
 
 **Override Syntax for Rapid Experimentation**
 
 Switching data versions or transformations can be done with a few flags at runtime, rather than rewriting script after script. For example:
 
-
 ```sh
 python scripts/universal_step.py \
-  +setup.script_base_name=rf_optuna_trial \
+  setup.script_base_name=rf_optuna_trial \
   data_versions=v10 \
   model_params=rf_optuna_trial_params
 ```
 
-
 This flexibility empowers you to iterate quickly without diving into complex code changes.
-
 
 ##### Why Companies Struggle
 
 Organizations often fail at building a cohesive MLOps practice because they adopt these tools in isolation or rely on ad hoc scripts. Configuration drift and inconsistent versioning are common outcomes, making reproducing experiments or sharing code with new team members an uphill battle. This project addresses these pitfalls by maintaining a strict single source of truth, unifying the entire pipeline, and ensuring every stage is both reproducible and extensible.
 
-
 By following these principles and leveraging the synergy of Hydra, Optuna, and MLflow, you build a solid foundation for any enterprise-scale MLOps workflow—one that’s modular, reproducible, and effortless to extend as your data and modeling needs evolve.
-
 
 ## Chapter 1 - High-Level Overview
 
@@ -90,7 +75,6 @@ By following these principles and leveraging the synergy of Hydra, Optuna, and M
 
 - **End-to-End Logging and Experiment Tracking**  
   MLflow hooks into each experiment to log artifacts (pickle models, permutation importances) and metrics (RMSE, R2), making it straightforward to roll back or compare runs.
-
 
 ### Architecture Highlights
 
@@ -122,7 +106,6 @@ By following these principles and leveraging the synergy of Hydra, Optuna, and M
 
 These design choices demonstrate a thorough MLOps-oriented approach—one that ensures both reproducibility and agility for rapid experimentation in a real-world setting.
 
-
 ## Chapter 2 - Config Groups and Rationale
 
 ### Overall Structure
@@ -140,7 +123,6 @@ These design choices demonstrate a thorough MLOps-oriented approach—one that e
 
 - **Future-Proof**  
   This modular approach scales as you add more transformations, new data splits, or additional advanced hyperparameter search spaces. You won’t have to refactor your entire codebase—just extend or create new config files.
-
 
 ### Notable Folders
 
@@ -166,7 +148,6 @@ These design choices demonstrate a thorough MLOps-oriented approach—one that e
 
 Together, these config folders ensure that every important parameter is discoverable, documented, and easily overridden—solidifying maintainability and clarity for both current and future collaborators.
 
-
 ## Chapter 3 - How Runtime Overrides Work
 
 ### Core Concept of Hydra Overrides
@@ -177,7 +158,7 @@ Together, these config folders ensure that every important parameter is discover
   By default, `config.yaml` sets a baseline for each group (e.g., `data_versions=base`, `models=rf_optuna_trial_params`). With Hydra, you can override them at runtime. For example:
   ```sh
   python scripts/universal_step.py \
-    +setup.script_base_name=lag_columns \
+    setup.script_base_name=lag_columns \
     data_versions=v10 \
     transformations=lag_columns
   ```
@@ -187,7 +168,7 @@ Together, these config folders ensure that every important parameter is discover
   You can stack multiple overrides, e.g.:
   ```sh
   python scripts/universal_step.py \
-    +setup.script_base_name=drop_rare_drgs \
+    setup.script_base_name=drop_rare_drgs \
     data_versions=v6 \
     model_params=rf_optuna_trial_params
   ```
@@ -195,7 +176,6 @@ Together, these config folders ensure that every important parameter is discover
 
 - **Fewer Scripts, More Flexibility**  
   Instead of writing new code for each scenario, you create or modify config files. The pipeline adjusts automatically at runtime—no duplication of logic.
-
 
 ### Practical Examples
 
@@ -208,7 +188,7 @@ Together, these config folders ensure that every important parameter is discover
   If you only want to read data and not save output (e.g., for debugging), you can override I/O policies:
   ```sh
   python scripts/universal_step.py \
-    +setup.script_base_name=drop_rare_drgs \
+    setup.script_base_name=drop_rare_drgs \
     io_policy.WRITE_OUTPUT=false
   ```
   This stops the pipeline from creating new CSVs or metadata files, ideal for quick checks.
@@ -217,14 +197,13 @@ Together, these config folders ensure that every important parameter is discover
   If you’d like to switch from default random-forest hyperparameters to an Optuna-driven search, set `model_params=rf_optuna_trial_params`:
   ```sh
   python scripts/universal_step.py \
-    +setup.script_base_name=rf_optuna_trial \
+    setup.script_base_name=rf_optuna_trial \
     data_versions=v11 \
     model_params=rf_optuna_trial_params
   ```
   No code changes required—just a single override pointing to a YAML file with all the hyperparameter search details.
 
 These override patterns mean your entire ML pipeline, from data ingestion through model training, is fully configurable at runtime. It’s both simpler and more powerful than copying or rewriting scripts for every new scenario.
-
 
 ## Chapter 4 - Data Versioning with DVC
 
@@ -243,7 +222,6 @@ These override patterns mean your entire ML pipeline, from data ingestion throug
 
 - **Confidence in Production**  
   Because each data artifact is hashed and tracked, you avoid “data drift”—you’ll know exactly which rows were used to train any given model, enabling more reliable maintenance, auditing, or model retraining.
-
 
 ### Practical Steps
 
@@ -291,7 +269,6 @@ These override patterns mean your entire ML pipeline, from data ingestion throug
 
 By structuring your project around DVC pipelines and remote storage, you gain ironclad reproducibility, easy collaboration, and a clear evolutionary path for each dataset version—critical elements for any senior-level MLOps workflow. 
 
-
 ## Chapter 5 - Modular Code Organization
 
 ### “Dependencies” Folder
@@ -313,7 +290,6 @@ By structuring your project around DVC pipelines and remote storage, you gain ir
 - **Modeling**  
   Models and hyperparameter search methods (e.g., `rf_optuna_trial.py`, `ridge_optuna_trial.py`) reside in `dependencies/modeling/`. They all follow a similar structure, so you can easily add new algorithms (like XGBoost) without major refactoring.
 
-
 ### “scripts/” Folder
 
 #### 5.2 “scripts/” Folder
@@ -328,7 +304,6 @@ By structuring your project around DVC pipelines and remote storage, you gain ir
   Because each script references the `dependencies/` folder for actual logic, the scripts themselves remain lean. Changing a single line in a config file can alter the behavior of the pipeline, without rewriting or branching any Python code.
 
 This code structure ensures each piece is independently testable and easy to locate. New team members can quickly find where transformations happen, how logs are configured, and where model training logic resides, which is key to a senior-level MLOps setup. 
-
 
 ## Chapter 6 - Example Walkthrough
 
@@ -360,7 +335,7 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 2. **Runtime Command**  
    ```sh
    python scripts/universal_step.py \
-     +setup.script_base_name=lag_columns \
+     setup.script_base_name=lag_columns \
      transformations=lag_columns \
      data_versions.data_version_input=v10 \
      data_versions.data_version_output=v11
@@ -375,7 +350,6 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 4. **Why Lag Columns?**  
    This step shifts certain numeric columns by one “year” within each `[facility_id, apr_drg_code]` group. It’s a common technique for time-series or sequential analysis, letting you reference previous-year values in the current year’s modeling.
 
-
 ### Tying It All Together
 
 #### 6.2 From Config to Final Artifacts
@@ -388,7 +362,6 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 
 - **Experiment Management**  
   If you then run `rf_optuna_trial` on `v11.csv`, you can experiment with new features (the lag columns) and see if model metrics improve, all tracked by MLflow. Switching to a different data version or a different transformation pipeline is just another override. This flexible approach highlights how config-driven design accelerates experimentation while preserving reproducibility.
-
 
 ## Chapter 7 - Dynamic DVC YAML Generation
 
@@ -407,7 +380,6 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 
 - **Full Customization**  
   Because it’s template-driven, you can easily tweak how your DVC file is formatted: add or remove sections (e.g., for metrics or checkpoints), rename `outs` to `metrics` or `plots`, etc. This is especially helpful if your pipeline expands to more advanced DVC features.
-
 
 ### How It Works
 
@@ -437,7 +409,6 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 4. **Flow Orchestration**  
    The logic to generate or regenerate `dvc.yaml` on demand is controlled by your Hydra config. For instance, if `skip_generation=false`, it calls `generate_dvc_yaml_core(...)`. If `allow_dvc_changes=true`, it replaces any existing `dvc.yaml` with the new one. This means you can set rules about when and how the file updates.
 
-
 ### Notable Advantages
 
 #### 7.3 Notable Advantages
@@ -456,7 +427,6 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 
 By integrating Hydra, Omegaconf, and Jinja2, you maintain a single “source of truth” for your pipeline, avoiding duplication and streamlining the entire process of DVC stage management. This is a hallmark of advanced MLOps design—where configuration, code, and data versioning all align seamlessly to reduce friction for the team. 
 
-
 ## Chapter 8 - Flow Orchestration with Prefect
 
 ### Introduction to Prefect Flow
@@ -471,7 +441,6 @@ By integrating Hydra, Omegaconf, and Jinja2, you maintain a single “source of 
 
 - **Integration With Hydra + DVC**  
   Prefect doesn’t replace Hydra or DVC; it wraps them. Hydra still manages your configuration structure, while DVC handles data versioning. Prefect’s role is orchestrating the entire end-to-end flow, ensuring each stage runs in a controlled order with proper logging.
-
 
 ### How the Flow Works
 
@@ -497,7 +466,6 @@ By integrating Hydra, Omegaconf, and Jinja2, you maintain a single “source of 
 6. **Final Execution**  
    The entire process is contained in `dvc_flow(...)`. At the very end, logs are saved to a file specified by your Hydra config, and you’ll see a summary in the console. This modular design means you can schedule this flow in Prefect Cloud or run it locally with the same code.
 
-
 ### Why This Matters
 
 #### 8.3 Why This Matters for MLOps
@@ -512,7 +480,6 @@ By integrating Hydra, Omegaconf, and Jinja2, you maintain a single “source of 
   For larger teams or more complex pipelines, Prefect’s concurrency, scheduling, and cloud-based run management keep things organized. You can extend the flow with additional tasks (e.g., model evaluation, MLflow artifact checks) without rewriting your entire pipeline.
 
 By orchestrating the entire DVC pipeline with Prefect, you gain a robust control plane for your transformations. Hydra ensures configs remain DRY, DVC tracks data lineage, and Prefect coordinates execution. This layered approach is a hallmark of production-grade MLOps solutions.
-
 
 ## Chapter 9 - Logging and MLflow Integration
 
@@ -529,7 +496,6 @@ By orchestrating the entire DVC pipeline with Prefect, you gain a robust control
 - **Central Control in `configs/logging_utils/base.yaml`**  
   You specify the log format (`%(asctime)s %(levelname)s:%(message)s`) and output paths for both Hydra runs and the pipeline in a single place. This ensures every pipeline step, model training, or data transformation follows the same conventions.
 
-
 ### Traceability with MLflow
 
 #### 9.2 Traceability with MLflow
@@ -542,7 +508,6 @@ By orchestrating the entire DVC pipeline with Prefect, you gain a robust control
 
 - **Experiment Consistency**  
   Hydra merges your experiment configuration (train/val/test splits, random seeds) with the model parameters. MLflow records these details automatically once you log them in the script. This means you can reconstruct exactly how each experiment was done—even months later—by referencing the logged parameters and your pipeline’s DVC version.
-
 
 ### Pipeline Log Example
 
@@ -567,7 +532,6 @@ Below is part of the pipeline log showing each stage run sequentially (e.g., `v0
   Each log entry is timestamped, so you know exactly when each step starts and finishes. This is crucial for debugging (e.g., if a step took unexpectedly long) or verifying that all transformations happened in the correct sequence.
 
 By combining Hydra, Python logging, and MLflow experiment tracking, you get a comprehensive picture of what ran, when it ran, how it was configured, which data version was used, and how the model performed—all in one place. This makes the entire system highly auditable and easier to maintain at scale.
-
 
 ## Chapter 10 - Conclusion and Further Steps
 
