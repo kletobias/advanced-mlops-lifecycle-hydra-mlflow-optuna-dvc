@@ -1,6 +1,19 @@
 stages:
+  v0_download_and_save_data:
+    cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=download_and_save_data transformations=download_and_save_data io_policy.READ_INPUT=False
+    desc: Refer to deps/outs for details.
+    frozen: true
+    deps:
+      - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
+      - ./dependencies/ingestion/download_and_save_data.py
+      - ./configs/data_versions/v0.yaml
+    outs:
+      - ./data/v0/v0.csv
+      - ./data/v0/v0_metadata.json
+
   v0_sanitize_column_names:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/cleaning/sanitize_column_names.py
@@ -11,6 +24,7 @@ stages:
 
   v1_drop_description_columns:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/drop_description_columns.py
@@ -21,6 +35,7 @@ stages:
 
   v2_median_profit:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/median_profit.py
@@ -31,6 +46,7 @@ stages:
 
   v3_mean_profit:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/mean_profit.py
@@ -41,6 +57,7 @@ stages:
 
   v4_total_mean_profit:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/total_mean_profit.py
@@ -51,6 +68,7 @@ stages:
 
   v5_total_median_profit:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/total_median_profit.py
@@ -61,6 +79,7 @@ stages:
 
   v5_1_total_median_cost:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/total_median_cost.py
@@ -71,6 +90,7 @@ stages:
 
   v5_2_total_mean_cost:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/total_mean_cost.py
@@ -81,6 +101,7 @@ stages:
 
   v6_drop_rare_drgs:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/drop_rare_drgs.py
@@ -91,6 +112,7 @@ stages:
 
   v7_agg_severities:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/agg_severities.py
@@ -101,6 +123,7 @@ stages:
 
   v8_ratio_drg_facility_vs_year:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/ratio_drg_facility_vs_year.py
@@ -111,6 +134,7 @@ stages:
 
   v9_yearly_discharge_bin:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/yearly_discharge_bin.py
@@ -121,6 +145,7 @@ stages:
 
   v10_lag_columns:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/lag_columns.py
@@ -131,6 +156,7 @@ stages:
 
   v11_rolling_columns:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/rolling_columns.py
@@ -141,6 +167,7 @@ stages:
 
   v12_drop_non_lag_columns:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/transformations/drop_non_lag_columns.py
@@ -151,6 +178,7 @@ stages:
 
   v13_rf_optuna_trial:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v13 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/modeling/rf_optuna_trial.py
@@ -158,13 +186,9 @@ stages:
     outs: []
   v13_ridge_optuna_trial:
     cmd: /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=ridge_optuna_trial transformations=ridge_optuna_trial data_versions.data_version_input=v13 data_versions.data_version_output=v13 io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
+    desc: Refer to deps/outs for details.
     deps:
       - /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py
       - ./dependencies/modeling/ridge_optuna_trial.py
       - ./configs/data_versions/v13.yaml
     outs: []
-plots:
-  - mlruns/267770527945916909/c0265242dba948829ad10cae3c7e55d8/artifacts/importances/permutation_importances.csv:
-      y: feature
-      x: importances
-      template: bar_horizontal_sorted
