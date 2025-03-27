@@ -217,9 +217,15 @@ Further Documentation
 
 ⸻
 
-License and Contact
-- License: MIT (or your chosen license).
-- Author: Your Name — feel free to connect!
-- Contact: Open an issue on GitHub or message me on LinkedIn for questions.
+**Contact**  
+- Author: Tobias Klein
+- Contact:
+    - Open an issue on GitHub or message me on LinkedIn for questions.
+    - [LinkedIn](https://www.linkedin.com/in/deep-learning-mastery/)
+    - [Website](https://deep-learning-mastery.com/)
 
 Thank you for exploring this project! For more information on scaling or productionizing an MLOps pipeline, reach out via GitHub issues or LinkedIn.
+
+© 2025 Tobias Klein. All rights reserved.
+
+This repository is provided solely for demonstration and personal review. No license is granted for commercial or non-commercial use, copying, modification, or distribution without explicit, written permission from the author.
