@@ -33,3 +33,11 @@ files/
 /.troubleshoot/
 portfolio_article
 documentation_v2/
+trouble/
+prefect.yaml
+.ruff_cache/
+.prefectignore
+notebooks/
+TODO.txt
+bin/
+gather_content/
