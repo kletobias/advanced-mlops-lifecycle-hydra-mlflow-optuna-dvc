@@ -10,17 +10,27 @@
 - **Hydra Configuration**  
   All parameters (data paths, transformations, hyperparameters) are separated from the code in a single source of truth. With Hydra’s override syntax, you can quickly switch between data versions (e.g., v0, v1, …) or transformations (lag_columns, drop_rare_drgs, etc.) at runtime, without modifying your core Python scripts.
 
+- **Smart use of defaults lists within config groups**
+  We define the defaults for each config group within `base.yaml` files. These 'base' configs are added to the defaults list of more specific configs and overwritten only where needed. No duplication.
+
 - **Data Versioning with DVC**  
-  Each pipeline stage (e.g., ingestion, transformation, modeling) is declared in `configs/pipeline/base.yaml`. DVC then tracks every data transformation, ensuring that any version of the dataset or code can be reproduced exactly. This eliminates confusion around which data was used for which experiment.
+  Each pipeline stage (e.g., ingestion, transformation, modeling) is only declared in `configs/pipeline/base.yaml` and written to `dvc.yaml`. DVC then tracks every data transformation, ensuring that any version of the dataset or code can be reproduced exactly. This eliminates confusion around which data was used for which experiment.
+
+- **We added support for `plots` in pipeline/base.yaml**
+  `dependencies/template/generate_dvc_yaml_core.py` now checks for plots in `configs/pipeline/base.yaml`. It generates the plots section in `dvc.yaml`, if present.
 
 - **Experiment Tracking with MLflow**  
-  Scripts like `rf_optuna_trial.py` or `ridge_optuna_trial.py` automatically log metrics and artifacts (model pickles, permutation importances, etc.) to MLflow. This makes it easy to compare multiple runs side by side, roll back to past models, or share results with your team.
+  Scripts like `rf_optuna_trial.py` or `ridge_optuna_trial.py` automatically log metrics and artifacts (model pickles, permutation importances, etc.) to MLflow (under MLflow's default folder `mlruns`). This makes it easy to compare multiple runs side by side, roll back to past models, or share results with your team.
 
 - **Modular Transformations**  
   Each transformation is a small, testable function in `dependencies/transformations/`. The configuration for which columns to shift, which DRGs to drop, and other parameters lives in matching YAML files under `configs/transformations/`. This approach keeps transformations atomic and easy to swap in and out.
 
+- **All Transformations share the same structure**
+  Each includes one dataclass and one transformation function. We use a single-function-per-transformation approach to keep transformations concise and clear. Universal tasks—such as reading/writing data, metadata processing, or merging—are handled in a dedicated dependencies module. Any repeated logic across transformations is refactored into shared code, ensuring maintainability, clarity, and minimal duplication.
+
 - **Metadata Logging**  
   Every time you generate a new CSV, the pipeline creates a JSON metadata file (including row count, column types, file hash, etc.). This extra layer of traceability helps ensure that any data artifacts you produce can be audited or reproduced later on.
+
 
 #### Why Aim for this "Trifecta"?
 
@@ -42,12 +52,45 @@ Our Python code is universal rather than specific to any single pipeline stage. 
 
 Switching data versions or transformations can be done with a few flags at runtime, rather than rewriting script after script. For example:
 
-```sh
-python scripts/universal_step.py \
+This runs the `RandomForestRegressor` optuna trial on the complete dataset.
+
+```
+python universal_step.py \
   setup.script_base_name=rf_optuna_trial \
-  data_versions=v10 \
+  transformations=rf_optuna_trial \
+  data_versions.data_version_input=v13 \
+  io_policy.WRITE_OUTPUT=false \
   model_params=rf_optuna_trial_params
 ```
+
+For debugging this optuna trial we use a smaller dataset, which is saved as data version `v13t`. We can run the trial using this version by simply changing`data_versions.data_version_input=v13` -> `data_versions.data_version_input=v13t`.
+
+```
+python universal_step.py \
+  setup.script_base_name=rf_optuna_trial \
+  transformations=rf_optuna_trial \
+  data_versions.data_version_input=v13 \
+  io_policy.WRITE_OUTPUT=false \
+  model_params=rf_optuna_trial_params
+```
+
+You might wonder why we don't specify `data_versions.data_version_output`. The reason lies in how we defined `data_version_input`, and `data_version_output` in configs/data_versions/base.yaml:
+
+```yaml
+name: hospital_inpatient_cost_data_by_new_york_state
+data_version_input: v0
+data_version_output: ${.data_version_input}
+description: |
+            dataset name: `hospital_inpatient_cost_data_by_new_york_state`
+            Original, unmodified data, as downloaded from kaggle.
+            See 'dataset_url' for further information.
+
+dataset_url: 'https://www.kaggle.com/datasets/thedevastator/2010-new-york-state-hospital-inpatient-discharge'
+```
+
+The default for `data_version_output` is `data_version_output == data_version_input`.
+
+
 
 This flexibility empowers you to iterate quickly without diving into complex code changes.
 
@@ -146,26 +189,11 @@ Together, these config folders ensure that every important parameter is discover
 - **Dynamic Parameter Switching**  
   By default, `config.yaml` sets a baseline for each group (e.g., `data_versions=base`, `models=rf_optuna_trial_params`). With Hydra, you can override them at runtime. For example:
 
-  ```sh
-  python scripts/universal_step.py \
-    setup.script_base_name=lag_columns \
-    data_versions=v10 \
-    transformations=lag_columns
-  ```
-
-  This single command changes your script’s behavior from one config to another without editing any YAML file directly.
-
-- **Single vs. Multiple Overrides**  
-  You can stack multiple overrides, e.g.:
-
-  ```sh
-  python scripts/universal_step.py \
-    setup.script_base_name=drop_rare_drgs \
-    data_versions=v6 \
-    model_params=rf_optuna_trial_params
-  ```
-
-  Hydra merges them in memory, so the pipeline uses version `v6` data while preparing for a random forest trial.
+python universal_step.py \
+  setup.script_base_name=drop_rare_drgs \
+  transformations=drop_rare_drgs \
+  data_versions.data_version_input=v6 \
+  data_versions.data_version_output=v7
 
 - **Fewer Scripts, More Flexibility**  
   Instead of writing new code for each scenario, you create or modify config files. The pipeline adjusts automatically at runtime—no duplication of logic.
@@ -175,26 +203,24 @@ Together, these config folders ensure that every important parameter is discover
 - **Switching Data Versions**  
   When you want to run your transformations on `v13` data, you pass `data_versions=v13`. The `universal_step.py` script then sees `cfg.data_versions.data_version_input='v13'` and automatically picks the correct CSV path (`./data/v13/v13.csv`).
 
-- **Toggling Output Writing**  
-  If you only want to read data and not save output (e.g., for debugging), you can override I/O policies:
+python universal_step.py \
+  setup.script_base_name=drop_description_columns \
+  transformations=drop_description_columns \
+  data_versions.data_version_input=v1 \
+  data_versions.data_version_output=v2
 
-  ```sh
-  python scripts/universal_step.py \
-    setup.script_base_name=drop_rare_drgs \
-    io_policy.WRITE_OUTPUT=false
-  ```
+The pipeline automatically picks the correct script (in this case, drop_description_columns.py) and writes the outputs to v2.csv.
 
   This stops the pipeline from creating new CSVs or metadata files, ideal for quick checks.
+```
+python universal_step.py \
+  setup.script_base_name=rf_optuna_trial \
+  transformations=rf_optuna_trial \
+  data_versions.data_version_input=v13 \
+  io_policy.WRITE_OUTPUT=false \
+  model_params=rf_optuna_trial_params
+```
 
-- **Model Tuning with Optuna**  
-  If you’d like to switch from default random-forest hyperparameters to an Optuna-driven search, set `model_params=rf_optuna_trial_params`:
-
-  ```sh
-  python scripts/universal_step.py \
-    setup.script_base_name=rf_optuna_trial \
-    data_versions=v11 \
-    model_params=rf_optuna_trial_params
-  ```
 
   No code changes required—just a single override pointing to a YAML file with all the hyperparameter search details.
 
@@ -219,16 +245,16 @@ These override patterns mean your entire ML pipeline, from data ingestion throug
 ### Practical Steps
 
 1. **Configure DVC Remotes**  
-   ```sh
+   ```
    dvc remote add -d s3_remote s3://mybucket/my_prefix
    dvc remote add nas_remote /path/to/my_nas
    ```
    You can switch between them or use both. For example, to pull from S3:
-   ```sh
+   ```
    dvc pull -r s3_remote
    ```
    Or to push updates to the NAS:
-   ```sh
+   ```
    dvc push -r nas_remote
    ```
 
@@ -244,14 +270,14 @@ These override patterns mean your entire ML pipeline, from data ingestion throug
    This means your pipeline code references a single source of truth for how data flows from one version to the next. DVC looks at this file to know which outputs (e.g., `./data/v10/v10.csv`) must be tracked.
 
 3. **Reproduce the Entire Pipeline**  
-   ```sh
+   ```
    dvc repro
    ```
    verifies each stage. If any dependencies changed (like `lag_columns.py` or `v9.csv`), DVC rebuilds the affected outputs. If the data and code are up-to-date, DVC skips unnecessary steps.
 
 4. **Publishing Changes**  
    After you confirm everything is correct:
-   ```sh
+   ```
    git commit -am "feat: add lag_columns stage"
    dvc push -r s3_remote
    ```
@@ -317,7 +343,7 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
    ```
 
 2. **Runtime Command**  
-   ```sh
+   ```
    python scripts/universal_step.py \
      setup.script_base_name=lag_columns \
      transformations=lag_columns \
@@ -368,7 +394,7 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 
 2. **Hydra + Omegaconf**  
    When you run something like:
-   ```sh
+   ```
    python scripts/orchestrate_dvc_flow.py pipeline=orchestrate_dvc_flow
    ```
    Hydra reads `orchestrate_dvc_flow.yaml`, merges it with your pipeline definitions in `base.yaml`, and creates one unified config. This merged config includes a list of all stages you want in `dvc.yaml`.
@@ -392,8 +418,13 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 - **Reduced Maintenance**  
   When adding new transformations or renaming scripts, you only modify the pipeline config. The DVC YAML automatically stays in sync, preventing errors or missing dependencies in a manually curated file.
 
-- **Easier Collaboration**  
-  Teammates can add or alter stages without manually editing `dvc.yaml`. They just push the updated YAML config in `configs/pipeline/*.yaml`; your template-driven generator handles the rest.
+```
+python universal_step.py \
+  setup.script_base_name=lag_columns \
+  transformations=lag_columns \
+  data_versions.data_version_input=v10 \
+  data_versions.data_version_output=v11
+```
 
 - **Scalability**  
   If your pipeline doubles in size, you simply add more entries in the config. Hydra+Jinja2 will seamlessly produce the expanded `dvc.yaml` with minimal overhead, keeping the pipeline structure consistent.
