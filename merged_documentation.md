@@ -440,7 +440,7 @@ To run the entire pipeline from start to finish (potentially time-consuming):
 dvc repro --force -P
 ```
 
-By default, this will process every stage in base.yaml sequentially, generating new CSVs and metadata for each version along the way. If the Kaggle download stage is frozen, it will be skipped unless you unfreeze it in your pipeline configuration.
+By default, this will process every stage in dvc.yaml sequentially, generating new CSVs and metadata for each version along the way. If the Kaggle download stage is frozen, it will be skipped unless you unfreeze it in your pipeline configuration.
 
 ## Chapter 5 - Modular Code Organization
 
@@ -480,13 +480,37 @@ This code structure ensures each piece is independently testable and easy to loc
 
 This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag columns.
 
-1. **Relevant Config**  
+1. **configs/data_versions/v11.yaml**  
    ```yaml
-   # configs/data_versions/v10.yaml
-   data_version: v10
-   description: "Data aggregated and binned. Next step adds lag features."
-   ```
+   # configs/data_versions/v11.yaml
+   defaults:
+     - base
 
+   data_version: v11
+   description: |
+     Difference to v10:
+     New columns get added for each listed column, shifted by 1 year (_lag1) within each [facility_id, apr_drg_code] group.
+     The data is sorted on [facility_id, apr_drg_code, year].
+
+     Adds features `_lag1` for the following columns:
+     columns_to_transform = [
+         "sum_discharges",
+         "severity_1_portion",
+         "severity_2_portion",
+         "severity_3_portion",
+         "severity_4_portion",
+         "w_mean_charge",
+         "w_mean_cost",
+         "w_mean_profit",
+         "w_total_mean_profit",
+         "w_median_charge",
+         "w_median_cost",
+         "w_median_profit",
+         "w_total_median_profit"
+     ]
+     new_cols = [f"{col}_lag1" for col in columns_to_transform]
+   ```
+2. **configs/transformations/lag_columns.yaml**
    ```yaml
    # configs/transformations/lag_columns.yaml
    columns_to_transform:
@@ -497,6 +521,50 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
    groupby_time_based_cols: [facility_id, apr_drg_code, year]
    lag1_suffix: _lag1
    shift_periods: 1
+   ```
+3. **dependencies/transformations/lag_columns.py**
+   ```python
+   # dependencies/transformations/lag_columns.py
+   import logging
+   from dataclasses import dataclass
+
+   import pandas as pd
+
+   logger = logging.getLogger(__name__)
+
+
+   @dataclass
+   class LagColumnsConfig:
+       columns_to_transform: list[str]
+       groupby_time_based_cols: list[str]
+       drop: bool
+       groupby_lag_cols: list[str]
+       lag1_suffix: str
+       shift_periods: int
+
+
+   def lag_columns(
+       df: pd.DataFrame,
+       columns_to_transform: list[str],
+       groupby_time_based_cols: list[str],
+       drop: bool,
+       groupby_lag_cols: list[str],
+       lag1_suffix: str,
+       shift_periods: int,
+   ) -> pd.DataFrame:
+       groupby_time_based_cols = list(groupby_time_based_cols)
+       groupby_lag_cols = list(groupby_lag_cols)
+       drop = bool(drop)
+
+       df = df.sort_values(by=groupby_time_based_cols).reset_index(drop=drop)
+
+       for col in columns_to_transform:
+           df[f"{col}{lag1_suffix}"] = df.groupby(groupby_lag_cols)[col].shift(
+               shift_periods
+           )
+
+           logger.info("Done with core transformation: lag_columns")
+       return df
    ```
 
 2. **Runtime Command**  
