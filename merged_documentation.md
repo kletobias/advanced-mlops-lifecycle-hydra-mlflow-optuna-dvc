@@ -513,14 +513,32 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 2. **configs/transformations/lag_columns.yaml**
    ```yaml
    # configs/transformations/lag_columns.yaml
-   columns_to_transform:
-     - sum_discharges
-     - severity_1_portion
-     # ...
-     - w_mean_cost
-   groupby_time_based_cols: [facility_id, apr_drg_code, year]
-   lag1_suffix: _lag1
-   shift_periods: 1
+    defaults:
+    - base
+      - _self_
+
+    lag_columns:
+      columns_to_transform:
+        - sum_discharges
+        - severity_1_portion
+        - severity_2_portion
+        - severity_3_portion
+        - severity_4_portion
+        - w_mean_charge
+        - w_mean_cost
+        - w_mean_profit
+        - w_total_mean_profit
+        - w_total_mean_cost
+        - w_median_charge
+        - w_median_cost
+        - w_median_profit
+        - w_total_median_profit
+        - w_total_median_cost
+      groupby_time_based_cols: [facility_id, apr_drg_code, year]
+      drop: true
+      groupby_lag_cols: [facility_id, apr_drg_code]
+      lag1_suffix: _lag1
+      shift_periods: 1
    ```
 3. **dependencies/transformations/lag_columns.py**
    ```python
