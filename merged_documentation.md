@@ -63,13 +63,13 @@ python universal_step.py \
   model_params=rf_optuna_trial_params
 ```
 
-For debugging this optuna trial we use a smaller dataset, which is saved as data version `v13t`. We can run the trial using this version by simply changing`data_versions.data_version_input=v13` -> `data_versions.data_version_input=v13t`.
+For debugging this optuna trial we used a smaller dataset, which is saved as data version `v13t`. We can run the trial using this version by simply changing`data_versions.data_version_input=v13` -> `data_versions.data_version_input=v13t`.
 
 ```
 python universal_step.py \
   setup.script_base_name=rf_optuna_trial \
   transformations=rf_optuna_trial \
-  data_versions.data_version_input=v13 \
+  data_versions.data_version_input=v13t \
   io_policy.WRITE_OUTPUT=false \
   model_params=rf_optuna_trial_params
 ```
@@ -91,7 +91,6 @@ dataset_url: 'https://www.kaggle.com/datasets/thedevastator/2010-new-york-state-
 The default for `data_version_output` is `data_version_output == data_version_input`.
 
 
-
 This flexibility empowers you to iterate quickly without diving into complex code changes.
 
 ##### Why Companies Struggle
@@ -105,7 +104,7 @@ By following these principles and leveraging the synergy of Hydra, Optuna, and M
 ### Objectives and Motivations
 
 - **Robust Reproducibility**  
-  The pipeline ensures all data transformations are tracked via DVC. Any version of the dataset or code can be exactly reproduced, which is essential for stable, verifiable ML pipelines in production.
+  The pipeline uses DVC to track all data transformations, ensuring every version of the dataset and code is fully reproducible. This guarantees stability and verifiability for ML pipelines in production. Stages `v5_1_total_median_cost` and `v5_2_total_mean_cost` demonstrate how new transformations can be seamlessly inserted at any point in the pipeline.
 
 - **Flexibility and Maintainability**  
   Hydra and Omegaconf power hierarchical configurations: you can shift between data versions (`v0`, `v1`...) or transformations (`drop_rare_drgs`, `lag_columns`, `rolling_columns`) just by changing a single line in a YAML config instead of rewriting scripts.
@@ -122,7 +121,7 @@ By following these principles and leveraging the synergy of Hydra, Optuna, and M
   Every data-manipulation step is a dedicated Python module under `dependencies/transformations/`. The pipeline calls them with Hydra overrides, so it’s easy to add or remove transformations without altering the central code.
 
 - **Universal Execution Script**  
-  A single `universal_step.py` file processes any transformation. It reads what to do from Hydra configs, loads input data, runs the specified transformation function, and writes output plus metadata. This pattern unifies ingestion, cleaning, feature engineering, and modeling steps under the same script.
+  A single `universal_step.py` file processes all transformations. It reads instructions from Hydra configs, encapsulates them in the correct dataclass, loads input data, runs the specified transformation function, and writes the output plus metadata. This approach unifies ingestion, cleaning, feature engineering, and modeling steps under one script.
 
 - **DVC Data Lineage**  
   Each transformation stage is also declared in the pipeline (`configs/pipeline/base.yaml`). DVC ensures a reproducible sequence of transformations. A new data version always references exactly which code and hyperparameters created it.
@@ -163,19 +162,19 @@ These design choices demonstrate a thorough MLOps-oriented approach—one that e
 ### Notable Folders
 
 - **`configs/data_versions/`**  
-  Each `.yaml` documents the evolution of the dataset. Files like `v0.yaml`, `v1.yaml`... `v12.yaml` describe transformations or new features introduced at each step. DVC references these versions, so you can reproduce any specific state of the data.
+All shared logic is located in `base.yaml`. You only need to define the input and output data versions as overrides. All other `.yaml` files document the dataset’s evolution, detailing any new transformations or features at each step. DVC references these versions, allowing you to reproduce any specific data state.
 
 - **`configs/transformations/`**  
   Mappings for each Python transformation function. For example, `lag_columns.yaml` defines which columns to shift, while `rolling_columns.yaml` sets rolling windows. The main pipeline references these transformations in a stage-wise manner.
 
 - **`configs/model_params/`**  
-  Holds hyperparameter definitions (e.g., `rf_optuna_trial_params.yaml`). If you want to tune the random forest, you only modify that file—no code changes required. The pipeline dynamically passes these parameters into the model training step.
+  This approach uses Hydra’s advanced defaults list to reference a separate config group for model parameters. By employing slash notation (for example, /model_params: rf_optuna_trial_params) in a machine learning hyperparameter optimization transformation’s defaults list, each stage seamlessly merges in the base hyperparameter definitions without overwriting fields. The rf_optuna_trial_params config itself points to a shared random forest parameter file, so you always inherit the complete hyperparameter dictionary. You can override only the parts you want to change for that transformation, and you can also add new hyperparameters specific to your current experiment. These overrides are non-destructive, meaning they leave all other definitions intact. This design keeps all model parameters in a single place while letting each step pull exactly what it needs.
 
 - **`configs/pipeline/`**  
-  Ties everything together. `base.yaml` enumerates each stage in the data transformation sequence, while specialized YAMLs (like `orchestrate_dvc_flow.yaml`) define how DVC is orchestrated. Each stage points to a script plus overrides for `setup.script_base_name`.
+  Ties everything together. `base.yaml` enumerates each stage in the data transformation sequence, while specialized YAMLs (like `orchestrate_dvc_flow.yaml`) define how DVC is orchestrated. Each stage points to a script plus overrides for `setup.script_base_name`. If plots are found, the resulting `dvc.yaml` will include them as well.
 
 - **`configs/ml_experiments/`**  
-  Centralizes experiment-level settings: random seeds, train/val/test ranges, or the name of the MLflow experiment folder. Makes it easy to manage or switch between multiple experiment setups.
+  Centralizes experiment-level settings: random seeds, train/val/test ranges, or the name of the MLflow experiment folder. Makes it easy to manage or switch between multiple experiment setups. `base.yaml` defines what is shared, with `rf_optuna_trial.yaml`, and `ridge_optuna_trial.yaml` only overriding what changes.
 
 - **`configs/logging_utils/`**  
   Central control for log formatting and logging levels. All pipeline steps reference the same logging config, ensuring consistent logs across ingestion, transformation, and training scripts.
@@ -189,42 +188,165 @@ Together, these config folders ensure that every important parameter is discover
 - **Dynamic Parameter Switching**  
   By default, `config.yaml` sets a baseline for each group (e.g., `data_versions=base`, `models=rf_optuna_trial_params`). With Hydra, you can override them at runtime. For example:
 
+```
 python universal_step.py \
   setup.script_base_name=drop_rare_drgs \
   transformations=drop_rare_drgs \
   data_versions.data_version_input=v6 \
   data_versions.data_version_output=v7
+```
 
 - **Fewer Scripts, More Flexibility**  
   Instead of writing new code for each scenario, you create or modify config files. The pipeline adjusts automatically at runtime—no duplication of logic.
 
 ### Practical Examples
 
-- **Switching Data Versions**  
-  When you want to run your transformations on `v13` data, you pass `data_versions=v13`. The `universal_step.py` script then sees `cfg.data_versions.data_version_input='v13'` and automatically picks the correct CSV path (`./data/v13/v13.csv`).
+#### data_versions
 
+- **Switching Data Versions**  
+  When you want to run transformations on v13 data without overwriting the existing CSV, specify:
+
+```yaml
+data_versions.data_version_input=v13
+io_policy.WRITE_OUTPUT=false
+```
+
+  universal_step.py detects:
+
+```yaml
+cfg.data_versions.data_version_input='v13'
+cfg.data_versions.data_version_output='v13'
+```
+
+  and automatically points to ./data/v13/v13.csv. Since no override changes data_version_output, it matches the input version (as defined in base.yaml). Because WRITE_OUTPUT is false, the file is not overwritten.
+
+#### Command Line Overrides to Universal Step Function Invocation
+
+Assume the following shell command
+
+```
 python universal_step.py \
   setup.script_base_name=drop_description_columns \
   transformations=drop_description_columns \
   data_versions.data_version_input=v1 \
   data_versions.data_version_output=v2
-
-The pipeline automatically picks the correct script (in this case, drop_description_columns.py) and writes the outputs to v2.csv.
-
-  This stops the pipeline from creating new CSVs or metadata files, ideal for quick checks.
-```
-python universal_step.py \
-  setup.script_base_name=rf_optuna_trial \
-  transformations=rf_optuna_trial \
-  data_versions.data_version_input=v13 \
-  io_policy.WRITE_OUTPUT=false \
-  model_params=rf_optuna_trial_params
 ```
 
+Below is the universal_step.py code snippet annotated with comments showing how each CLI override (for example, setup.script_base_name=drop_description_columns) is merged into the Hydra config and used at runtime. Refer to these comments to see precisely where and how each override affects the script’s logic and behavior.
 
-  No code changes required—just a single override pointing to a YAML file with all the hyperparameter search details.
+```python
+# scripts/universal_step.py
+import logging
 
-These override patterns mean your entire ML pipeline, from data ingestion through model training, is fully configurable at runtime. It’s both simpler and more powerful than copying or rewriting scripts for every new scenario.
+import hydra
+import pandas as pd
+from dependencies.config_schemas.RootConfig import RootConfig
+from dependencies.io.csv_to_dataframe import csv_to_dataframe
+from dependencies.io.dataframe_to_csv import dataframe_to_csv
+from dependencies.logging_utils.log_cfg_job import log_cfg_job
+from dependencies.logging_utils.log_function_call import log_function_call
+from dependencies.logging_utils.setup_logging import setup_logging
+from dependencies.metadata.calculate_metadata import calculate_and_save_metadata
+from dependencies.transformations.drop_description_columns import (
+    DropDescriptionColumnsConfig,
+    drop_description_columns,
+)
+
+TRANSFORMATIONS = {
+    "drop_description_columns": {
+        "transform": log_function_call(drop_description_columns),
+        "Config": DropDescriptionColumnsConfig,
+    },
+    # ...
+}
+
+
+@hydra.main(version_base=None, config_path="../configs", config_name="config")
+def universal_step(cfg: RootConfig) -> None:
+    setup_logging(cfg) # Uses setup.script_base_name for directory to write to.
+    logger = logging.getLogger(__name__)
+
+    log_cfg_job_flag = cfg.logging_utils.log_cfg_job.log_for_each_step
+    if log_cfg_job_flag: # False (Default value)
+        logger.info("Override: 'log_cfg_job_flag' set to %s", bool(log_cfg_job_flag))
+        log_cfg_job(cfg)
+    else:
+        logger.debug(
+            "Not logging cfg job: 'log_cfg_job_flag' == %s", bool(log_cfg_job_flag)
+        )
+
+    # Uses override `setup.script_base_name`
+    transform_name = cfg.setup.script_base_name
+    # Validation of passed override value for `setup.script_base_name`
+    if transform_name not in TRANSFORMATIONS:
+        logger.error("'%s' is not recognized in TRANSFORMATIONS.", transform_name)
+        return
+
+    # Accesses transformation function and structured config in TRANSFORMATIONS dict for key `setup.script_base_name`
+    step_info = TRANSFORMATIONS[transform_name]
+    # Function wrapped in log_function_call
+    step_fn = step_info["transform"]
+    # Dataclass config defined in the same file above the function
+    step_cls = step_info["Config"]
+
+    # All configs in group transformations have root level key == transformation name
+    # cfg.transformations is override `transformations=drop_description_columns`
+    step_params = cfg.transformations[transform_name]
+
+    # In this case the default: both True
+    read_input = cfg.io_policy.READ_INPUT
+    write_output = cfg.io_policy.WRITE_OUTPUT
+
+    if transform_name == "download_and_save_data": # False
+        if step_cls:
+            cfg_obj = step_cls(**step_params)
+            step_fn(**cfg_obj.__dict__)
+        else:
+            step_fn()
+    else:
+        if read_input: # True 
+            # Reads v1.csv and returns DataFrame
+            # Values come from config group utility_functions.csv_to_dataframe
+            # Also uses data_versions.data_version_input (v1) for the actual path
+            df = csv_to_dataframe(**cfg.utility_functions.csv_to_dataframe)
+        else:
+            df = pd.DataFrame()
+
+        # Conditionally wrap in structured config class
+        # In this example, the config is effectively empty.
+        cfg_obj = step_cls(**step_params) if step_cls else None
+        returned_value = step_fn(
+            df,
+            **(cfg_obj.__dict__ if cfg_obj else {})
+        )
+
+        if cfg.transformations.RETURNS == "df": # True
+            if returned_value is not None: # True
+                # Validation: Return type must either be pd.DataFrame or None
+                if not isinstance(returned_value, pd.DataFrame):
+                    raise TypeError(f"{transform_name} did not return a DataFrame.")
+                # Return pd.DataFrame without description columns.
+                df = returned_value
+
+        if write_output: # True
+            # Write pd.DataFrame to v2.csv
+            # Also uses data_versions.data_version_output (v2) for the actual path
+            dataframe_to_csv(df, **cfg.utility_functions.dataframe_to_csv)
+            # After saving v2.csv, calculate and save metadata
+            # calculate_and_save_metadata also uses data_versions.data_version_output (v2) for file paths
+            calculate_and_save_metadata(
+                df, **cfg.utility_functions.calculate_and_save_metadata
+            )
+
+    logger.info("Sucessfully executed step: %s", transform_name)
+
+
+if __name__ == "__main__":
+    # In this case we call the script directly.
+    universal_step()
+```
+
+This example shows a modular “universal step” pattern where each transformation is treated as a named function and (optionally) a typed config. The script uses Hydra to retrieve CLI overrides (setup.script_base_name, transformations, data_versions, etc.) and merge them with defaults. This config is then translated into actions: a DataFrame is conditionally read (read_input), processed by the selected transformation, and conditionally written out (write_output). By delegating paths and file operations to centralized config groups (data_versions, utility_functions), it keeps I/O logic clean, consistent, and easy to override.
 
 ## Chapter 4 - Data Versioning with DVC
 
@@ -244,46 +366,81 @@ These override patterns mean your entire ML pipeline, from data ingestion throug
 
 ### Practical Steps
 
-1. **Configure DVC Remotes**  
-   ```
-   dvc remote add -d s3_remote s3://mybucket/my_prefix
-   dvc remote add nas_remote /path/to/my_nas
-   ```
-   You can switch between them or use both. For example, to pull from S3:
-   ```
-   dvc pull -r s3_remote
-   ```
-   Or to push updates to the NAS:
-   ```
-   dvc push -r nas_remote
-   ```
+#### Quickstart Workflow
 
-2. **Declare Pipeline Stages**  
-   `configs/pipeline/base.yaml` enumerates each stage:
-   ```yaml
-   - name: v10_lag_columns
-     cmd_python: ${cmd_python}
-     script: ${universal_step_script}
-     overrides: setup.script_base_name=lag_columns transformations=lag_columns ...
-     ...
-   ```
-   This means your pipeline code references a single source of truth for how data flows from one version to the next. DVC looks at this file to know which outputs (e.g., `./data/v10/v10.csv`) must be tracked.
+Below is a minimal workflow for pulling data, configuring your Python path, and running the DVC pipeline steps. If you rely on Kaggle data ingestion, note the optional step for using your Kaggle API key.
 
-3. **Reproduce the Entire Pipeline**  
-   ```
-   dvc repro
-   ```
-   verifies each stage. If any dependencies changed (like `lag_columns.py` or `v9.csv`), DVC rebuilds the affected outputs. If the data and code are up-to-date, DVC skips unnecessary steps.
+1. Pull Data via `dvc pull`
 
-4. **Publishing Changes**  
-   After you confirm everything is correct:
-   ```
-   git commit -am "feat: add lag_columns stage"
-   dvc push -r s3_remote
-   ```
-   This ensures both code and data are safely versioned. Teammates can then `git pull` + `dvc pull` to replicate your work environment locally or on their server.
+By default, we have a public S3 bucket configured. Simply run:
 
-By structuring your project around DVC pipelines and remote storage, you gain ironclad reproducibility, easy collaboration, and a clear evolutionary path for each dataset version—critical elements for any senior-level MLOps workflow.
+```sh
+python dependencies/io/pull_dvc_s3.py
+```
+This fetches files into data/, configs/, and other directories (e.g., any CSV files you need).
+
+2. Pull MLflow Artifacts
+
+To retrieve final artifacts (e.g., model.pkl, permutation importances, etc.):
+
+python dependencies/io/pull_mlruns_s3.py
+
+These go into the mlruns/ folder under your project root. You can then query them using the MLflow search syntax.
+
+(Optional) Kaggle Data Ingestion
+
+If you need the data from Kaggle instead of S3, and have a Kaggle API key:
+
+```sh
+python scripts/universal_step.py \
+    +setup.script_base_name=download_and_save_data \
+    data_versions=v0  \
+    io_policy.READ_INPUT=False
+```
+
+This downloads and saves data as v0 locally.
+
+3. Run a Single Step in the Pipeline
+
+3.1. Update cmd_python in configs/config.yaml:
+  Replace the default path ("/Users/tobias/.local/share/mamba/envs/ny/bin/python") with your interpreter’s path.
+3.2. (Optional) Adjust the Pipeline
+  Modify base.yaml if you want to add or remove any pipeline stages.
+3.3. Regenerate dvc.yaml
+  This rewrites the DVC pipeline commands (so they use your cmd_python path):
+
+```sh
+python dependencies/templates/generate_dvc_yaml_core.py
+```
+
+3.4. Execute the Desired Step
+For instance, if you only want to run “add lag columns on v10”:
+
+```sh
+dvc repro --force -s v10_lag_columns
+```
+
+This triggers:
+
+```sh
+python scripts/universal_step.py \
+  setup.script_base_name=lag_columns \
+  transformations=lag_columns \
+  data_versions.data_version_input=v10 \
+  data_versions.data_version_output=v11
+```
+
+Hydra then loads configs/transformations/lag_columns.yaml, reads data from ./data/v10/v10.csv, and writes new data plus metadata to ./data/v11/.
+
+4. OPTIONAL: Run All Steps
+
+To run the entire pipeline from start to finish (potentially time-consuming):
+
+```sh
+dvc repro --force -P
+```
+
+By default, this will process every stage in base.yaml sequentially, generating new CSVs and metadata for each version along the way. If the Kaggle download stage is frozen, it will be skipped unless you unfreeze it in your pipeline configuration.
 
 ## Chapter 5 - Modular Code Organization
 
