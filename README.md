@@ -3,99 +3,96 @@
 
 This repository contains a fully reproducible, config-driven pipeline for analyzing New York State hospital DRG (Diagnosis-Related Group) data. It uses Hydra (for hierarchical configs), DVC (for data versioning & reproducibility), and MLflow (for experiment tracking). The primary goal is to showcase senior-level MLOps patterns: modular transformations, data lineage, and hyperparameter optimization with minimal code duplication.
 
+---
+
 ## Key Features
 
-- Hydra Configuration
-    All parameters (data paths, transformations, hyperparameters) are separated from the code. Simply override them at runtime to switch between data versions (e.g., v0, v1, …) or transformations (lag_columns, drop_rare_drgs, etc.).
+- **Hydra Configuration**  
+  All parameters (data paths, transformations, hyperparameters) are separated from the code. Simply override them at runtime to switch between data versions (e.g., `v0`, `v1`, etc.) or transformations (`lag_columns`, `drop_rare_drgs`, etc.).
 
-- Data Versioning with DVC
-    Each pipeline stage (e.g. ingestion, transformation, modeling) is represented in configs/pipeline/base.yaml. DVC tracks these transformations, ensuring every data version is reproducible.
+- **Data Versioning with DVC**  
+  Each pipeline stage (e.g., ingestion, transformation, modeling) is represented in `configs/pipeline/base.yaml`. DVC tracks these transformations, ensuring that every data version is reproducible.
 
-- Experiment Tracking with MLflow
-    Scripts like rf_optuna_trial.py or ridge_optuna_trial.py log metrics and artifacts (model pickle, permutation importances) to MLflow, enabling easy model comparison.
+- **Experiment Tracking with MLflow**  
+  Scripts like `rf_optuna_trial.py` or `ridge_optuna_trial.py` log metrics and artifacts (model pickle, permutation importances) to MLflow, making it easy to compare experiments.
 
-- Modular Transformations
-    Each transformation is a small, testable function in dependencies/transformations/. Configuration (which columns to shift, thresholds to drop DRGs, etc.) lives in matching YAML files under configs/transformations/.
+- **Modular Transformations**  
+  Each transformation is a small, testable function in `dependencies/transformations/`. Configuration (columns to shift, thresholds to drop DRGs, etc.) lives in matching YAML files under `configs/transformations/`.
 
-- Metadata Logging
-    Every time you generate a new CSV, the code saves a JSON metadata file (row count, column types, file hash, etc.) for reproducibility.
+- **Metadata Logging**  
+  Every time you generate a new CSV, the code saves a JSON metadata file (row count, column types, file hash, etc.) for reproducibility.
 
+---
 
 ## Repository Structure (High-Level)
-
 ```
 .
 ├── configs/                # All Hydra config files
 │   ├── config.yaml         # Main entry point (merges other config groups)
-│   ├── data_versions/      # Each version of the dataset (v0, v1, ...)
+│   ├── data_versions/      # Each version of the dataset (v0, v1, …)
 │   ├── pipeline/           # DVC pipeline definitions
 │   ├── transformations/    # YAML settings for each transformation
-│   └── ... (logging_utils, ml_experiments, etc.)
+│   └── … (logging_utils, ml_experiments, etc.)
 ├── data/                   # Data folder (versioned by DVC)
 ├── dependencies/           # Modular code for transformations, ingestion, modeling, etc.
 │   ├── transformations/    # Each transformation is a function + config schema
 │   ├── modeling/           # ML/hyperparameter scripts (Optuna, MLflow)
-│   └── ...
+│   └── …
 ├── scripts/
-│   ├── universal_step.py   # "One script to rule them all" - runs any transformation
+│   ├── universal_step.py   # “One script to rule them all” - runs any transformation
 │   └── orchestrate_dvc_flow.py  # Prefect + DVC orchestration script
 ├── logs/                   # Pipeline logs (auto-generated)
 ├── dvc.yaml                # Will be generated or updated via DVC (pipeline)
-├── README.md               # You're reading it
-└── ...
+├── README.md               # You’re reading it
+└── …
 ```
-
+---
 
 ## Quickstart
 
-Below is a minimal way to get up and running.
+Below is a minimal way to get set up and run the pipeline. Make sure your Python interpreter is available; if you are creating a conda/micromamba environment, you can install dependencies from `env.yaml` and then update `cmd_python` in your config before running DVC.
 
-**1. Install Dependencies**
+### 1. Install Dependencies
 
-
-> **All the following commands assume that you have completed this step and that you have activated the `ny` environment (or whatever you name it).**
-
-**With Conda**
+Create (and activate) your environment using conda or micromamba:
 
 ```sh
-# Create a conda environment from env.yaml
+# Using Conda:
 conda env create -f env.yaml
 conda activate ny
 ```
 
-**With Micromamba**:
-
 ```sh
-# Create a conda environment from env.yaml
+# Using Micromamba:
 micromamba env create -f env.yaml
 micromamba activate ny
 ```
 
-**2. Pull Data via `dvc pull` from our S3 bucket**
+⸻
 
-Eveything is pre-configured. It pulls from our public s3 bucket, after configuring it as a new dvc remote if needed.
+### 2. Pull Data via dvc pull from Our Public S3 Bucket
+
+Everything is pre-configured to pull from a public S3 bucket (read-only). If needed, set it as a new remote:
 
 ```sh
-# Outputs will populate data/, configs/, among others.
 python dependencies/io/pull_dvc_s3.py
 ```
 
-**3. Pull the entire mlruns folder from our S3 bucket**
+This step populates your local data/, configs/, etc.
 
-- Get all final artifacts (permutation importances, RandomForestRegressor importances, model.pkl, ...)
-- You can query it using the MLflow query (sql like) syntax [Mlflow - Search Syntax Overview](https://mlflow.org/docs/latest/search-runs/#search-syntax-overview)
-- New Optuna trials that you run get added to it without any further setup needed, and artifacts logged just like the already present data.
+⸻
+
+### 3. Pull the Entire mlruns Folder from Our S3 Bucket
+
+Retrieve final artifacts (model pickle, importances, etc.):
 
 ```sh
-# Output is populated directory `mlruns/` in your project root.
 python dependencies/io/pull_mlruns_s3.py
 ```
 
+They are stored in the mlruns/ folder, so you can query them using MLflow’s search syntax.
 
-
-Or run ingestion for data version v0 if you rely on Kaggle:
-
-> *For this step you need a kaggle api key.*
+Optional: If you rely on Kaggle data ingestion, you’ll need a Kaggle API key. Example:
 
 ```sh
 python scripts/universal_step.py \
@@ -104,30 +101,39 @@ python scripts/universal_step.py \
     io_policy.READ_INPUT=False
 ```
 
-**3. Run a single step in the Pipeline**
+⸻
 
-1. You have to change the value of `cmd_python` in configs/config.yaml. Enter the path to your python interpreter.
-2. Update the pipeline [base.yaml](configs/pipeline/base.yaml), if you want to make changes to it.
-3. Regenerate dvc.yaml with your python interpreter in the `cmd`. Run:
+### 4. Run a Single Step in the Pipeline
+
+1. Update cmd_python in configs/config.yaml:  
+  Enter the path to your Python interpreter (instead of "/Users/tobias/.local/share/mamba/envs/ny/bin/python").
+2. (Optional) Edit Pipeline Stages  
+  If you want to modify the flow, open configs/pipeline/base.yaml.
+3. Regenerate dvc.yaml  
+This ensures your Python interpreter path is reflected in the pipeline commands:
 
 ```sh
 python dependencies/templates/generate_dvc_yaml_core.py
 ```
-4. Run all steps start to finish. (Can take several hours to complete.)
+
+### 5. Run All Steps or a Single One
+
+- All Steps:
+
 ```sh
-# This executes all steps in dvc.yaml (INCLUDING THE KAGGLE DOWNLOAD)
 dvc repro --force -P
 ```
 
-This executes each stage in configs/pipeline/base.yaml sequentially, producing new CSV files (and metadata) for each data version.
+Potentially time-consuming—rebuilds each stage.
 
-**4. Run a Single Transformation in dvc.yaml (example: add lag columns on v10)**
+
+- Single Step (e.g., v10_lag_columns):
 
 ```sh
 dvc repro --force -s v10_lag_columns
 ```
 
-The above code executes the following:
+This runs:
 
 ```sh
 python scripts/universal_step.py \
@@ -137,195 +143,83 @@ python scripts/universal_step.py \
   data_versions.data_version_output=v11
 ```
 
-Hydra will load configs/transformations/lag_columns.yaml, v10 data as input, and produce v11 data.
-- Input data is loaded from [./data/v10/v10.csv](/data/v10/v10.csv)
-- Output data v11 is written to [./data/v11/v11.csv](/data/v11/v11.csv)
-- Output data v11's metadata is written to [./data/v11/v11_metadata.json](/data/v11/v11_metadata.json)
+Hydra loads configs/transformations/lag_columns.yaml, reads from ./data/v10/v10.csv, and writes new data (with metadata) to ./data/v11.
 
-**5. OPTIONAL: Run all steps in the Pipeline**
-You can run all steps start to finish. (**Warning:** Can take several hours to complete!)
+⸻
 
-```sh
-# This executes all steps in dvc.yaml (EXCEPT THE KAGGLE DOWNLOAD)
-# Remove the frozen flag for it to get executed.
-dvc repro --force -P
+### 5. Logs and Pipeline Output
+
+Logs are stored under:
+
+```txt
+logs/runs/${now:%Y-%m-%d_%H-%M-%S}/${setup.script_base_name}
 ```
 
-This executes each stage in configs/pipeline/base.yaml sequentially, producing new CSV files (and metadata) for each data version.
+For instance, running the lag_columns step might produce:
 
-5. Check Logs
-
-Logs are saved under `logs/runs/${now:%Y-%m-%d_%H-%M-%S}/${setup.script_base_name}` (see details under [Logging Configuration](#logging-configuration))
-
-For this run: [./logs/runs/2025-03-20_17-30-59/lag_columns.log](logs/runs/2025-03-20_17-30-59/lag_columns.log)
-
-```text
-Running stage 'v10_lag_columns':
-> /Users/tobias/.local/share/mamba/envs/practice/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
-[2025-03-20 17:30:59,271][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-20 17:30:59,838][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v10/v10.csv, created df
-[2025-03-20 17:31:00,008][dependencies.transformations.lag_columns][INFO] - Done with core transformation: lag_columns
-[2025-03-20 17:31:00,010][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11
-[2025-03-20 17:31:05,964][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11.csv
-[2025-03-20 17:31:12,048][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 85b89b3126ee6cfa18ad5fc716081f6baad1a3abf3470cd505ff588309c1c30e
-[2025-03-20 17:31:12,278][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11.csv
-[2025-03-20 17:31:12,279][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11_metadata.json
-[2025-03-20 17:31:12,279][__main__][INFO] - Sucessfully executed step: lag_columns
-Updating lock file 'dvc.lock'
-Use `dvc push` to send your updates to remote storage.
+```txt
+logs/runs/2025-03-20_17-30-59/lag_columns.log
 ```
 
-### Logging Configuration
+with details about CSV paths, metadata, and transformation execution.
 
-In the example above we executed transformation `lag_columns`. The override `setup.script_base_name=lag_columns` is used to define where the logs for this transformation are written to.
-
-```sh
-python scripts/universal_step.py \
-  setup.script_base_name=lag_columns \
-  transformations=lag_columns \
-  data_versions.data_version_input=v10 \
-  data_versions.data_version_output=v11
-```
-
-We use hydra's logger if it exists in our execution of [setup_logging.py](dependencies/logging_utils/setup_logging.py), together with our [log_function_call.py](dependencies/logging_utils/log_function_call.py) in the [universal_step.py](scripts/universal_step.py), and our [log_function_call.py](dependencies/logging_utils/log_function_call.py)
-
-```yaml
-# configs/hydra/base.yaml
-job:
-  name: ${setup.script_base_name} # In the example: lag_columns
-run:
-  dir: logs/runs/${now:%Y-%m-%d_%H-%M-%S}
-sweep:
-  dir: logs/multiruns/${now:%Y-%m-%d_%H-%M-%S}
-  subdir: ${hydra.job.num}
-```
-
-In this example the log is saved under:
-
-(logs/runs/2025-03-20_17-39-23/lag_columns.log)[logs/runs/2025-03-20_17-39-23/lag_columns.log]
+⸻
 
 ## Running ML Experiments
 
-We use MLflow and Optuna for hyperparameter tuning:
-	•	Random Forest:
+This repo integrates MLflow and Optuna for hyperparameter tuning. For example, to run a Random Forest trial:
 
+```sh
 python scripts/universal_step.py \
-  +setup.script_base_name=rf_optuna_trial \
+  setup.script_base_name=rf_optuna_trial \
   data_versions=v13 \
   model_params=rf_optuna_trial_params
+```
 
+A similar approach applies to Ridge Regression or other models. Each run logs metrics (RMSE, R², etc.) and artifacts (importances, pickled model) to ./mlruns.
 
-	•	Ridge Regression:
+⸻
 
-python scripts/universal_step.py \
-  +setup.script_base_name=ridge_optuna_trial \
-  data_versions=v13 \
-  model_params=ridge_optuna_trial_params
-
-
-
-Each trial logs metrics (like RMSE, R²) and artifacts to ./mlruns by default.
-
-#### Example: Permutation Importances logged as Artifact
-
-The universal importance metric we use is permutation importances
+Example Artifacts: Permutation Importances
 
 ```csv
 feature,importances
 w_total_median_profit_lag1,0.10964554607356722
 w_total_mean_profit_lag1,0.10563058193740327
-w_total_median_profit_rolling2,0.08264136737424133
-w_total_mean_profit_rolling2,0.055836704844702115
-w_total_mean_cost_rolling2,0.013683989835306897
-w_total_mean_cost_lag1,0.010790000561158775
-w_total_median_cost_rolling2,0.009244236750888502
-w_total_median_cost_lag1,0.00867279031657484
-sum_discharges_rolling2,0.0026856946195632724
-sum_discharges_lag1,0.0025191493380667617
 ...
 ```
 
-#### Example: RandomForestRegressor Importances logged as Artifact
-
-`rf_optuna_trial.py` takes advantage of the fact that there is another feature importances metric native to the RandomForest estimator. It logs that as well.
+Example Artifacts: RandomForestRegressor Importances
 
 ```csv
 feature,importance
 w_total_median_profit_lag1,0.2170874864655451
 w_total_mean_profit_lag1,0.20730719583731547
-w_total_median_profit_rolling2,0.20122115990233386
-w_total_mean_profit_rolling2,0.1522267096323898
-w_total_mean_cost_rolling2,0.059487923298292424
-w_total_mean_cost_lag1,0.047090312814948604
-w_total_median_cost_rolling2,0.034416037187213325
-w_total_median_cost_lag1,0.029658001263519133
-sum_discharges_lag1,0.010165206374812752
-sum_discharges_rolling2,0.009809536146385413
 ...
 ```
 
-#### Example: Prefect logs from an entire pipeline run
+⸻
 
-```sh
-(ny) ~ $ python scripts/orchestrate_dvc_flow.py pipeline=orchestrate_dvc_flo
-run=true pipeline.pipeline_run=true logging_utils.level=20
-[2025-03-21 16:37:51,456][dependencies.general.mkdir_if_not_exists][INFO] - 
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:37:51,456][root][INFO] - Reading config, validating user stag
-[2025-03-21 16:37:51,456][root][INFO] - User stages valid
-16:37:51.854 | INFO    | prefect.engine - Created flow run 'horned-shellfish
-16:37:51.876 | INFO    | Flow run 'horned-shellfish' - Flow start
-16:37:51.899 | INFO    | Flow run 'horned-shellfish' - Created task run 'set
-16:37:51.900 | INFO    | Flow run 'horned-shellfish' - Executing 'set_enviro
-16:37:51.925 | INFO    | Task run 'set_environment_vars-0' - Setting environ
-16:37:51.938 | INFO    | Task run 'set_environment_vars-0' - Finished in sta
-16:37:51.967 | INFO    | Flow run 'horned-shellfish' - Created task run 'ens
-16:37:51.968 | INFO    | Flow run 'horned-shellfish' - Executing 'ensure_dvc
-16:37:51.991 | INFO    | Task run 'ensure_dvc_is_clean-0' - Checking for unc
-16:37:52.006 | INFO    | Task run 'ensure_dvc_is_clean-0' - No uncommitted D
-16:37:52.023 | INFO    | Task run 'ensure_dvc_is_clean-0' - Finished in stat
-16:37:52.037 | INFO    | Flow run 'horned-shellfish' - Created task run 'gen
-16:37:52.038 | INFO    | Flow run 'horned-shellfish' - Executing 'generate_d
-16:37:52.062 | INFO    | Task run 'generate_dvc_yaml-0' - Attempting to gene
-16:37:52.063 | INFO    | Task run 'generate_dvc_yaml-0' - Backing up existin
-16:37:52.083 | INFO    | Task run 'generate_dvc_yaml-0' - No differences det
-16:37:52.096 | INFO    | Task run 'generate_dvc_yaml-0' - Finished in state 
-16:37:52.108 | INFO    | Flow run 'horned-shellfish' - Created task run 'run
-16:37:52.109 | INFO    | Flow run 'horned-shellfish' - Executing 'run_dvc_re
-16:37:52.134 | INFO    | Task run 'run_dvc_repro-0' - Running DVC repro
-16:37:52.134 | INFO    | Task run 'run_dvc_repro-0' - Pipeline mode is ON
-16:37:52.134 | INFO    | Task run 'run_dvc_repro-0' - Force mode is ON
-16:37:52.135 | INFO    | Task run 'run_dvc_repro-0' - No specific stages => 
-17:52:48.384 | INFO    | Task run 'run_dvc_repro-0' - Finished in state Completed()
-17:52:48.385 | INFO    | Flow run 'horned-shellfish' - Flow done
-17:52:48.407 | INFO    | Flow run 'horned-shellfish' - Finished in state Completed('All states completed.')
-```
-
-## Highlights and Why It’s Not “Just Scripts”
-	1.	Config-Driven: Hydra decouples parameters from code. No rewriting CSV paths or columns.
-	2.	Fully Versioned: DVC ensures each step from v0 to v13 is reproducible.
-	3.	Scalable: Add new transformations by creating a .py in dependencies/transformations/ plus a .yaml in configs/transformations/.
-	4.	Testable: Each transformation is a small function with typed configs, making it easier to test.
-	5.	Production Mindset: Logging, metadata, MLflow integration, and potential CI/CD hooks.
+Highlights and Why It’s Not “Just Scripts”
+1. Config-Driven: Hydra decouples parameters from code. No rewriting CSV paths or hyperparams.
+2. Fully Versioned: DVC ensures each step (v0 to v13) is reproducible.
+3. Scalable: Add new transformations by creating a .py in dependencies/transformations/ plus a .yaml in configs/transformations/.
+4. Testable: Each transformation is a small function with typed configs, making it easier to test.
+5. Production Mindset: Integrated logging, metadata, MLflow, and potential CI/CD hooks.
 
 ⸻
 
-## Further Documentation
-	•	For a deep dive on each transformation, data version, and design rationale, see Detailed Docs (placeholder link) or the docs/ folder.
-	•	For a high-level conceptual overview or if you’re just browsing, check out:
-	•	Hydra
-	•	DVC
-	•	MLflow
+Further Documentation
+- Detailed Docs: See the docs/ folder (placeholder) for a deeper look at each transformation, data version, and design rationale.
+- Hydra: Hydra documentation
+- DVC: DVC documentation
+- MLflow: MLflow documentation
 
 ⸻
 
-## License and Contact
-	•	License: MIT (or your chosen license).
-	•	Author: Your Name — feel free to connect!
-	•	Contact: Open an issue on GitHub or message me on LinkedIn for questions.
+License and Contact
+- License: MIT (or your chosen license).
+- Author: Your Name — feel free to connect!
+- Contact: Open an issue on GitHub or message me on LinkedIn for questions.
 
-⸻
-
-Thank you for checking out this project! If you have any questions or want to see how a full MLOps pipeline can be scaled further, reach out via GitHub issues or LinkedIn.
+Thank you for exploring this project! For more information on scaling or productionizing an MLOps pipeline, reach out via GitHub issues or LinkedIn.
