@@ -48,6 +48,10 @@ This repository contains a fully reproducible, config-driven pipeline for analyz
 ```
 ---
 
+## Technical Documentation
+
+A more detailed, technical breakdown of each transformation, configuration, and pipeline orchestration step can be found in [documentation/detailed_documentation.md](documentation/detailed_documentation.md). This in-depth documentation covers implementation details, design choices, and extended usage scenarios.
+
 ## Quickstart
 
 Below is a minimal way to get set up and run the pipeline. Make sure your Python interpreter is available; if you are creating a conda/micromamba environment, you can install dependencies from `env.yaml` and then update `cmd_python` in your config before running DVC.
