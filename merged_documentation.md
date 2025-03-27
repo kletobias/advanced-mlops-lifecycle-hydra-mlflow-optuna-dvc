@@ -402,18 +402,20 @@ This downloads and saves data as v0 locally.
 
 3. Run a Single Step in the Pipeline
 
-3.1. Update cmd_python in configs/config.yaml:
+3.1. Update cmd_python in configs/config.yaml:  
   Replace the default path ("/Users/tobias/.local/share/mamba/envs/ny/bin/python") with your interpreter’s path.
-3.2. (Optional) Adjust the Pipeline
+
+3.2. (Optional) Adjust the Pipeline  
   Modify base.yaml if you want to add or remove any pipeline stages.
-3.3. Regenerate dvc.yaml
+
+3.3. Regenerate dvc.yaml  
   This rewrites the DVC pipeline commands (so they use your cmd_python path):
 
 ```sh
 python dependencies/templates/generate_dvc_yaml_core.py
 ```
 
-3.4. Execute the Desired Step
+3.4. Execute the Desired Step  
 For instance, if you only want to run “add lag columns on v10”:
 
 ```sh

@@ -104,16 +104,16 @@ python scripts/universal_step.py \
     io_policy.READ_INPUT=False
 ```
 
-**3. Run the Entire Pipeline**
+**3. Run a single step in the Pipeline**
 
-Update the pipeline [base.yaml](configs/pipeline/base.yaml), if you want to make changes to it.
-
-Remove the first step in [base.yaml](configs/pipeline/base.yaml), if you don't have a working kaggle api setup. Run dvc pull as outlined in step 2 first, then regenerate [dvc.yaml](dvc.yaml) using the code below:
+1. You have to change the value of `cmd_python` in configs/config.yaml. Enter the path to your python interpreter.
+2. Update the pipeline [base.yaml](configs/pipeline/base.yaml), if you want to make changes to it.
+3. Regenerate dvc.yaml with your python interpreter in the `cmd`. Run:
 
 ```sh
-
+python dependencies/templates/generate_dvc_yaml_core.py
 ```
-
+4. Run all steps start to finish. (Can take several hours to complete.)
 ```sh
 # This executes all steps in dvc.yaml (INCLUDING THE KAGGLE DOWNLOAD)
 dvc repro --force -P
@@ -121,7 +121,7 @@ dvc repro --force -P
 
 This executes each stage in configs/pipeline/base.yaml sequentially, producing new CSV files (and metadata) for each data version.
 
-4. Run a Single Transformation in dvc.yaml (example: add lag columns on v10)
+**4. Run a Single Transformation in dvc.yaml (example: add lag columns on v10)**
 
 ```sh
 dvc repro --force -s v10_lag_columns
@@ -141,6 +141,17 @@ Hydra will load configs/transformations/lag_columns.yaml, v10 data as input, and
 - Input data is loaded from [./data/v10/v10.csv](/data/v10/v10.csv)
 - Output data v11 is written to [./data/v11/v11.csv](/data/v11/v11.csv)
 - Output data v11's metadata is written to [./data/v11/v11_metadata.json](/data/v11/v11_metadata.json)
+
+**5. OPTIONAL: Run all steps in the Pipeline**
+You can run all steps start to finish. (**Warning:** Can take several hours to complete!)
+
+```sh
+# This executes all steps in dvc.yaml (EXCEPT THE KAGGLE DOWNLOAD)
+# Remove the frozen flag for it to get executed.
+dvc repro --force -P
+```
+
+This executes each stage in configs/pipeline/base.yaml sequentially, producing new CSV files (and metadata) for each data version.
 
 5. Check Logs
 
