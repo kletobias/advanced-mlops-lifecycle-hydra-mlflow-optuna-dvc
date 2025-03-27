@@ -214,10 +214,10 @@ Highlights and Why It’s Not “Just Scripts”
 ⸻
 
 Further Documentation
-- Detailed Docs: See the docs/ folder (placeholder) for a deeper look at each transformation, data version, and design rationale.
-- Hydra: Hydra documentation
-- DVC: DVC documentation
-- MLflow: MLflow documentation
+- Detailed Docs: See the [documentation](documentation/) folder for a deeper look at each transformation, data version, and design rationale.
+- Hydra: [Hydra documentation](https://hydra.cc/docs/intro/)
+- DVC: [DVC documentation](https://dvc.org/doc)
+- MLflow: [MLflow documentation](https://mlflow.org/docs/latest)
 
 ⸻
 
