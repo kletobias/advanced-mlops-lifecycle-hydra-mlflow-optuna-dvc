@@ -64,7 +64,33 @@ Hydra logs from the same execution, with one file per transformation, are locate
 
 Start here, if you want to run the pipeline yourself.
 
+Make sure to set value for `project_root` in [paths/base.yaml](configs/paths/base.yaml) to the absolute path of your git root for this project.
+
+You can run the following command to get the value (make sure your `$PWD` is inside this repository when you run it.):
+
+```sh
+echo "$(git rev-parse --show-toplevel)"
+```
+
 Below is a minimal way to get set up and run the pipeline. Make sure your Python interpreter is available; if you are creating a conda/micromamba environment, you can install dependencies from `env.yaml` and then update `cmd_python` in your config before running DVC.
+
+You can set their values using environment variables and something like `python-dotenv` so hydra can resolve `${env:VARIABLE}` references.
+
+## Config References
+
+In your Hydra `.yaml` files, they are reference as follows:
+
+```yaml
+# configs/config.yaml
+cmd_python: "${env:CMD_PYTHON}"
+
+# configs/paths/base.yaml
+paths:
+  directories:
+    project_root: "${env:PROJECT_ROOT}"
+```
+
+You can also set them manually in these to files.
 
 ### 1. Install Dependencies
 
