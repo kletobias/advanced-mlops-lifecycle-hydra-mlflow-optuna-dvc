@@ -27,6 +27,7 @@ This repository contains a config-driven pipeline for analyzing New York State h
 
 ## Repository Structure
 
+```
 .
 ├── configs/                # Hydra config files
 │   ├── config.yaml         # Main Hydra entry point
@@ -46,6 +47,7 @@ This repository contains a config-driven pipeline for analyzing New York State h
 ├── dvc.yaml                # Master pipeline (tracked in Git)
 ├── README.md               # You’re reading it
 └── …
+```
 
 ### Additional Docs
 
@@ -75,7 +77,7 @@ micromamba activate ny
 ```
 
 2. (Optional) Set Environment Variables
-  Some Hydra configs reference environment variables like CMD_PYTHON or PROJECT_ROOT. You can set these manually or via a .env file. For example:
+  Some Hydra configs reference environment variables like `$CMD_PYTHON` or `$PROJECT_ROOT`. You can set these manually or via a .env file. For example:
 
 ```bash
 export CMD_PYTHON=/path/to/your/conda/envs/ny/bin/python
@@ -90,7 +92,7 @@ Data:
 python dependencies/io/pull_dvc_s3.py
 ```
 
-This will configure the DVC remote (public S3) and dvc pull the relevant data into data/.
+This will configure the DVC remote (public S3) and dvc pull the relevant data into `data/`.
 
 - ML runs (artifacts, metrics, etc.):
 
@@ -98,10 +100,10 @@ This will configure the DVC remote (public S3) and dvc pull the relevant data in
 python dependencies/io/pull_mlruns_s3.py
 ```
 
-This populates the mlruns/ folder with finalized experiments.
+This populates the `mlruns/` folder with finalized experiments.
 
 4. Check or Adjust dvc.yaml
-  This repo includes a pre-generated dvc.yaml that defines the pipeline stages. If you find references to an environment path that doesn’t match your local machine, you may need to edit the commands in dvc.yaml or in configs/pipeline/.
+  This repo includes a pre-generated `dvc.yaml` that defines the pipeline stages. If you find references to an environment path that doesn’t match your local machine, you may need to edit the commands in `dvc.yaml` or in `configs/pipeline/`.
 
 ⸻
 
@@ -113,7 +115,7 @@ Running the Pipeline (If Desired)
 dvc repro --force -P
 ```
 
-This will attempt to run every stage from scratch. If you see “File already tracked by Git” or path mismatch issues, adjust your environment variables or pipeline commands in dvc.yaml.
+This will attempt to run every stage from scratch. If you see “File already tracked by Git” or path mismatch issues, adjust your environment variables or pipeline commands in `dvc.yaml`.
 
 2. Run a Single Stage
 
@@ -131,10 +133,10 @@ python scripts/universal_step.py \
     data_versions.data_version_output=v11
 ```
 
-Hydra loads configs/transformations/lag_columns.yaml, reads ./data/v10/v10.csv, and writes the result plus metadata to ./data/v11/.
+Hydra loads `configs/transformations/lag_columns.yaml`, reads `./data/v10/v10.csv`, and writes the result plus metadata to `./data/v11/`.
 
 3. Check the Logs
-You’ll find logs in logs/runs/${timestamp}, with one file per transformation or model training step.
+You’ll find logs in `logs/runs/${timestamp}`, with one file per transformation or model training step.
 
 ⸻
 
@@ -148,7 +150,7 @@ python scripts/universal_step.py \
     model_params=rf_optuna_trial_params
 ```
 
- This logs metrics and artifacts (model pickle, feature importances) to mlruns/.
+This logs metrics and artifacts (model pickle, feature importances) to `mlruns/`.
 
 ⸻
 
@@ -156,11 +158,14 @@ Known Caveats
 1. Manual Pipeline Config Adjustments
   You may need to tweak commands in dvc.yaml or Hydra configs if your environment paths differ from mine.
   Some references to cmd_python or project root might be out of date if you cloned the repo to a different location.
+
 2. Mixed Git/DVC Tracking
   The pipeline definition (dvc.yaml) is tracked in Git.
   Large data and model outputs are tracked by DVC. If you encounter an error about “file tracked by Git” or “tracked by both Git and DVC,” remove or untrack it from DVC.
+
 3. S3 Accessibility
   The data and MLflow artifacts are stored in a public S3 bucket. If you can’t access them, you might need to set up AWS credentials or bypass corporate firewalls.
+
 4. Focus on Portfolio
   This project demonstrates MLOps patterns, but it may not be fully turnkey for every environment. (For instance, the pipeline might reference paths/base.yaml with absolute paths that differ from your machine.)
 
@@ -177,20 +182,22 @@ Why This Setup?
 4. Experiment Management with MLflow
   MLflow logs metrics, confusion matrices, and picks up model artifacts. This helps in comparing trials and working in a team.
 5. Demonstration of Best Practices
-- Logging: auto-generated metadata for CSV transformations.
-- Potential CI/CD hooks (e.g., dvc repro in a CI pipeline).
-- Clear project structure for large or enterprise MLOps setups.
+    - Logging: auto-generated metadata for CSV transformations.
+    - Potential CI/CD hooks (e.g., dvc repro in a CI pipeline).
+    - Clear project structure for large or enterprise MLOps setups.
 
 ⸻
 
-Further Information
-- For a deeper technical exploration, see the documentation/ folder, which includes design rationale and extended usage.
-- For questions, open an issue or reach out:
-- LinkedIn: @deep-learning-mastery
-- Personal Site: deep-learning-mastery.com
+**Contact**  
+- Author: Tobias Klein
+- Contact:
+    - Open an issue on GitHub or message me on LinkedIn for questions.
+    - [LinkedIn](https://www.linkedin.com/in/deep-learning-mastery/)
+    - [Website](https://deep-learning-mastery.com/)
+
+Thank you for exploring this project! For more information on scaling or productionizing an MLOps pipeline, reach out via GitHub issues or LinkedIn.
 
 ⸻
 
 © 2025 Tobias Klein. All rights reserved.
 This repository is provided for demonstration and personal review. No license is granted for commercial or non-commercial use, copying, modification, or distribution without explicit, written permission.
-
