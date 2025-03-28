@@ -66,6 +66,14 @@ This repository contains a config-driven pipeline for analyzing New York State h
 
 ---
 
+## Check the Logs
+
+If you want to get a better idea of the pipline, check out the logs below:
+
+A complete pipeline log from running `scripts/orchestrate_dvc_flow.py` is available in the `logs/pipeline` directory: [pipeline log directory](logs/pipeline).
+
+Hydra logs from the same execution, with one file per transformation, are located in `logs/runs`: [runs logs directory](logs/runs/).
+
 ## Installation & Basic Setup
 
 > **Disclaimer**: The instructions below assume you’re familiar with DVC, Hydra, and basic Python package management. Because this is a portfolio repo, you may need to tweak some paths in `configs/` or environment variables to get everything running on your setup.
