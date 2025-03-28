@@ -17,6 +17,7 @@ src/data_inspection/outputs/
 *.tfevents
 *.pkl
 *.json
+*.bak
 
 # Visualization outputs
 *.png
