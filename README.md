@@ -1,271 +1,196 @@
-<!--README.md-->
 # Medical DRG in NY — A Reproducible ML Pipeline
 
-This repository contains a fully reproducible, config-driven pipeline for analyzing New York State hospital DRG (Diagnosis-Related Group) data. It uses Hydra (for hierarchical configs), DVC (for data versioning & reproducibility), and MLflow (for experiment tracking). The primary goal is to showcase senior-level MLOps patterns: modular transformations, data lineage, and hyperparameter optimization with minimal code duplication.
+This repository contains a config-driven pipeline for analyzing New York State hospital DRG (Diagnosis-Related Group) data. It uses **Hydra** for hierarchical configs, **DVC** for data versioning & reproducibility, and **MLflow** for experiment tracking. The main goal is to showcase advanced MLOps patterns—such as modular transformations, data lineage, and hyperparameter optimization—at a senior engineering level.
+
+> **Note**: This repo is primarily a _portfolio project_. The pipeline is mostly reproducible, but may require a few **manual adjustments** to run end-to-end on your machine (explained below). If you just want to inspect the pipeline structure and ML artifacts, you can do so without running the entire pipeline locally.
 
 ---
 
 ## Key Features
 
 - **Hydra Configuration**  
-  All parameters (data paths, transformations, hyperparameters) are separated from the code. Simply override them at runtime to switch between data versions (e.g., `v0`, `v1`, etc.) or transformations (`lag_columns`, `drop_rare_drgs`, etc.).
+  All parameters (paths, transformations, hyperparameters) are separated from the code, making it easy to customize or switch data versions.
 
 - **Data Versioning with DVC**  
-  Each pipeline stage (e.g., ingestion, transformation, modeling) is represented in `configs/pipeline/base.yaml`. DVC tracks these transformations, ensuring that every data version is reproducible.
+  Each pipeline stage (e.g., ingestion, transformation, modeling) is declared in YAML configs. DVC ensures the transformations are reproducible, tracking large artifacts outside of Git.
 
 - **Experiment Tracking with MLflow**  
-  Scripts like `rf_optuna_trial.py` or `ridge_optuna_trial.py` log metrics and artifacts (model pickle, permutation importances) to MLflow, making it easy to compare experiments.
+  Model metrics and artifacts (e.g., pickled model, permutation importances) are automatically logged, so you can compare runs.
 
 - **Modular Transformations**  
-  Each transformation is a small, testable function in `dependencies/transformations/`. Configuration (columns to shift, thresholds to drop DRGs, etc.) lives in matching YAML files under `configs/transformations/`.
+  Every transformation is a small function with its own YAML config. That means you can easily plug in or remove steps.
 
 - **Metadata Logging**  
-  Every time you generate a new CSV, the code saves a JSON metadata file (row count, column types, file hash, etc.) for reproducibility.
+  Each time you generate a new CSV, a JSON metadata file is produced (row count, column types, file hash, etc.) for thorough lineage.
 
 ---
 
-## Repository Structure (High-Level)
-```
+## Repository Structure
+
 .
-├── configs/                # All Hydra config files
-│   ├── config.yaml         # Main entry point (merges other config groups)
-│   ├── data_versions/      # Each version of the dataset (v0, v1, …)
-│   ├── pipeline/           # DVC pipeline definitions
-│   ├── transformations/    # YAML settings for each transformation
-│   └── … (logging_utils, ml_experiments, etc.)
-├── data/                   # Data folder (versioned by DVC)
-├── dependencies/           # Modular code for transformations, ingestion, modeling, etc.
-│   ├── transformations/    # Each transformation is a function + config schema
-│   ├── modeling/           # ML/hyperparameter scripts (Optuna, MLflow)
+├── configs/                # Hydra config files
+│   ├── config.yaml         # Main Hydra entry point
+│   ├── data_versions/      # Each data version (v0, v1, etc.)
+│   ├── pipeline/           # Pipeline definitions (for DVC)
+│   ├── transformations/    # YAML settings per transformation
+│   └── …
+├── data/                   # Versioned by DVC (not all included in Git)
+├── dependencies/           # Common code: transformations, modeling, etc.
+│   ├── transformations/
+│   ├── modeling/
 │   └── …
 ├── scripts/
-│   ├── universal_step.py   # “One script to rule them all” - runs any transformation
-│   └── orchestrate_dvc_flow.py  # Prefect + DVC orchestration script
-├── logs/                   # Pipeline logs (auto-generated)
-├── dvc.yaml                # Will be generated or updated via DVC (pipeline)
+│   ├── universal_step.py   # A single script that can run any transformation
+│   └── orchestrate_dvc_flow.py  # Prefect + DVC orchestration example
+├── logs/                   # Pipeline logs
+├── dvc.yaml                # Master pipeline (tracked in Git)
 ├── README.md               # You’re reading it
 └── …
-```
+
+### Additional Docs
+
+- See [documentation/detailed_documentation.md](documentation/detailed_documentation.md) for a deeper dive into transformations, pipeline orchestration, etc.
+- Hydra: [Hydra docs](https://hydra.cc/docs/intro/)
+- DVC: [DVC docs](https://dvc.org/doc)
+- MLflow: [MLflow docs](https://mlflow.org/docs/latest)
+
 ---
 
-## Technical Documentation
+## Installation & Basic Setup
 
-A more detailed, technical breakdown of each transformation, configuration, and pipeline orchestration step can be found in [documentation/detailed_documentation.md](documentation/detailed_documentation.md). This in-depth documentation covers implementation details, design choices, and extended usage scenarios.
+> **Disclaimer**: The instructions below assume you’re familiar with DVC, Hydra, and basic Python package management. Because this is a portfolio repo, you may need to tweak some paths in `configs/` or environment variables to get everything running on your setup.
 
-## Check the Logs
+1. **Create & Activate a Python Environment**
 
-If you want to get a better idea of the pipline, check out the logs below:
-
-A complete pipeline log from running `scripts/orchestrate_dvc_flow.py` is available in the `logs/pipeline` directory: [pipeline log directory](logs/pipeline).
-
-Hydra logs from the same execution, with one file per transformation, are located in `logs/runs`: [runs logs directory](logs/runs/).
-
-## Quickstart
-
-Start here, if you want to run the pipeline yourself.
-
-Make sure to set value for `project_root` in [paths/base.yaml](configs/paths/base.yaml) to the absolute path of your git root for this project.
-
-You can run the following command to get the value (make sure your `$PWD` is inside this repository when you run it.):
-
-```sh
-echo "$(git rev-parse --show-toplevel)"
-```
-
-Below is a minimal way to get set up and run the pipeline. Make sure your Python interpreter is available; if you are creating a conda/micromamba environment, you can install dependencies from `env.yaml` and then update `cmd_python` in your config before running DVC.
-
-You can set their values using environment variables and something like `python-dotenv` so hydra can resolve `${env:VARIABLE}` references.
-
-## Config References
-
-In your Hydra `.yaml` files, they are reference as follows:
-
-```yaml
-# configs/config.yaml
-cmd_python: "${env:CMD_PYTHON}"
-
-# configs/paths/base.yaml
-paths:
-  directories:
-    project_root: "${env:PROJECT_ROOT}"
-```
-
-You can also set them manually in these to files.
-
-### 1. Install Dependencies
-
-Create (and activate) your environment using conda or micromamba:
-
-```sh
-# Using Conda:
+```bash
 conda env create -f env.yaml
 conda activate ny
 ```
 
-```sh
-# Using Micromamba:
+or
+
+```bash
 micromamba env create -f env.yaml
 micromamba activate ny
 ```
 
-⸻
+2. (Optional) Set Environment Variables
+  Some Hydra configs reference environment variables like CMD_PYTHON or PROJECT_ROOT. You can set these manually or via a .env file. For example:
 
-### 2. Pull Data via dvc pull from Our Public S3 Bucket
+```bash
+export CMD_PYTHON=/path/to/your/conda/envs/ny/bin/python
+export PROJECT_ROOT=/path/to/this/repo
+```
 
-Everything is pre-configured to pull from a public S3 bucket (read-only). If needed, set it as a new remote:
+3. Pull Data & Artifacts from S3 (Optional)
 
-```sh
+Data:
+
+```bash
 python dependencies/io/pull_dvc_s3.py
 ```
 
-This step populates your local data/, configs/, etc.
+This will configure the DVC remote (public S3) and dvc pull the relevant data into data/.
 
-⸻
+- ML runs (artifacts, metrics, etc.):
 
-### 3. Pull the Entire mlruns Folder from Our S3 Bucket
-
-Retrieve final artifacts (model pickle, importances, etc.):
-
-```sh
+```bash
 python dependencies/io/pull_mlruns_s3.py
 ```
 
-They are stored in the mlruns/ folder, so you can query them using MLflow’s search syntax.
+This populates the mlruns/ folder with finalized experiments.
 
-Optional: If you rely on Kaggle data ingestion, you’ll need a Kaggle API key. Example:
-
-```sh
-python scripts/universal_step.py \
-    setup.script_base_name=download_and_save_data \
-    data_versions=v0  \
-    io_policy.READ_INPUT=False
-```
+4. Check or Adjust dvc.yaml
+  This repo includes a pre-generated dvc.yaml that defines the pipeline stages. If you find references to an environment path that doesn’t match your local machine, you may need to edit the commands in dvc.yaml or in configs/pipeline/.
 
 ⸻
 
-### 4. Run a Single Step in the Pipeline
+Running the Pipeline (If Desired)
 
-1. Update cmd_python in configs/config.yaml:  
-  Enter the path to your Python interpreter (instead of "/Users/tobias/.local/share/mamba/envs/ny/bin/python").
-2. (Optional) Edit Pipeline Stages  
-  If you want to modify the flow, open configs/pipeline/base.yaml.
-3. Regenerate dvc.yaml  
-This ensures your Python interpreter path is reflected in the pipeline commands:
+1. Force Reproduce All Stages
 
-```sh
-python dependencies/templates/generate_dvc_yaml_core.py
-```
-
-### 5. Run All Steps or a Single One
-
-- All Steps:
-
-```sh
+```bash
 dvc repro --force -P
 ```
 
-Potentially time-consuming—rebuilds each stage.
+This will attempt to run every stage from scratch. If you see “File already tracked by Git” or path mismatch issues, adjust your environment variables or pipeline commands in dvc.yaml.
 
+2. Run a Single Stage
 
-- Single Step (e.g., v10_lag_columns):
-
-```sh
+```bash
 dvc repro --force -s v10_lag_columns
 ```
 
-This runs:
+This calls:
 
-```sh
+```bash
 python scripts/universal_step.py \
-  setup.script_base_name=lag_columns \
-  transformations=lag_columns \
-  data_versions.data_version_input=v10 \
-  data_versions.data_version_output=v11
+    setup.script_base_name=lag_columns \
+    transformations=lag_columns \
+    data_versions.data_version_input=v10 \
+    data_versions.data_version_output=v11
 ```
 
-Hydra loads configs/transformations/lag_columns.yaml, reads from ./data/v10/v10.csv, and writes new data (with metadata) to ./data/v11.
+Hydra loads configs/transformations/lag_columns.yaml, reads ./data/v10/v10.csv, and writes the result plus metadata to ./data/v11/.
+
+3. Check the Logs
+You’ll find logs in logs/runs/${timestamp}, with one file per transformation or model training step.
 
 ⸻
 
-### 5. Logs and Pipeline Output
+Running ML Experiments  
+- For example, to run a Random Forest hyperparameter trial with Optuna:
 
-Logs are stored under:
-
-```
-logs/runs/${now:%Y-%m-%d_%H-%M-%S}/${setup.script_base_name}
-```
-
-For instance, running the lag_columns step might produce:
-
-```
-logs/runs/2025-03-20_17-30-59/lag_columns.log
-```
-
-with details about CSV paths, metadata, and transformation execution.
-
-⸻
-
-## Running ML Experiments
-
-This repo integrates MLflow and Optuna for hyperparameter tuning. For example, to run a Random Forest trial:
-
-```sh
+```bash
 python scripts/universal_step.py \
-  setup.script_base_name=rf_optuna_trial \
-  data_versions=v13 \
-  model_params=rf_optuna_trial_params
+    setup.script_base_name=rf_optuna_trial \
+    data_versions=v13 \
+    model_params=rf_optuna_trial_params
 ```
 
-A similar approach applies to Ridge Regression or other models. Each run logs metrics (RMSE, R², etc.) and artifacts (importances, pickled model) to ./mlruns.
+ This logs metrics and artifacts (model pickle, feature importances) to mlruns/.
 
 ⸻
 
-Example Artifacts: Permutation Importances
-
-```csv
-feature,importances
-w_total_median_profit_lag1,0.10964554607356722
-w_total_mean_profit_lag1,0.10563058193740327
-...
-```
-
-Example Artifacts: RandomForestRegressor Importances
-
-```csv
-feature,importance
-w_total_median_profit_lag1,0.2170874864655451
-w_total_mean_profit_lag1,0.20730719583731547
-...
-```
+Known Caveats
+1. Manual Pipeline Config Adjustments
+  You may need to tweak commands in dvc.yaml or Hydra configs if your environment paths differ from mine.
+  Some references to cmd_python or project root might be out of date if you cloned the repo to a different location.
+2. Mixed Git/DVC Tracking
+  The pipeline definition (dvc.yaml) is tracked in Git.
+  Large data and model outputs are tracked by DVC. If you encounter an error about “file tracked by Git” or “tracked by both Git and DVC,” remove or untrack it from DVC.
+3. S3 Accessibility
+  The data and MLflow artifacts are stored in a public S3 bucket. If you can’t access them, you might need to set up AWS credentials or bypass corporate firewalls.
+4. Focus on Portfolio
+  This project demonstrates MLOps patterns, but it may not be fully turnkey for every environment. (For instance, the pipeline might reference paths/base.yaml with absolute paths that differ from your machine.)
 
 ⸻
 
-Highlights and Why It’s Not “Just Scripts”  
-1. Config-Driven: Hydra decouples parameters from code. No rewriting CSV paths or hyperparams.
-2. Fully Versioned: DVC ensures each step (v0 to v13) is reproducible.
-3. Scalable: Add new transformations by creating a .py in dependencies/transformations/ plus a .yaml in configs/transformations/.
-4. Testable: Each transformation is a small function with typed configs, making it easier to test.
-5. Production Mindset: Integrated logging, metadata, MLflow, and potential CI/CD hooks.
+Why This Setup?
+
+1. Config-Driven
+  Hydra reduces code duplication by separating parameters (like CSV paths or hyperparams) from business logic.
+2. Version Controlled & Reproducible
+  DVC manages big data artifacts so that you can revert or reproduce results with minimal overhead.
+3. Modular & Extensible
+  Each transformation is a self-contained function plus a small YAML config. You can easily add or remove steps without rewriting the entire pipeline.
+4. Experiment Management with MLflow
+  MLflow logs metrics, confusion matrices, and picks up model artifacts. This helps in comparing trials and working in a team.
+5. Demonstration of Best Practices
+- Logging: auto-generated metadata for CSV transformations.
+- Potential CI/CD hooks (e.g., dvc repro in a CI pipeline).
+- Clear project structure for large or enterprise MLOps setups.
 
 ⸻
 
-Further Documentation
-- Detailed Docs: See the [documentation](documentation/) folder for a deeper look at each transformation, data version, and design rationale.
-- Hydra: [Hydra documentation](https://hydra.cc/docs/intro/)
-- DVC: [DVC documentation](https://dvc.org/doc)
-- MLflow: [MLflow documentation](https://mlflow.org/docs/latest)
+Further Information
+- For a deeper technical exploration, see the documentation/ folder, which includes design rationale and extended usage.
+- For questions, open an issue or reach out:
+- LinkedIn: @deep-learning-mastery
+- Personal Site: deep-learning-mastery.com
 
 ⸻
-
-**Contact**  
-- Author: Tobias Klein
-- Contact:
-    - Open an issue on GitHub or message me on LinkedIn for questions.
-    - [LinkedIn](https://www.linkedin.com/in/deep-learning-mastery/)
-    - [Website](https://deep-learning-mastery.com/)
-
-Thank you for exploring this project! For more information on scaling or productionizing an MLOps pipeline, reach out via GitHub issues or LinkedIn.
 
 © 2025 Tobias Klein. All rights reserved.
+This repository is provided for demonstration and personal review. No license is granted for commercial or non-commercial use, copying, modification, or distribution without explicit, written permission.
 
-This repository is provided solely for demonstration and personal review. No license is granted for commercial or non-commercial use, copying, modification, or distribution without explicit, written permission from the author.
