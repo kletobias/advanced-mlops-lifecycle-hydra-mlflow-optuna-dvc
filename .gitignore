@@ -2,7 +2,6 @@
 **/.DS_Store
 # Ignore any YYYY-MM-DD named directory under outputs that has hydra logs in it.
 **/outputs/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
-*.log
 __pycache__/
 *.pyc
 src/data_inspection/outputs/
@@ -27,13 +26,8 @@ src/data_inspection/outputs/
 /mlruns
 files/
 *.txt
-/outputs/mlflow/
-/outputs/modeling/
-/outputs/transformation/
 /.troubleshoot/
 portfolio_article
-documentation_v2/
-trouble/
 prefect.yaml
 .ruff_cache/
 .prefectignore
