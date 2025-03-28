@@ -1,10 +1,18 @@
+<!--README.md-->
 # Medical DRG in NY — A Reproducible ML Pipeline
 
 This repository contains a config-driven pipeline for analyzing New York State hospital DRG (Diagnosis-Related Group) data. It uses **Hydra** for hierarchical configs, **DVC** for data versioning & reproducibility, and **MLflow** for experiment tracking. The main goal is to showcase advanced MLOps patterns—such as modular transformations, data lineage, and hyperparameter optimization—at a senior engineering level.
 
+
 > **Note**: This repo is primarily a _portfolio project_. The pipeline is mostly reproducible, but may require a few **manual adjustments** to run end-to-end on your machine (explained below). If you just want to inspect the pipeline structure and ML artifacts, you can do so without running the entire pipeline locally.
 
 ---
+
+## Dataset
+
+- Name: 2010 New York State Hospital Inpatient Discharge Data
+- Info Kaggle: [2010 New York State Hospital Inpatient Discharge Data](https://www.kaggle.com/datasets/thedevastator/2010-new-york-state-hospital-inpatient-discharge)
+- Source: [data.world](https://data.world/healthdatany) (Requires login)
 
 ## Key Features
 
