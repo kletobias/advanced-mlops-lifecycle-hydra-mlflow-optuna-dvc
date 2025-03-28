@@ -1,0 +1,92 @@
+# configs/model_params/randomforest.yaml
+# INFO: The list of all hyperparameters with their default values for RandomForestRegressor Hyperparameter tuning
+# REFERENCE: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html
+defaults:
+  - base
+  - _self_
+
+hyperparameters:
+  n_estimators:
+    tune: false
+    type: int
+    default: 100
+    low: 50
+    high: 1000
+    step: 50
+
+  max_depth:
+    tune: false
+    type: int
+    default: null
+    low: 5
+    high: 50
+    step: 5
+
+  min_samples_split:
+    tune: false
+    type: int
+    default: 2
+    low: 2
+    high: 50
+    step: 2
+
+  min_samples_leaf:
+    tune: false
+    type: int
+    default: 1
+    low: 5
+    high: 50
+    step: 5
+
+  min_weight_fraction_leaf:
+    tune: false
+    type: float
+    default: 0.0
+
+  max_features:
+    tune: false
+    type: float
+    default: 1.0 # float 1.0 means all n features can be used.
+    low: 0.1
+    high: 1.0
+    step: 0.1
+
+  max_leaf_nodes:
+    tune: false
+    type: int
+    default: null
+
+  min_impurity_decrease:
+    tune: false
+    type: float
+    default: 0.0
+
+  bootstrap:
+    tune: false
+    type: bool
+    default: true
+
+  oob_score:
+    tune: false
+    type: bool
+    default: false
+
+  warm_start:
+    tune: false
+    type: bool
+    default: false
+
+  ccp_alpha:
+    tune: false
+    type: float
+    default: 0.0
+
+  max_samples:
+    tune: false
+    type: int
+    default: null
+
+  monotonic_cst:
+    tune: false
+    type: list
+    default: null

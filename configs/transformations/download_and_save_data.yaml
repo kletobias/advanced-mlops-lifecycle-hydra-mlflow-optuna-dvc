@@ -1,0 +1,13 @@
+defaults:
+  - base
+  - _self_
+
+download_and_save_data:
+  dataset: wajahat1064/hospital-inpatient-cost-data-by-new-york-state
+  target_dir: ${paths.directories.data}/${data_versions.data_version_input}
+  v0_csv_file_path: ${.target_dir}/${data_versions.data_version_input}.csv
+  v0_zip_file_path: ${.target_dir}/${data_versions.data_version_input}.zip
+  glob_pattern_csv_files: ${.target_dir}/*.csv
+  glob_pattern_zip_files: ${.target_dir}/*.zip
+  low_memory: false
+  output_metadata_file_path: ${data_storage.output_metadata_file_path}

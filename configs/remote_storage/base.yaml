@@ -1,0 +1,4 @@
+s3_bucket:
+  bucket_name: nyproject25
+  prefix: ""
+  remote_uri: "s3://${.bucket_name}/${.prefix}"

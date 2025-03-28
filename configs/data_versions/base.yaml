@@ -1,0 +1,9 @@
+name: hospital_inpatient_cost_data_by_new_york_state
+data_version_input: v0
+data_version_output: ${.data_version_input}
+description: |
+            dataset name: `hospital_inpatient_cost_data_by_new_york_state`
+            Original, unmodified data, as downloaded from kaggle.
+            See 'dataset_url' for further information.
+
+dataset_url: 'https://www.kaggle.com/datasets/thedevastator/2010-new-york-state-hospital-inpatient-discharge'

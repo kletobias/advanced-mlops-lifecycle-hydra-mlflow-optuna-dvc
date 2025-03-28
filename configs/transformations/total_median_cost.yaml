@@ -1,0 +1,8 @@
+defaults:
+  - base
+  - _self_
+
+total_median_cost:
+  total_median_cost_col_name: total_median_cost
+  median_cost_col_name: median_cost
+  discharges_col_name: discharges

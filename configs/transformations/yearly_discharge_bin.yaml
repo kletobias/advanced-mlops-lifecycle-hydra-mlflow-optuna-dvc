@@ -1,0 +1,26 @@
+defaults:
+  - base
+  - _self_
+
+yearly_discharge_bin:
+  groupby_cols:
+    - year
+    - facility_id
+  as_index: false
+  sum_discharges_col_name: sum_discharges
+  rename_columns:
+    sum_discharges: yearly_sum_discharges
+  yearly_discharge_bin_col_name: yearly_discharge_bin
+  labels: false
+  duplicates: drop
+  num_bins: 5
+  year_col_name: year
+  yearly_sum_discharges_col_name: yearly_sum_discharges
+  df_agg_columns:
+    - year
+    - facility_id
+    - yearly_discharge_bin
+  on_columns:
+    - year
+    - facility_id
+  how: left

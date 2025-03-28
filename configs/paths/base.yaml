@@ -1,0 +1,13 @@
+# configs/paths/base.yaml
+directories:
+  project_root: "${env:PROJECT_ROOT}"
+  bin: "${.project_root}/bin"
+  configs: "${.project_root}/configs"
+  data: "${.project_root}/data"
+  dependencies: "${.project_root}/dependencies"
+  documentation: "${.project_root}/documentation"
+  logs: "${.project_root}/logs"
+  outputs: "${.project_root}/outputs"
+  scripts: "${.project_root}/scripts"
+  templates: "${.project_root}/templates"
+  mlruns: "${.project_root}/mlruns"

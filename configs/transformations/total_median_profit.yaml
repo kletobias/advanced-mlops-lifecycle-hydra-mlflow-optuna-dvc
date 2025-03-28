@@ -1,0 +1,8 @@
+defaults:
+  - base
+  - _self_
+
+total_median_profit:
+  total_median_profit_col_name: total_median_profit
+  median_profit_col_name: median_profit
+  discharges_col_name: discharges

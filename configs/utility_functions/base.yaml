@@ -1,0 +1,11 @@
+csv_to_dataframe:
+  csv_file_path: ${data_storage.input_file_path_csv}
+  low_memory: false
+
+dataframe_to_csv:
+  output_file_path_csv: ${data_storage.output_file_path_csv}
+  include_index: false
+
+calculate_and_save_metadata:
+  data_file_path: ${data_storage.output_file_path_csv}
+  output_metadata_file_path: ${data_storage.output_metadata_file_path}

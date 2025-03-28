@@ -1,0 +1,16 @@
+# configs/utility_functions/push_mlruns_s3.yaml
+defaults:
+  - /remote_storage: s3_mlflow
+  - _self_
+
+bucket_name: ${remote_storage.s3_bucket.bucket_name}
+prefix: ${remote_storage.s3_bucket.prefix}
+local_mlruns_dir: "${paths.directories.mlruns}"
+remote_uri: ${remote_storage.s3_bucket.remote_uri}
+sync_command: 
+  - aws
+  - s3
+  - sync
+  - ${..local_mlruns_dir}
+  - ${..remote_uri}
+replace_remote: true

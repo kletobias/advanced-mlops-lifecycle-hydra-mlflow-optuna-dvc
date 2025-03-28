@@ -1,0 +1,4 @@
+defaults:
+  - base
+data_version: v13
+description: "Difference to v12: Removes the original columns that got transformed by v11, v12 to prevent data leakage."

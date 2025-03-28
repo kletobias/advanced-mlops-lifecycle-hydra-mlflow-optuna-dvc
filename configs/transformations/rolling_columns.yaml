@@ -1,0 +1,16 @@
+# rolling_columns.yaml
+defaults:
+  - base
+  - lag_columns
+  - _self_
+
+rolling_columns:
+  columns_to_transform: ${transformations.lag_columns.columns_to_transform}
+  groupby_time_based_cols: ${transformations.lag_columns.groupby_time_based_cols}
+  drop: ${transformations.lag_columns.drop}
+  groupby_rolling_cols: ${transformations.lag_columns.groupby_lag_cols}
+  rolling_str: _rolling
+  window: 2
+  shift_periods: 1
+  min_periods: 1
+  inplace: false

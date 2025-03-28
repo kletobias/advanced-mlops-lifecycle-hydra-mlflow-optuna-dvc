@@ -1,0 +1,29 @@
+# configs/transformations/agg_severities.yaml
+defaults:
+  - base
+  - _self_
+
+agg_severities:
+  weighted_mean_weight_col_name: discharges
+  weighted_median_weight_col_name: discharges
+  discharges_col_name: discharges
+  sum_discharges_key: sum_discharges
+  severity_levels: [1, 2, 3, 4]
+  apr_severity_of_illness_code_col_name: apr_severity_of_illness_code
+  mean_cols:
+    - mean_charge
+    - mean_cost
+    - mean_profit
+    - total_mean_profit
+    - total_mean_cost
+  median_cols:
+    - median_charge
+    - median_cost
+    - median_profit
+    - total_median_profit
+    - total_median_cost
+  groupby_cols:
+    - year
+    - facility_id
+    - apr_drg_code
+  as_index: false

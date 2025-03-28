@@ -1,0 +1,14 @@
+defaults:
+  - base
+
+data_version: v8
+description: |
+  Difference to v7: This version aggregates the DRG dataset that dropped rare DRGs (v7) by (year, facility_id, apr_drg_code).
+  Within each group, we compute:
+    - sum_discharges: total discharges across all rows in that group.
+    - severity_{1,2,3,4}_portion: fraction of total discharges attributed to each severity level.
+    - w_mean_*: weighted mean of mean_charge, mean_cost, mean_profit, total_mean_profit (weights = discharges).
+    - w_median_*: weighted median of median_charge, median_cost, median_profit, total_median_profit (weights = discharges).
+
+  This transformation reduces the dataset to a single row per (year, facility_id, apr_drg_code),
+  preserving key aggregate statistics while removing duplication and tiny row fragments.

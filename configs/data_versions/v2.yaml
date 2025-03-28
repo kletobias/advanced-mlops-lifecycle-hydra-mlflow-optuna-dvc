@@ -1,0 +1,4 @@
+defaults:
+  - base
+data_version: v2
+description: 'Difference to v1: Removed all columns that end with `description`.'

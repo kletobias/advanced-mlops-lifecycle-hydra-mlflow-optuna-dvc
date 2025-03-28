@@ -1,0 +1,5 @@
+defaults:
+  - base
+
+data_version: v5_2
+description: 'Difference to v5_1: Adds feature `total_median_cost` = `median_cost` * `discharges`'

@@ -1,0 +1,8 @@
+defaults:
+  - base
+  - _self_
+
+mean_profit:
+  mean_profit_col_name: mean_profit
+  mean_charge_col_name: mean_charge
+  mean_cost_col_name: mean_cost

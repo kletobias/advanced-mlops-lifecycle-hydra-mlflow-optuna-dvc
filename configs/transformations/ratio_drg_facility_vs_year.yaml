@@ -1,0 +1,16 @@
+# configs/transformations/ratio_drg_facility_vs_year.yaml
+defaults:
+  - base
+  - _self_
+
+ratio_drg_facility_vs_year:
+  year_col_name: year
+  facility_id_col_name: facility_id
+  apr_drg_code_col_name: apr_drg_code
+  facility_drg_count_col_name: facility_drg_count
+  year_drg_count_col_name: year_drg_count
+  ratio_drg_facility_vs_year_col_name: ratio_drg_facility_vs_year
+  year_merge_on: year
+  year_merge_how: left
+  final_merge_on: [year, facility_id]
+  final_merge_how: left

@@ -1,0 +1,30 @@
+# configs/model_params/rf_optuna_trial_params.yaml
+defaults:
+  - base
+  - randomforestregressor
+  - _self_
+
+hyperparameters:
+  n_estimators:
+    tune: true
+    low: 100
+    high: 1000
+    step: null
+
+  max_depth:
+    tune: true
+    low: 5
+    high: 55
+    step: null
+
+  min_samples_split:
+    tune: true
+    low: 2
+    high: 50
+    step: null
+
+  max_features:
+    tune: true
+    low: 0.1
+    high: 1.0
+    step: null

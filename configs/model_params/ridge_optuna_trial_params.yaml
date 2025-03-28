@@ -1,0 +1,39 @@
+defaults:
+  - base
+  - _self_
+
+hyperparameters:
+  alpha:
+    tune: true
+    type: float
+    low: 1e-5
+    high: 1e3
+    step: null
+    log: true
+
+  solver:
+    tune: true
+    type: categorical
+    values:
+      - auto
+      - svd
+      - cholesky
+      - lsqr
+      - sag
+      - saga
+    step: null
+
+  tol:
+    tune: true
+    type: float
+    low: 1e-6
+    high: 1e-2
+    step: null
+    log: true
+
+  max_iter:
+    tune: true
+    type: int
+    low: 100
+    high: 2000
+    step: 100

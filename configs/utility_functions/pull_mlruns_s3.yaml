@@ -1,0 +1,7 @@
+# configs/utility_functions/pull_mlruns_s3.yaml
+defaults:
+  - push_mlruns_s3
+  - _self_
+
+sync_command: [aws, s3, sync, "${..remote_uri}", "${..local_mlruns_dir}"]
+overwrite_local: true

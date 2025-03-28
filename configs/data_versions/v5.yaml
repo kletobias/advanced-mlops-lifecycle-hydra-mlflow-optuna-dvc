@@ -1,0 +1,5 @@
+defaults:
+  - base
+
+data_version: v5
+description: 'Difference to v4: Adds feature `total_mean_profit` as `mean_profit` * `discharges`'

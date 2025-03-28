@@ -1,0 +1,11 @@
+# File paths input data
+input_file_path_csv: ${paths.directories.data}/${data_versions.data_version_input}/${data_versions.data_version_input}.csv
+input_file_path_json: ${paths.directories.data}/${data_versions.data_version_input}/${data_versions.data_version_input}.json
+input_file_path_db: ${paths.directories.data}/${data_versions.data_version_input}/${data_versions.data_version_input}.db
+input_metadata_file_path: ${paths.directories.data}/${data_versions.data_version_input}/${data_versions.data_version_input}_metadata.json
+
+# File paths output data
+output_file_path_csv: ${paths.directories.data}/${data_versions.data_version_output}/${data_versions.data_version_output}.csv
+output_file_path_json: ${paths.directories.data}/${data_versions.data_version_output}/${data_versions.data_version_output}.json
+output_file_path_db: ${paths.directories.data}/${data_versions.data_version_output}/${data_versions.data_version_output}.db
+output_metadata_file_path: ${paths.directories.data}/${data_versions.data_version_output}/${data_versions.data_version_output}_metadata.json

@@ -1,0 +1,6 @@
+defaults:
+  - base
+  - _self_
+
+s3_bucket:
+  prefix: mlruns

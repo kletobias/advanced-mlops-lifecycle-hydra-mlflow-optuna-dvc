@@ -1,0 +1,26 @@
+defaults:
+  - base
+
+data_version: v11
+description: |
+  Difference to v10:
+  New columns get added for each listed column, shifted by 1 year (_lag1) within each [facility_id, apr_drg_code] group.
+  The data is sorted on [facility_id, apr_drg_code, year].
+
+  Adds features `_lag1` for the following columns:
+  columns_to_transform = [
+      "sum_discharges",
+      "severity_1_portion",
+      "severity_2_portion",
+      "severity_3_portion",
+      "severity_4_portion",
+      "w_mean_charge",
+      "w_mean_cost",
+      "w_mean_profit",
+      "w_total_mean_profit",
+      "w_median_charge",
+      "w_median_cost",
+      "w_median_profit",
+      "w_total_median_profit"
+  ]
+  new_cols = [f"{col}_lag1" for col in columns_to_transform]

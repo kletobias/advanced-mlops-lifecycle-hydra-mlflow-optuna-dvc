@@ -1,0 +1,8 @@
+defaults:
+  - base
+  - _self_
+
+median_profit:
+  median_profit_col_name: median_profit
+  median_charge_col_name: median_charge
+  median_cost_col_name: median_cost

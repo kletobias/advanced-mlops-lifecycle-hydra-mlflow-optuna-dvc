@@ -1,0 +1,4 @@
+defaults:
+  - base
+data_version: v3
+description: 'difference from v2: new feature added `median_profit`. It is the difference between `median_charge`, and `median_cost`'

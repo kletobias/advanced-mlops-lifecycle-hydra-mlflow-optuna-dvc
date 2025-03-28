@@ -1,0 +1,7 @@
+defaults:
+  - base
+  - _self_
+
+drop_description_columns:
+  pattern: description
+  inplace: false

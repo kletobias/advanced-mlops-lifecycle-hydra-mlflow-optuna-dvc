@@ -1,0 +1,4 @@
+defaults:
+  - base
+data_version: v4
+description: 'Difference to v3: Adds feature `mean_profit` as `mean_charge` - `mean_cost`'

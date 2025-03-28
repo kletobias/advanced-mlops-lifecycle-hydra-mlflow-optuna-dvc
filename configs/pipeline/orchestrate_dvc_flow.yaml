@@ -1,0 +1,14 @@
+# configs/pipeline/orchestrate_dvc_flow.yaml
+defaults:
+  - base
+  - _self_
+
+stages_to_run: []
+force_run: false
+pipeline_run: false
+allow_dvc_changes: true
+skip_generation: false
+search_path: ${paths.directories.templates}/dvc
+template_name: generate_dvc.yaml.j2
+dvc_yaml_file_path: ${paths.directories.project_root}/dvc.yaml
+log_file_path: ${logging_utils.log_file_path}

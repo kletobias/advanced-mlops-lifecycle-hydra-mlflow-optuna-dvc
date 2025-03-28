@@ -1,0 +1,3 @@
+defaults:
+  - push_dvc_s3
+  - _self_

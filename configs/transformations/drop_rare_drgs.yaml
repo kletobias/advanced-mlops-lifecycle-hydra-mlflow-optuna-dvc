@@ -1,0 +1,11 @@
+defaults:
+  - base
+  - _self_
+
+drop_rare_drgs:
+  apr_drg_code_col_name: apr_drg_code
+  as_index: false
+  discharges_col_name: discharges
+  threshold: 5000
+  drop: true
+  inplace: false

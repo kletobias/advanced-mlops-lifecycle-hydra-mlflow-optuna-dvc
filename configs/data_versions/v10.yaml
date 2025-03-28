@@ -1,0 +1,5 @@
+defaults:
+  - base
+
+data_version: v10
+description: 'Difference to v9: New column yearly_discharge_bin added, splitting facilities by annual sum_discharges into 5 equally sized quantile bins.'

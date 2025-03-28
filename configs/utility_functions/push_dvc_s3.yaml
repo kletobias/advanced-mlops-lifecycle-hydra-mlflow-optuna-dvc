@@ -1,0 +1,8 @@
+defaults:
+  - /remote_storage: s3_dvc
+  - _self_
+
+bucket_name: ${remote_storage.s3_bucket.bucket_name}
+prefix: ${remote_storage.s3_bucket.prefix}
+remote_uri: ${remote_storage.s3_bucket.remote_uri}
+remote_name: s3_dvc
