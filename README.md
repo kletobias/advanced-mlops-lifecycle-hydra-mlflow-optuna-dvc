@@ -100,7 +100,7 @@ Optional: If you rely on Kaggle data ingestion, you’ll need a Kaggle API key. 
 
 ```sh
 python scripts/universal_step.py \
-    +setup.script_base_name=download_and_save_data \
+    setup.script_base_name=download_and_save_data \
     data_versions=v0  \
     io_policy.READ_INPUT=False
 ```
@@ -155,13 +155,13 @@ Hydra loads configs/transformations/lag_columns.yaml, reads from ./data/v10/v10.
 
 Logs are stored under:
 
-```txt
+```
 logs/runs/${now:%Y-%m-%d_%H-%M-%S}/${setup.script_base_name}
 ```
 
 For instance, running the lag_columns step might produce:
 
-```txt
+```
 logs/runs/2025-03-20_17-30-59/lag_columns.log
 ```
 
@@ -204,7 +204,7 @@ w_total_mean_profit_lag1,0.20730719583731547
 
 ⸻
 
-Highlights and Why It’s Not “Just Scripts”
+Highlights and Why It’s Not “Just Scripts”  
 1. Config-Driven: Hydra decouples parameters from code. No rewriting CSV paths or hyperparams.
 2. Fully Versioned: DVC ensures each step (v0 to v13) is reproducible.
 3. Scalable: Add new transformations by creating a .py in dependencies/transformations/ plus a .yaml in configs/transformations/.
