@@ -70,7 +70,7 @@ This repository contains a config-driven pipeline for analyzing New York State h
 
 > **Disclaimer**: The instructions below assume you’re familiar with DVC, Hydra, and basic Python package management. Because this is a portfolio repo, you may need to tweak some paths in `configs/` or environment variables to get everything running on your setup.
 
-1. **Create & Activate a Python Environment**
+### 1. Create & Activate a Python Environment
 
 ```bash
 conda env create -f env.yaml
@@ -84,15 +84,16 @@ micromamba env create -f env.yaml
 micromamba activate ny
 ```
 
-2. (Optional) Set Environment Variables
-  Some Hydra configs reference environment variables like `$CMD_PYTHON` or `$PROJECT_ROOT`. You can set these manually or via a .env file. For example:
+### 2. (Optional) Set Environment Variables
+
+Some Hydra configs reference environment variables like `$CMD_PYTHON` or `$PROJECT_ROOT`. You can set these manually or via a .env file. For example:
 
 ```bash
 export CMD_PYTHON=/path/to/your/conda/envs/ny/bin/python
 export PROJECT_ROOT=/path/to/this/repo
 ```
 
-3. Pull Data & Artifacts from S3 (Optional)
+### 3. Pull Data & Artifacts from S3 (Optional)
 
 Data:
 
@@ -110,14 +111,15 @@ python dependencies/io/pull_mlruns_s3.py
 
 This populates the `mlruns/` folder with finalized experiments.
 
-4. Check or Adjust dvc.yaml
-  This repo includes a pre-generated `dvc.yaml` that defines the pipeline stages. If you find references to an environment path that doesn’t match your local machine, you may need to edit the commands in `dvc.yaml` or in `configs/pipeline/`.
+### 4. Check or Adjust dvc.yaml
+
+This repo includes a pre-generated `dvc.yaml` that defines the pipeline stages. If you find references to an environment path that doesn’t match your local machine, you may need to edit the commands in `dvc.yaml` or in `configs/pipeline/`.
 
 ⸻
 
-Running the Pipeline (If Desired)
+## Running the Pipeline (If Desired)
 
-1. Force Reproduce All Stages
+### 1. Force Reproduce All Stages
 
 ```bash
 dvc repro --force -P
@@ -125,7 +127,7 @@ dvc repro --force -P
 
 This will attempt to run every stage from scratch. If you see “File already tracked by Git” or path mismatch issues, adjust your environment variables or pipeline commands in `dvc.yaml`.
 
-2. Run a Single Stage
+### 2. Run a Single Stage
 
 ```bash
 dvc repro --force -s v10_lag_columns
@@ -143,7 +145,8 @@ python scripts/universal_step.py \
 
 Hydra loads `configs/transformations/lag_columns.yaml`, reads `./data/v10/v10.csv`, and writes the result plus metadata to `./data/v11/`.
 
-3. Check the Logs
+### 3. Check the Logs
+
 You’ll find logs in `logs/runs/${timestamp}`, with one file per transformation or model training step.
 
 ⸻
@@ -162,7 +165,7 @@ This logs metrics and artifacts (model pickle, feature importances) to `mlruns/`
 
 ⸻
 
-Known Caveats
+## Known Caveats
 1. Manual Pipeline Config Adjustments
   You may need to tweak commands in dvc.yaml or Hydra configs if your environment paths differ from mine.
   Some references to cmd_python or project root might be out of date if you cloned the repo to a different location.
@@ -179,7 +182,7 @@ Known Caveats
 
 ⸻
 
-Why This Setup?
+## Why This Setup?
 
 1. Config-Driven
   Hydra reduces code duplication by separating parameters (like CSV paths or hyperparams) from business logic.
@@ -196,7 +199,7 @@ Why This Setup?
 
 ⸻
 
-**Contact**  
+## Contact
 - Author: Tobias Klein
 - Contact:
     - Open an issue on GitHub or message me on LinkedIn for questions.
