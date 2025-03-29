@@ -72,6 +72,10 @@ Although only two random forest trials are shown in the final run, we had previo
 
 The R² for ridge regressions is usually between 0.86 and 0.89, while for the random forest regressor it tends to fall between 0.84 and 0.86.
 
+Our target column is `w_total_median_profit`. See:
+- Transformation: [agg_severities.py](dependencies/transformations/agg_severities.py),
+- Associated Config: [agg_severities.yaml](configs/transformations/agg_severities.yaml)
+
 ![MLflow UI Table](examples/mlflow_ui_table.png)
 
 ![All RMSE Values](examples/scatter_newplot.png)
