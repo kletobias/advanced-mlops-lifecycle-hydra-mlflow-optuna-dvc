@@ -66,6 +66,18 @@ This repository contains a config-driven pipeline for analyzing New York State h
 
 ---
 
+### MLflow Outputs
+
+Although only two random forest trials are shown in the final run, we had previously tested random forest extensively. We limited it to two in the final pipeline because it is more time-consuming, but these results remain representative of the model’s performance from the broader experiments.
+
+The R² for ridge regressions is usually between 0.86 and 0.89, while for the random forest regressor it tends to fall between 0.84 and 0.86.
+
+![MLflow UI Table](examples/mlflow_ui_table.png)
+
+![All RMSE Values](examples/scatter_newplot.png)
+
+![Permutation Importances](examples/newplot_importances.png)
+
 ## Check the Logs
 
 If you want to get a better idea of the pipline, check out the logs below:
