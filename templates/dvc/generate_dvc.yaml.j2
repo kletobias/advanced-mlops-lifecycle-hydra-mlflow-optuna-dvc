@@ -28,10 +28,10 @@ stages:
 {%- if plots %}
 plots:
 {%- for plot_dict in plots %}
-  - {%- for key, subdict in plot_dict.items() %}
-{{ key }}:
+{%- for key, subdict in plot_dict.items() %}
+  - {{ key }}:
 {%- for subkey, subvalue in subdict.items() %}
-    {{ subkey }}: {{ subvalue }}
+      {{ subkey }}: {{ subvalue }}
 {%- endfor %}
 {%- endfor %}
 {%- endfor %}
