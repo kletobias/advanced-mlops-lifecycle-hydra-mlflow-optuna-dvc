@@ -232,6 +232,6 @@ stages:
     outs: []
 plots:
   - mlruns/267770527945916909/c0265242dba948829ad10cae3c7e55d8/artifacts/importances/permutation_importances.csv:
-      y: feature
-      x: importances
       template: bar_horizontal_sorted
+      x: importances
+      y: feature
