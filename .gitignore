@@ -20,6 +20,7 @@ src/data_inspection/outputs/
 
 # Visualization outputs
 *.png
+!examples/*.png
 *.jpeg
 *.pdf
 *.tiff
