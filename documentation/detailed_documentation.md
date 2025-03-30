@@ -1,4 +1,5 @@
 <!--documentation/detailed_documentation.md-->
+
 # Comprehensive Documentation
 
 ## README.md
@@ -30,7 +31,6 @@
 
 - **Metadata Logging**  
   Every time you generate a new CSV, the pipeline creates a JSON metadata file (including row count, column types, file hash, etc.). This extra layer of traceability helps ensure that any data artifacts you produce can be audited or reproduced later on.
-
 
 #### Why Aim for this "Trifecta"?
 
@@ -81,15 +81,14 @@ name: hospital_inpatient_cost_data_by_new_york_state
 data_version_input: v0
 data_version_output: ${.data_version_input}
 description: |
-            dataset name: `hospital_inpatient_cost_data_by_new_york_state`
-            Original, unmodified data, as downloaded from kaggle.
-            See 'dataset_url' for further information.
+  dataset name: `hospital_inpatient_cost_data_by_new_york_state`
+  Original, unmodified data, as downloaded from kaggle.
+  See 'dataset_url' for further information.
 
-dataset_url: 'https://www.kaggle.com/datasets/thedevastator/2010-new-york-state-hospital-inpatient-discharge'
+dataset_url: "https://www.kaggle.com/datasets/thedevastator/2010-new-york-state-hospital-inpatient-discharge"
 ```
 
 The default for `data_version_output` is `data_version_output == data_version_input`.
-
 
 This flexibility empowers you to iterate quickly without diving into complex code changes.
 
@@ -162,7 +161,7 @@ These design choices demonstrate a thorough MLOps-oriented approach—one that e
 ### Notable Folders
 
 - **`configs/data_versions/`**  
-All shared logic is located in `base.yaml`. You only need to define the input and output data versions as overrides. All other `.yaml` files document the dataset’s evolution, detailing any new transformations or features at each step. DVC references these versions, allowing you to reproduce any specific data state.
+  All shared logic is located in `base.yaml`. You only need to define the input and output data versions as overrides. All other `.yaml` files document the dataset’s evolution, detailing any new transformations or features at each step. DVC references these versions, allowing you to reproduce any specific data state.
 
 - **`configs/transformations/`**  
   Mappings for each Python transformation function. For example, `lag_columns.yaml` defines which columns to shift, while `rolling_columns.yaml` sets rolling windows. The main pipeline references these transformations in a stage-wise manner.
@@ -211,14 +210,14 @@ data_versions.data_version_input=v13
 io_policy.WRITE_OUTPUT=false
 ```
 
-  universal_step.py detects:
+universal_step.py detects:
 
 ```yaml
 cfg.data_versions.data_version_input='v13'
 cfg.data_versions.data_version_output='v13'
 ```
 
-  and automatically points to ./data/v13/v13.csv. Since no override changes data_version_output, it matches the input version (as defined in base.yaml). Because WRITE_OUTPUT is false, the file is not overwritten.
+and automatically points to ./data/v13/v13.csv. Since no override changes data_version_output, it matches the input version (as defined in base.yaml). Because WRITE_OUTPUT is false, the file is not overwritten.
 
 #### Command Line Overrides to Universal Step Function Invocation
 
@@ -304,7 +303,7 @@ def universal_step(cfg: RootConfig) -> None:
         else:
             step_fn()
     else:
-        if read_input: # True 
+        if read_input: # True
             # Reads v1.csv and returns DataFrame
             # Values come from config group utility_functions.csv_to_dataframe
             # Also uses data_versions.data_version_input (v1) for the actual path
@@ -377,6 +376,7 @@ By default, we have a public S3 bucket configured. Simply run:
 ```sh
 python dependencies/io/pull_dvc_s3.py
 ```
+
 This fetches files into data/, configs/, and other directories (e.g., any CSV files you need).
 
 2. Pull MLflow Artifacts
@@ -403,13 +403,13 @@ This downloads and saves data as v0 locally.
 3. Run a Single Step in the Pipeline
 
 3.1. Update cmd_python in configs/config.yaml:  
-  Replace the default path ("/Users/tobias/.local/share/mamba/envs/ny/bin/python") with your interpreter’s path.
+ Replace the default path ("/Users/tobias/.local/share/mamba/envs/ny/bin/python") with your interpreter’s path.
 
 3.2. (Optional) Adjust the Pipeline  
-  Modify base.yaml if you want to add or remove any pipeline stages.
+ Modify base.yaml if you want to add or remove any pipeline stages.
 
 3.3. Regenerate dvc.yaml  
-  This rewrites the DVC pipeline commands (so they use your cmd_python path):
+ This rewrites the DVC pipeline commands (so they use your cmd_python path):
 
 ```sh
 python dependencies/templates/generate_dvc_yaml_core.py
@@ -482,7 +482,8 @@ This code structure ensures each piece is independently testable and easy to loc
 
 This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag columns.
 
-1. **configs/data_versions/v11.yaml**  
+1. **configs/data_versions/v11.yaml**
+
    ```yaml
    # configs/data_versions/v11.yaml
    defaults:
@@ -512,37 +513,41 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
      ]
      new_cols = [f"{col}_lag1" for col in columns_to_transform]
    ```
+
 2. **configs/transformations/lag_columns.yaml**
+
    ```yaml
    # configs/transformations/lag_columns.yaml
-    defaults:
-    - base
-      - _self_
+   defaults:
+     - base
+       - _self_
 
-    lag_columns:
-      columns_to_transform:
-        - sum_discharges
-        - severity_1_portion
-        - severity_2_portion
-        - severity_3_portion
-        - severity_4_portion
-        - w_mean_charge
-        - w_mean_cost
-        - w_mean_profit
-        - w_total_mean_profit
-        - w_total_mean_cost
-        - w_median_charge
-        - w_median_cost
-        - w_median_profit
-        - w_total_median_profit
-        - w_total_median_cost
-      groupby_time_based_cols: [facility_id, apr_drg_code, year]
-      drop: true
-      groupby_lag_cols: [facility_id, apr_drg_code]
-      lag1_suffix: _lag1
-      shift_periods: 1
+   lag_columns:
+     columns_to_transform:
+       - sum_discharges
+       - severity_1_portion
+       - severity_2_portion
+       - severity_3_portion
+       - severity_4_portion
+       - w_mean_charge
+       - w_mean_cost
+       - w_mean_profit
+       - w_total_mean_profit
+       - w_total_mean_cost
+       - w_median_charge
+       - w_median_cost
+       - w_median_profit
+       - w_total_median_profit
+       - w_total_median_cost
+     groupby_time_based_cols: [facility_id, apr_drg_code, year]
+     drop: true
+     groupby_lag_cols: [facility_id, apr_drg_code]
+     lag1_suffix: _lag1
+     shift_periods: 1
    ```
+
 3. **dependencies/transformations/lag_columns.py**
+
    ```python
    # dependencies/transformations/lag_columns.py
    import logging
@@ -587,7 +592,8 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
        return df
    ```
 
-2. **Runtime Command**  
+4. **Runtime Command**
+
    ```
    python scripts/universal_step.py \
      setup.script_base_name=lag_columns \
@@ -595,14 +601,16 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
      data_versions.data_version_input=v10 \
      data_versions.data_version_output=v11
    ```
+
    This tells Hydra to load `v10.yaml` for input, `v11.yaml` for output, and run the `lag_columns` transformation.
 
-3. **Outputs**  
+5. **Outputs**
+
    - A new CSV: `./data/v11/v11.csv`  
      (with columns like `sum_discharges_lag1`, `severity_1_portion_lag1`, etc.)
    - A metadata JSON: `v11_metadata.json` (row count, file hash, etc.)
 
-4. **Why Lag Columns?**  
+6. **Why Lag Columns?**  
    This step shifts certain numeric columns by one “year” within each `[facility_id, apr_drg_code]` group. It’s a common technique for time-series or sequential analysis, letting you reference previous-year values in the current year’s modeling.
 
 ### Tying It All Together
@@ -639,13 +647,16 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
 
 2. **Hydra + Omegaconf**  
    When you run something like:
+
    ```
    python scripts/orchestrate_dvc_flow.py pipeline=orchestrate_dvc_flow
    ```
+
    Hydra reads `orchestrate_dvc_flow.yaml`, merges it with your pipeline definitions in `base.yaml`, and creates one unified config. This merged config includes a list of all stages you want in `dvc.yaml`.
 
 3. **Jinja2 Template**  
    The script `generate_dvc_yaml_core.py` loads a Jinja2 template (`generate_dvc.yaml.j2`). It iterates over the `stages` list from the Hydra config, then renders:
+
    ```text
    stages:
      v1_drop_description_columns:
@@ -653,6 +664,7 @@ This walkthrough demonstrates the move from `v10.csv` to `v11.csv` by adding lag
        deps: ...
        outs: ...
    ```
+
    and so on for each stage. This process ensures everything in your pipeline config ends up in the final `dvc.yaml`.
 
 4. **Flow Orchestration**  
@@ -703,9 +715,10 @@ By integrating Hydra, Omegaconf, and Jinja2, you maintain a single “source of 
 3. **Ensure Clean DVC State**  
    The `ensure_dvc_is_clean()` task checks for uncommitted DVC changes in `git status`. If it finds any, it raises an exception to prevent partial commits or inconsistent states.
 
-4. **Generating the DVC YAML File**  
-   - If `skip_generation` is `false`, we call `generate_dvc_yaml(...)`.  
-   - This uses the Hydra config’s `stages_list` and a Jinja2 template to build the `dvc.yaml` automatically.  
+4. **Generating the DVC YAML File**
+
+   - If `skip_generation` is `false`, we call `generate_dvc_yaml(...)`.
+   - This uses the Hydra config’s `stages_list` and a Jinja2 template to build the `dvc.yaml` automatically.
    - If the new file differs from the old one and `allow_dvc_changes` is `false`, it reverts changes for safety. Otherwise, it accepts them.
 
 5. **Running `dvc repro`**  
@@ -760,9 +773,11 @@ Below is part of the pipeline log showing each stage run sequentially (e.g., `v0
 
 - **File I/O and Metadata**  
   The pipeline logs read/write operations along with file hashes. For example:
+
   ```
   [2025-03-21 16:38:05,393][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/...
   ```
+
   This ensures you can track each version of your data artifacts.
 
 - **MLflow Logging**  
@@ -780,6 +795,7 @@ By combining Hydra, Python logging, and MLflow experiment tracking, you get a co
 #### 10.1 Conclusion
 
 This project demonstrates a comprehensive data-to-model pipeline, from ingestion and cleaning to hyperparameter tuning and final model logging. By integrating Hydra, DVC, and MLflow—and later orchestrating them with Prefect—we solve real problems like:
+
 - **Data Drift** (DVC ensures exact data lineage)
 - **Configuration Drift** (Hydra’s single source of truth)
 - **Experiment Tracking** (MLflow logs all parameters and artifacts)
@@ -802,6 +818,7 @@ These approaches highlight a deeper MLOps mindset: one that ensures every experi
 #### 10.3 Why This Project Stands Out
 
 Many MLOps pipelines exist, but they often miss:
+
 - **Strict reproducibility** across transformations
 - **Unified config management** that prevents duplication
 - **Built-in experiment logging** with minimal overhead
@@ -812,6 +829,7 @@ This project tackles each of these challenges head-on. Every piece—Hydra confi
 #### 10.4 Aiming for Senior-Level MLOps Roles
 
 My goal in building this pipeline was not just to showcase programming, but to demonstrate the ability to design, maintain, and evolve complex ML systems. Senior MLOps engineers must:
+
 - Spot critical bottlenecks (data drift, pipeline fragmentation).
 - Enforce best practices (version control, config management, logging).
 - Align these solutions with real-world constraints (cloud costs, compute resources, team structure).
