@@ -6,6 +6,7 @@ __pycache__/
 *.pyc
 src/data_inspection/outputs/
 *.yaml
+!configs/*.yaml
 !configs/*/*.yaml
 !dvc.yaml
 **/.ipynb_checkpoints/**
