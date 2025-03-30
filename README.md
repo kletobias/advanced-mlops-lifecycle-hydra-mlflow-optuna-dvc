@@ -1,8 +1,8 @@
 <!--README.md-->
+
 # Medical DRG in NY — A Reproducible ML Pipeline
 
 This repository contains a config-driven pipeline for analyzing New York State hospital DRG (Diagnosis-Related Group) data. It uses **Hydra** for hierarchical configs, **DVC** for data versioning & reproducibility, and **MLflow** for experiment tracking. The main goal is to showcase advanced MLOps patterns—such as modular transformations, data lineage, and hyperparameter optimization—at a senior engineering level.
-
 
 > **Note**: This repo is primarily a _portfolio project_. The pipeline is mostly reproducible, but may require a few **manual adjustments** to run end-to-end on your machine (explained below). If you just want to inspect the pipeline structure and ML artifacts, you can do so without running the entire pipeline locally.
 
@@ -73,6 +73,7 @@ Although only two random forest trials are shown in the final run, we had previo
 The R² for ridge regressions is usually between 0.86 and 0.89, while for the random forest regressor it tends to fall between 0.84 and 0.86.
 
 Our target column is `w_total_median_profit`. See:
+
 - Transformation: [agg_severities.py](dependencies/transformations/agg_severities.py),
 - Associated Config: [agg_severities.yaml](configs/transformations/agg_severities.yaml)
 
@@ -175,7 +176,8 @@ You’ll find logs in `logs/runs/${timestamp}`, with one file per transformation
 
 ⸻
 
-Running ML Experiments  
+Running ML Experiments
+
 - For example, to run a Random Forest hyperparameter trial with Optuna:
 
 ```bash
@@ -190,45 +192,47 @@ This logs metrics and artifacts (model pickle, feature importances) to `mlruns/`
 ⸻
 
 ## Known Caveats
+
 1. Manual Pipeline Config Adjustments
-  You may need to tweak commands in dvc.yaml or Hydra configs if your environment paths differ from mine.
-  Some references to cmd_python or project root might be out of date if you cloned the repo to a different location.
+   You may need to tweak commands in dvc.yaml or Hydra configs if your environment paths differ from mine.
+   Some references to cmd_python or project root might be out of date if you cloned the repo to a different location.
 
 2. Mixed Git/DVC Tracking
-  The pipeline definition (dvc.yaml) is tracked in Git.
-  Large data and model outputs are tracked by DVC. If you encounter an error about “file tracked by Git” or “tracked by both Git and DVC,” remove or untrack it from DVC.
+   The pipeline definition (dvc.yaml) is tracked in Git.
+   Large data and model outputs are tracked by DVC. If you encounter an error about “file tracked by Git” or “tracked by both Git and DVC,” remove or untrack it from DVC.
 
 3. S3 Accessibility
-  The data and MLflow artifacts are stored in a public S3 bucket. If you can’t access them, you might need to set up AWS credentials or bypass corporate firewalls.
+   The data and MLflow artifacts are stored in a public S3 bucket. If you can’t access them, you might need to set up AWS credentials or bypass corporate firewalls.
 
 4. Focus on Portfolio
-  This project demonstrates MLOps patterns, but it may not be fully turnkey for every environment. (For instance, the pipeline might reference paths/base.yaml with absolute paths that differ from your machine.)
+   This project demonstrates MLOps patterns, but it may not be fully turnkey for every environment. (For instance, the pipeline might reference paths/base.yaml with absolute paths that differ from your machine.)
 
 ⸻
 
 ## Why This Setup?
 
 1. Config-Driven
-  Hydra reduces code duplication by separating parameters (like CSV paths or hyperparams) from business logic.
+   Hydra reduces code duplication by separating parameters (like CSV paths or hyperparams) from business logic.
 2. Version Controlled & Reproducible
-  DVC manages big data artifacts so that you can revert or reproduce results with minimal overhead.
+   DVC manages big data artifacts so that you can revert or reproduce results with minimal overhead.
 3. Modular & Extensible
-  Each transformation is a self-contained function plus a small YAML config. You can easily add or remove steps without rewriting the entire pipeline.
+   Each transformation is a self-contained function plus a small YAML config. You can easily add or remove steps without rewriting the entire pipeline.
 4. Experiment Management with MLflow
-  MLflow logs metrics, confusion matrices, and picks up model artifacts. This helps in comparing trials and working in a team.
+   MLflow logs metrics, confusion matrices, and picks up model artifacts. This helps in comparing trials and working in a team.
 5. Demonstration of Best Practices
-    - Logging: auto-generated metadata for CSV transformations.
-    - Potential CI/CD hooks (e.g., dvc repro in a CI pipeline).
-    - Clear project structure for large or enterprise MLOps setups.
+   - Logging: auto-generated metadata for CSV transformations.
+   - Potential CI/CD hooks (e.g., dvc repro in a CI pipeline).
+   - Clear project structure for large or enterprise MLOps setups.
 
 ⸻
 
 ## Contact
+
 - Author: Tobias Klein
 - Contact:
-    - Open an issue on GitHub or message me on LinkedIn for questions.
-    - [LinkedIn](https://www.linkedin.com/in/deep-learning-mastery/)
-    - [Website](https://deep-learning-mastery.com/)
+  - Open an issue on GitHub or message me on LinkedIn for questions.
+  - [LinkedIn](https://www.linkedin.com/in/deep-learning-mastery/)
+  - [Website](https://deep-learning-mastery.com/)
 
 Thank you for exploring this project! For more information on scaling or productionizing an MLOps pipeline, reach out via GitHub issues or LinkedIn.
 
