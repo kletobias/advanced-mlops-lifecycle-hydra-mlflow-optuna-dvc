@@ -1,0 +1,26 @@
+# configs/config.yaml
+defaults:
+  - paths: base
+  - hydra: base
+  - setup: base
+  - project_sections: 3_transformation
+  - data_versions: base
+  - data_storage: base
+  - remote_storage: base
+  - utility_functions: base
+  - logging_utils: base
+  - io_policy: base
+  - model_params: base
+  - ml_experiments: base
+  - transformations: base
+  - pipeline: orchestrate_dvc_flow
+  - _self_
+
+cmd_python: python
+
+universal_step_script: "${paths.directories.scripts}/universal_step.py"
+dvc_default_desc: "Refer to deps/outs for details."
+
+
+# hardcode random_state
+rng_seed: 42
