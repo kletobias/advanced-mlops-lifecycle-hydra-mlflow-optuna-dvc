@@ -8,6 +8,7 @@ stages:
     frozen: true
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/download_and_save_data.yaml
       - ./dependencies/ingestion/download_and_save_data.py
       - ./configs/data_versions/v0.yaml
     outs:
@@ -21,6 +22,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/sanitize_column_names.yaml
       - ./dependencies/cleaning/sanitize_column_names.py
       - ./configs/data_versions/v0.yaml
     outs:
@@ -34,6 +36,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/drop_description_columns.yaml
       - ./dependencies/transformations/drop_description_columns.py
       - ./configs/data_versions/v1.yaml
     outs:
@@ -47,6 +50,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/median_profit.yaml
       - ./dependencies/transformations/median_profit.py
       - ./configs/data_versions/v2.yaml
     outs:
@@ -60,6 +64,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/mean_profit.yaml
       - ./dependencies/transformations/mean_profit.py
       - ./configs/data_versions/v3.yaml
     outs:
@@ -73,6 +78,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/total_mean_profit.yaml
       - ./dependencies/transformations/total_mean_profit.py
       - ./configs/data_versions/v4.yaml
     outs:
@@ -86,6 +92,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/total_median_profit.yaml
       - ./dependencies/transformations/total_median_profit.py
       - ./configs/data_versions/v5.yaml
     outs:
@@ -99,6 +106,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/total_median_cost.yaml
       - ./dependencies/transformations/total_median_cost.py
       - ./configs/data_versions/v5.yaml
     outs:
@@ -112,6 +120,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/total_mean_cost.yaml
       - ./dependencies/transformations/total_mean_cost.py
       - ./configs/data_versions/v5_2.yaml
     outs:
@@ -125,6 +134,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/drop_rare_drgs.yaml
       - ./dependencies/transformations/drop_rare_drgs.py
       - ./configs/data_versions/v6.yaml
     outs:
@@ -138,6 +148,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/agg_severities.yaml
       - ./dependencies/transformations/agg_severities.py
       - ./configs/data_versions/v7.yaml
     outs:
@@ -151,6 +162,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/ratio_drg_facility_vs_year.yaml
       - ./dependencies/transformations/ratio_drg_facility_vs_year.py
       - ./configs/data_versions/v8.yaml
     outs:
@@ -164,6 +176,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/yearly_discharge_bin.yaml
       - ./dependencies/transformations/yearly_discharge_bin.py
       - ./configs/data_versions/v9.yaml
     outs:
@@ -177,6 +190,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/lag_columns.yaml
       - ./dependencies/transformations/lag_columns.py
       - ./configs/data_versions/v10.yaml
     outs:
@@ -190,6 +204,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/rolling_columns.yaml
       - ./dependencies/transformations/rolling_columns.py
       - ./configs/data_versions/v11.yaml
     outs:
@@ -203,6 +218,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/drop_non_lag_columns.yaml
       - ./dependencies/transformations/drop_non_lag_columns.py
       - ./configs/data_versions/v12.yaml
     outs:
@@ -216,6 +232,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/rf_optuna_trial.yaml
       - ./dependencies/modeling/rf_optuna_trial.py
       - ./configs/data_versions/v13.yaml
     outs: []
@@ -227,6 +244,7 @@ stages:
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
+      - ./configs/transformations/ridge_optuna_trial.yaml
       - ./dependencies/modeling/ridge_optuna_trial.py
       - ./configs/data_versions/v13.yaml
     outs: []
