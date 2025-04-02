@@ -37,3 +37,4 @@ notebooks/
 TODO.txt
 bin/
 gather_content/
+.env
