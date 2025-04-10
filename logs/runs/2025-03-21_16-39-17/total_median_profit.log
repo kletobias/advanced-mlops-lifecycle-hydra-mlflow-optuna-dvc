@@ -1,11 +1,11 @@
 [2025-03-21 16:39:17,161][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:39:18,022][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5/v5.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:39:18,022][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5/v5.csv, created df
 [2025-03-21 16:39:18,028][dependencies.transformations.total_median_profit][INFO] - Done with core transformation: total_median_profit
 [2025-03-21 16:39:18,030][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1
-[2025-03-21 16:39:23,635][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1/v5_1.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1
+[2025-03-21 16:39:23,635][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1/v5_1.csv
 [2025-03-21 16:39:29,578][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: e8e0f91206c80b5eef7dc329c58ad9f295bc4b23bb137d76b7afcba68cad063f
-[2025-03-21 16:39:30,244][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1/v5_1.csv
-[2025-03-21 16:39:30,245][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1/v5_1_metadata.json
+[2025-03-21 16:39:30,244][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1/v5_1.csv
+[2025-03-21 16:39:30,245][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1/v5_1_metadata.json
 [2025-03-21 16:39:30,245][__main__][INFO] - Sucessfully executed step: total_median_profit

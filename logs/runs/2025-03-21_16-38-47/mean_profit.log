@@ -1,11 +1,11 @@
 [2025-03-21 16:38:47,418][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:38:48,100][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v3/v3.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:38:48,100][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v3/v3.csv, created df
 [2025-03-21 16:38:48,103][dependencies.transformations.mean_profit][INFO] - Done with core transformation: mean_profit
 [2025-03-21 16:38:48,104][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4
-[2025-03-21 16:38:52,594][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4/v4.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v4
+[2025-03-21 16:38:52,594][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v4/v4.csv
 [2025-03-21 16:38:57,398][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: e6052d4b565b98018360c93c0f0b89e1d04795e3945d9c2663270807f07b53a2
-[2025-03-21 16:38:58,006][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4/v4.csv
-[2025-03-21 16:38:58,007][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4/v4_metadata.json
+[2025-03-21 16:38:58,006][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v4/v4.csv
+[2025-03-21 16:38:58,007][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v4/v4_metadata.json
 [2025-03-21 16:38:58,007][__main__][INFO] - Sucessfully executed step: mean_profit

@@ -1,4 +1,4 @@
-#!/Users/tobias/.local/share/mamba/envs/ny/bin/python
+#!$ULOCAL/share/mamba/envs/ny/bin/python
 
 python scripts/universal_step.py \
   setup.script_base_name=lag_columns \

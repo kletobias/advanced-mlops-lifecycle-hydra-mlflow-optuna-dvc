@@ -1,290 +1,290 @@
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline/2025-03-21_16-37-51.log
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline/2025-03-21_16-37-51.log
 Verifying data sources in stage: 'configs/data_versions/v0.yaml.dvc'
 
 Running stage 'v0_download_and_save_data':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=download_and_save_data transformations=download_and_save_data io_policy.READ_INPUT=False
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=download_and_save_data transformations=download_and_save_data io_policy.READ_INPUT=False
 [2025-03-21 16:37:55,005][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
 [2025-03-21 16:37:55,009][general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v0
 Warning: Looks like you're using an outdated API Version, please consider updating (server 1.7.4.2 / client 1.6.17)
 Dataset URL: https://www.kaggle.com/datasets/wajahat1064/hospital-inpatient-cost-data-by-new-york-state
 License(s): CC0-1.0
-Downloading hospital-inpatient-cost-data-by-new-york-state.zip to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0
+Downloading hospital-inpatient-cost-data-by-new-york-state.zip to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v0
   0%|          | 0.00/30.1M [00:00<?, ?B/s]  3%|▎         | 1.00M/30.1M [00:00<00:15, 2.03MB/s] 10%|▉         | 3.00M/30.1M [00:00<00:04, 5.97MB/s] 20%|█▉        | 6.00M/30.1M [00:00<00:02, 11.8MB/s] 37%|███▋      | 11.0M/30.1M [00:00<00:01, 19.5MB/s] 53%|█████▎    | 16.0M/30.1M [00:00<00:00, 26.9MB/s] 66%|██████▋   | 20.0M/30.1M [00:01<00:00, 26.2MB/s] 76%|███████▋  | 23.0M/30.1M [00:01<00:00, 22.9MB/s] 90%|████████▉ | 27.0M/30.1M [00:01<00:00, 18.5MB/s]100%|██████████| 30.1M/30.1M [00:01<00:00, 18.7MB/s]
 
 [2025-03-21 16:37:57,849][dependencies.ingestion.download_and_save_data][INFO] - Successfully downloaded and saved the dataset.
-[2025-03-21 16:37:57,850][dependencies.ingestion.download_and_save_data][WARNING] - Renamed ZIP file to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0/v0.zip
-Archive:  /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0/v0.zip
-  inflating: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0/Hospital_Inpatient_Cost_Transparency__Beginning_2009_20240726.csv  
+[2025-03-21 16:37:57,850][dependencies.ingestion.download_and_save_data][WARNING] - Renamed ZIP file to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v0/v0.zip
+Archive:  $PROJECT_ROOT/portfolio_medical_drg_ny/data/v0/v0.zip
+  inflating: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v0/Hospital_Inpatient_Cost_Transparency__Beginning_2009_20240726.csv  
 [2025-03-21 16:37:58,731][dependencies.ingestion.download_and_save_data][INFO] - Successfully removed ZIP file after extraction.
-[2025-03-21 16:37:59,674][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0/v0.csv, created df
+[2025-03-21 16:37:59,674][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v0/v0.csv, created df
 [2025-03-21 16:38:04,309][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: e38078d024f5b2c7698e9dbc1b8418b761d6b190310c9ec1b1d8f8507db3d98d
-[2025-03-21 16:38:05,393][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0/v0.csv
-[2025-03-21 16:38:05,393][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0/v0_metadata.json
+[2025-03-21 16:38:05,393][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v0/v0.csv
+[2025-03-21 16:38:05,393][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v0/v0_metadata.json
 [2025-03-21 16:38:05,408][__main__][INFO] - Sucessfully executed step: download_and_save_data
 Updating lock file 'dvc.lock'
 
 Running stage 'v0_sanitize_column_names':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1
 [2025-03-21 16:38:08,885][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:38:09,852][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v0/v0.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:38:09,852][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v0/v0.csv, created df
 [2025-03-21 16:38:09,852][dependencies.cleaning.sanitize_column_names][INFO] - Column names sanitized
 [2025-03-21 16:38:09,853][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v1
-[2025-03-21 16:38:14,267][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v1/v1.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v1
+[2025-03-21 16:38:14,267][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v1/v1.csv
 [2025-03-21 16:38:18,917][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 15a50fb860214881660dc9312e2cfcf5681cf196f38bd7ac007228d42030b566
-[2025-03-21 16:38:19,996][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v1/v1.csv
-[2025-03-21 16:38:19,997][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v1/v1_metadata.json
+[2025-03-21 16:38:19,996][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v1/v1.csv
+[2025-03-21 16:38:19,997][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v1/v1_metadata.json
 [2025-03-21 16:38:19,998][__main__][INFO] - Sucessfully executed step: sanitize_column_names
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v1.yaml.dvc'
 
 Running stage 'v1_drop_description_columns':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2
 [2025-03-21 16:38:23,452][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:38:24,371][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v1/v1.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:38:24,371][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v1/v1.csv, created df
 [2025-03-21 16:38:24,396][dependencies.transformations.drop_description_columns][INFO] - Done with core transformation: drop_description_columns
 [2025-03-21 16:38:24,426][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v2
-[2025-03-21 16:38:27,899][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v2/v2.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v2
+[2025-03-21 16:38:27,899][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v2/v2.csv
 [2025-03-21 16:38:31,544][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 36be7b8464a95baef03b734b88e68b6b84e98f4a8be6527e627bb47eacd2054a
-[2025-03-21 16:38:32,073][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v2/v2.csv
-[2025-03-21 16:38:32,074][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v2/v2_metadata.json
+[2025-03-21 16:38:32,073][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v2/v2.csv
+[2025-03-21 16:38:32,074][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v2/v2_metadata.json
 [2025-03-21 16:38:32,074][__main__][INFO] - Sucessfully executed step: drop_description_columns
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v2.yaml.dvc'
 
 Running stage 'v2_median_profit':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3
 [2025-03-21 16:38:34,843][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:38:35,417][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v2/v2.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:38:35,417][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v2/v2.csv, created df
 [2025-03-21 16:38:35,421][dependencies.transformations.median_profit][INFO] - Done with core transformation: median_profit
 [2025-03-21 16:38:35,422][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v3
-[2025-03-21 16:38:39,452][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v3/v3.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v3
+[2025-03-21 16:38:39,452][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v3/v3.csv
 [2025-03-21 16:38:43,669][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 561645009ed897fc9be67e4e740de4d7fe57a738dc51ce77c59938f7442abd88
-[2025-03-21 16:38:44,233][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v3/v3.csv
-[2025-03-21 16:38:44,234][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v3/v3_metadata.json
+[2025-03-21 16:38:44,233][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v3/v3.csv
+[2025-03-21 16:38:44,234][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v3/v3_metadata.json
 [2025-03-21 16:38:44,234][__main__][INFO] - Sucessfully executed step: median_profit
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v3.yaml.dvc'
 
 Running stage 'v3_mean_profit':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4
 [2025-03-21 16:38:47,418][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:38:48,100][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v3/v3.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:38:48,100][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v3/v3.csv, created df
 [2025-03-21 16:38:48,103][dependencies.transformations.mean_profit][INFO] - Done with core transformation: mean_profit
 [2025-03-21 16:38:48,104][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4
-[2025-03-21 16:38:52,594][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4/v4.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v4
+[2025-03-21 16:38:52,594][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v4/v4.csv
 [2025-03-21 16:38:57,398][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: e6052d4b565b98018360c93c0f0b89e1d04795e3945d9c2663270807f07b53a2
-[2025-03-21 16:38:58,006][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4/v4.csv
-[2025-03-21 16:38:58,007][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4/v4_metadata.json
+[2025-03-21 16:38:58,006][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v4/v4.csv
+[2025-03-21 16:38:58,007][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v4/v4_metadata.json
 [2025-03-21 16:38:58,007][__main__][INFO] - Sucessfully executed step: mean_profit
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v4.yaml.dvc'
 
 Running stage 'v4_total_mean_profit':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5
 [2025-03-21 16:39:01,660][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:39:02,373][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v4/v4.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:39:02,373][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v4/v4.csv, created df
 [2025-03-21 16:39:02,376][dependencies.transformations.total_mean_profit][INFO] - Done with core transformation: total_mean_profit
 [2025-03-21 16:39:02,377][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5
-[2025-03-21 16:39:07,598][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5/v5.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v5
+[2025-03-21 16:39:07,598][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5/v5.csv
 [2025-03-21 16:39:12,984][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: fa737cb4f467612932e7cd83556c17c12b7ea9c3d4b210b61854840442bb77f4
-[2025-03-21 16:39:13,644][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5/v5.csv
-[2025-03-21 16:39:13,645][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5/v5_metadata.json
+[2025-03-21 16:39:13,644][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5/v5.csv
+[2025-03-21 16:39:13,645][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5/v5_metadata.json
 [2025-03-21 16:39:13,645][__main__][INFO] - Sucessfully executed step: total_mean_profit
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v5.yaml.dvc'
 
 Running stage 'v5_total_median_profit':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
 [2025-03-21 16:39:17,161][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:39:18,022][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5/v5.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:39:18,022][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5/v5.csv, created df
 [2025-03-21 16:39:18,028][dependencies.transformations.total_median_profit][INFO] - Done with core transformation: total_median_profit
 [2025-03-21 16:39:18,030][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1
-[2025-03-21 16:39:23,635][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1/v5_1.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1
+[2025-03-21 16:39:23,635][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1/v5_1.csv
 [2025-03-21 16:39:29,578][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: e8e0f91206c80b5eef7dc329c58ad9f295bc4b23bb137d76b7afcba68cad063f
-[2025-03-21 16:39:30,244][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1/v5_1.csv
-[2025-03-21 16:39:30,245][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1/v5_1_metadata.json
+[2025-03-21 16:39:30,244][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1/v5_1.csv
+[2025-03-21 16:39:30,245][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1/v5_1_metadata.json
 [2025-03-21 16:39:30,245][__main__][INFO] - Sucessfully executed step: total_median_profit
 Updating lock file 'dvc.lock'
 
 Running stage 'v5_1_total_median_cost':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
 [2025-03-21 16:39:33,914][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:39:34,807][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_1/v5_1.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:39:34,807][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_1/v5_1.csv, created df
 [2025-03-21 16:39:34,811][dependencies.transformations.total_median_cost][INFO] - Done with core transformation: total_median_cost
 [2025-03-21 16:39:34,812][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_2
-[2025-03-21 16:39:41,065][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_2/v5_2.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_2
+[2025-03-21 16:39:41,065][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_2/v5_2.csv
 [2025-03-21 16:39:47,542][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: a815d5b494b48ddb5425f96f5ffadf52f726e148b5970c0ca5548a92ec2b0cd5
-[2025-03-21 16:39:48,225][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_2/v5_2.csv
-[2025-03-21 16:39:48,226][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_2/v5_2_metadata.json
+[2025-03-21 16:39:48,225][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_2/v5_2.csv
+[2025-03-21 16:39:48,226][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_2/v5_2_metadata.json
 [2025-03-21 16:39:48,226][__main__][INFO] - Sucessfully executed step: total_median_cost
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v5_2.yaml.dvc'
 
 Running stage 'v5_2_total_mean_cost':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
 [2025-03-21 16:39:51,969][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:39:52,933][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v5_2/v5_2.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:39:52,933][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v5_2/v5_2.csv, created df
 [2025-03-21 16:39:52,936][dependencies.transformations.total_mean_cost][INFO] - Done with core transformation: total_mean_cost
 [2025-03-21 16:39:52,937][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v6
-[2025-03-21 16:39:59,746][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v6/v6.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v6
+[2025-03-21 16:39:59,746][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v6/v6.csv
 [2025-03-21 16:40:06,771][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 444d178166159a4520b7e7f3fdd03dd67cd15fbe383f7664e9bd1dc1c30d18cd
-[2025-03-21 16:40:07,505][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v6/v6.csv
-[2025-03-21 16:40:07,505][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v6/v6_metadata.json
+[2025-03-21 16:40:07,505][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v6/v6.csv
+[2025-03-21 16:40:07,505][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v6/v6_metadata.json
 [2025-03-21 16:40:07,505][__main__][INFO] - Sucessfully executed step: total_mean_cost
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v6.yaml.dvc'
 
 Running stage 'v6_drop_rare_drgs':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
 [2025-03-21 16:40:11,016][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:40:12,058][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v6/v6.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:40:12,058][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v6/v6.csv, created df
 [2025-03-21 16:40:12,130][dependencies.transformations.drop_rare_drgs][INFO] - Done with core transformation: drop_rare_drgs
 [2025-03-21 16:40:12,137][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v7
-[2025-03-21 16:40:18,643][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v7/v7.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v7
+[2025-03-21 16:40:18,643][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v7/v7.csv
 [2025-03-21 16:40:25,423][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 40b1a11bd4f319efde8d6c8bab9fe811aac9eef579f083c8e237c03cc07e5820
-[2025-03-21 16:40:26,140][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v7/v7.csv
-[2025-03-21 16:40:26,141][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v7/v7_metadata.json
+[2025-03-21 16:40:26,140][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v7/v7.csv
+[2025-03-21 16:40:26,141][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v7/v7_metadata.json
 [2025-03-21 16:40:26,141][__main__][INFO] - Sucessfully executed step: drop_rare_drgs
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v7.yaml.dvc'
 
 Running stage 'v7_agg_severities':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
 [2025-03-21 16:40:29,477][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:40:30,476][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v7/v7.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:40:30,476][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v7/v7.csv, created df
 [2025-03-21 16:54:21,317][dependencies.transformations.agg_severities][INFO] - Done with core transformation: agg_severities
 [2025-03-21 16:54:21,325][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v8
-[2025-03-21 16:54:24,451][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v8/v8.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v8
+[2025-03-21 16:54:24,451][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v8/v8.csv
 [2025-03-21 16:54:27,709][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 0cee898257560d8e67d10b502b136054d5340a30fa1836d59e40cc53cbd45144
-[2025-03-21 16:54:27,857][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v8/v8.csv
-[2025-03-21 16:54:27,857][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v8/v8_metadata.json
+[2025-03-21 16:54:27,857][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v8/v8.csv
+[2025-03-21 16:54:27,857][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v8/v8_metadata.json
 [2025-03-21 16:54:27,857][__main__][INFO] - Sucessfully executed step: agg_severities
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v8.yaml.dvc'
 
 Running stage 'v8_ratio_drg_facility_vs_year':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9
 [2025-03-21 16:54:31,588][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:54:32,061][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v8/v8.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:54:32,061][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v8/v8.csv, created df
 [2025-03-21 16:54:32,086][dependencies.pandas_specific.df_merge][INFO] - Successfully merged df1, and df2 on: year, how: left
 [2025-03-21 16:54:32,089][dependencies.pandas_specific.df_merge][INFO] - Successfully merged df1, and df2 on: ['year', 'facility_id'], how: left
 [2025-03-21 16:54:32,116][dependencies.transformations.ratio_drg_facility_vs_year][INFO] - Done with core transformation: ratio_drg_facility_vs_year
 [2025-03-21 16:54:32,117][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v9
-[2025-03-21 16:54:35,562][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v9/v9.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v9
+[2025-03-21 16:54:35,562][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v9/v9.csv
 [2025-03-21 16:54:39,083][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 4be093c9d4efa865d712d38d289b8c6c17cd44f26bc57b345c36a85cc5806de7
-[2025-03-21 16:54:39,216][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v9/v9.csv
-[2025-03-21 16:54:39,216][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v9/v9_metadata.json
+[2025-03-21 16:54:39,216][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v9/v9.csv
+[2025-03-21 16:54:39,216][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v9/v9_metadata.json
 [2025-03-21 16:54:39,216][__main__][INFO] - Sucessfully executed step: ratio_drg_facility_vs_year
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v9.yaml.dvc'
 
 Running stage 'v9_yearly_discharge_bin':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
 [2025-03-21 16:54:42,103][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:54:42,622][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v9/v9.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:54:42,622][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v9/v9.csv, created df
 [2025-03-21 16:54:42,641][dependencies.transformations.yearly_discharge_bin][INFO] - Done with core transformation: yearly_discharge_bin
 [2025-03-21 16:54:42,641][dependencies.pandas_specific.df_merge][INFO] - Successfully merged df1, and df2 on: ['year', 'facility_id'], how: left
 [2025-03-21 16:54:42,662][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v10
-[2025-03-21 16:54:46,150][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v10/v10.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v10
+[2025-03-21 16:54:46,150][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v10/v10.csv
 [2025-03-21 16:54:49,705][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 37bae522b643b14e65b5764f928d127911eb5d6f8d1935742b396088cc067a44
-[2025-03-21 16:54:49,842][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v10/v10.csv
-[2025-03-21 16:54:49,843][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v10/v10_metadata.json
+[2025-03-21 16:54:49,842][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v10/v10.csv
+[2025-03-21 16:54:49,843][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v10/v10_metadata.json
 [2025-03-21 16:54:49,843][__main__][INFO] - Sucessfully executed step: yearly_discharge_bin
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v10.yaml.dvc'
 
 Running stage 'v10_lag_columns':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
 [2025-03-21 16:54:52,729][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:54:53,313][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v10/v10.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:54:53,313][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v10/v10.csv, created df
 [2025-03-21 16:54:53,486][dependencies.transformations.lag_columns][INFO] - Done with core transformation: lag_columns
 [2025-03-21 16:54:53,489][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11
-[2025-03-21 16:54:59,742][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v11
+[2025-03-21 16:54:59,742][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v11/v11.csv
 [2025-03-21 16:55:06,155][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 85b89b3126ee6cfa18ad5fc716081f6baad1a3abf3470cd505ff588309c1c30e
-[2025-03-21 16:55:06,510][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11.csv
-[2025-03-21 16:55:06,511][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11_metadata.json
+[2025-03-21 16:55:06,510][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v11/v11.csv
+[2025-03-21 16:55:06,511][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v11/v11_metadata.json
 [2025-03-21 16:55:06,511][__main__][INFO] - Sucessfully executed step: lag_columns
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v11.yaml.dvc'
 
 Running stage 'v11_rolling_columns':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
 [2025-03-21 16:55:09,851][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:55:11,435][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v11/v11.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:55:11,435][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v11/v11.csv, created df
 [2025-03-21 16:56:14,609][dependencies.transformations.rolling_columns][INFO] - Done with core transformation: rolling_columns
 [2025-03-21 16:56:14,611][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v12
-[2025-03-21 16:56:23,203][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v12/v12.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v12
+[2025-03-21 16:56:23,203][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v12/v12.csv
 [2025-03-21 16:56:31,924][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 2dde80f76d1b672bd6d8e443b9bd8d72b5c7c36ab75af47044e51a1b08e6bd3d
-[2025-03-21 16:56:32,241][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v12/v12.csv
-[2025-03-21 16:56:32,242][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v12/v12_metadata.json
+[2025-03-21 16:56:32,241][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v12/v12.csv
+[2025-03-21 16:56:32,242][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v12/v12_metadata.json
 [2025-03-21 16:56:32,242][__main__][INFO] - Sucessfully executed step: rolling_columns
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v12.yaml.dvc'
 
 Running stage 'v12_drop_non_lag_columns':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
 [2025-03-21 16:56:35,655][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:56:37,883][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v12/v12.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:56:37,883][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v12/v12.csv, created df
 [2025-03-21 16:56:37,896][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v13
-[2025-03-21 16:56:43,689][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v13/v13.csv
+$PROJECT_ROOT/portfolio_medical_drg_ny/data/v13
+[2025-03-21 16:56:43,689][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v13/v13.csv
 [2025-03-21 16:56:49,619][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 2f92cfb558ccda998478ee1c80f149402d9c01c40bd700eac82638bf2d53f0cc
-[2025-03-21 16:56:49,860][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v13/v13.csv
-[2025-03-21 16:56:49,861][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v13/v13_metadata.json
+[2025-03-21 16:56:49,860][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: $PROJECT_ROOT/portfolio_medical_drg_ny/data/v13/v13.csv
+[2025-03-21 16:56:49,861][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to $PROJECT_ROOT/portfolio_medical_drg_ny/data/v13/v13_metadata.json
 [2025-03-21 16:56:49,861][__main__][INFO] - Sucessfully executed step: drop_non_lag_columns
 Updating lock file 'dvc.lock'
 
 Verifying data sources in stage: 'configs/data_versions/v13.yaml.dvc'
 
 Running stage 'v13_rf_optuna_trial':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v13 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v13 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params
 [2025-03-21 16:56:53,061][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:56:54,471][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v13/v13.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:56:54,471][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v13/v13.csv, created df
 [2025-03-21 16:56:54,474][dependencies.modeling.rf_optuna_trial][INFO] - Starting rf_optuna_trial with 2 trials to run
 [2025-03-21 16:56:54,484][dependencies.modeling.rf_optuna_trial][INFO] - MLflow experiment set to 'rf_optuna_trial_2025-03-21_16-56-53'
 [I 2025-03-21 16:56:54,517] A new study created in memory with name: no-name-066798fb-701b-47b2-9fa9-4c577121e502
@@ -300,60 +300,60 @@ Running stage 'v13_rf_optuna_trial':
 [2025-03-21 17:48:36,222][__main__][INFO] - Sucessfully executed step: rf_optuna_trial
 
 Running stage 'v13_ridge_optuna_trial':
-> /Users/tobias/.local/share/mamba/envs/ny/bin/python /Users/tobias/.local/projects/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=ridge_optuna_trial transformations=ridge_optuna_trial data_versions.data_version_input=v13 data_versions.data_version_output=v13 io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
+> $ULOCAL/share/mamba/envs/ny/bin/python $PROJECT_ROOT/portfolio_medical_drg_ny/scripts/universal_step.py setup.script_base_name=ridge_optuna_trial transformations=ridge_optuna_trial data_versions.data_version_input=v13 data_versions.data_version_output=v13 io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
 [2025-03-21 17:48:39,478][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 17:48:40,902][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v13/v13.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 17:48:40,902][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v13/v13.csv, created df
 [2025-03-21 17:48:40,904][dependencies.modeling.ridge_optuna_trial][INFO] - Starting ridge_optuna_trial with 10 trials to run
 [2025-03-21 17:48:40,914][dependencies.modeling.ridge_optuna_trial][INFO] - MLflow experiment set to 'rf_optuna_trial_2025-03-21_17-48-39'
 [I 2025-03-21 17:48:40,948] A new study created in memory with name: no-name-98673794-ca62-423a-afd1-b7949deb2b4d
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+$PROJECT_ROOT/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
   final_params[param_name] = trial.suggest_int(
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_ridge.py:215: LinAlgWarning: Ill-conditioned matrix (rcond=1.46789e-20): result may not be accurate.
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_ridge.py:215: LinAlgWarning: Ill-conditioned matrix (rcond=1.46789e-20): result may not be accurate.
   return linalg.solve(A, Xy, assume_a="pos", overwrite_a=True).T
 [2025-03-21 17:48:41,454][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 1 => RMSE=617420.608 R2=0.897 (No best yet)
 [I 2025-03-21 17:48:41,455] Trial 1 finished with value: 617420.6077863937 and parameters: {'alpha': 74.05775720939683, 'solver': 'lsqr', 'tol': 0.00486743157220894, 'max_iter': 1400}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+$PROJECT_ROOT/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
   final_params[param_name] = trial.suggest_int(
 [2025-03-21 17:48:42,955][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 2 => RMSE=634187.007 R2=0.888 (Best so far=617420.608)
 [I 2025-03-21 17:48:42,955] Trial 2 finished with value: 634187.0070083919 and parameters: {'alpha': 0.004351715776277316, 'solver': 'auto', 'tol': 0.0011462316255390365, 'max_iter': 1700}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+$PROJECT_ROOT/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
   final_params[param_name] = trial.suggest_int(
 [2025-03-21 17:48:43,375][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 3 => RMSE=634192.185 R2=0.888 (Best so far=617420.608)
 [I 2025-03-21 17:48:43,375] Trial 3 finished with value: 634192.1847502897 and parameters: {'alpha': 87.00374717638165, 'solver': 'svd', 'tol': 0.002793193999381043, 'max_iter': 600}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+$PROJECT_ROOT/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
   final_params[param_name] = trial.suggest_int(
 [2025-03-21 17:48:43,571][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 6 => RMSE=625227.244 R2=0.894 (Best so far=617420.608)
 [I 2025-03-21 17:48:43,571] Trial 6 finished with value: 625227.244109572 and parameters: {'alpha': 1.4978933963662242, 'solver': 'lsqr', 'tol': 0.00122190999449829, 'max_iter': 1700}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+$PROJECT_ROOT/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
   final_params[param_name] = trial.suggest_int(
 [2025-03-21 17:48:43,905][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 5 => RMSE=634190.249 R2=0.888 (Best so far=617420.608)
 [I 2025-03-21 17:48:43,905] Trial 5 finished with value: 634190.248973801 and parameters: {'alpha': 48.229697435436584, 'solver': 'svd', 'tol': 1.5945871391736926e-05, 'max_iter': 1500}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+$PROJECT_ROOT/portfolio_medical_drg_ny/dependencies/modeling/optuna_random_search_util.py:33: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
   final_params[param_name] = trial.suggest_int(
 [2025-03-21 17:48:43,939][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 7 => RMSE=626286.706 R2=0.893 (Best so far=617420.608)
 [I 2025-03-21 17:48:43,939] Trial 7 finished with value: 626286.7064161175 and parameters: {'alpha': 0.12608377242977103, 'solver': 'lsqr', 'tol': 7.861969939711278e-05, 'max_iter': 1100}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
 [2025-03-21 17:49:00,132][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 8 => RMSE=620153.025 R2=0.896 (Best so far=617420.608)
 [I 2025-03-21 17:49:00,132] Trial 8 finished with value: 620153.024825034 and parameters: {'alpha': 0.008353369066627639, 'solver': 'sag', 'tol': 0.003743191604148067, 'max_iter': 500}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
 [2025-03-21 17:50:41,618][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 0 => RMSE=621367.086 R2=0.895 (Best so far=617420.608)
 [I 2025-03-21 17:50:41,619] Trial 0 finished with value: 621367.085980847 and parameters: {'alpha': 955.372631288247, 'solver': 'saga', 'tol': 0.0001633451792387062, 'max_iter': 700}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
 [2025-03-21 17:51:17,531][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 4 => RMSE=623231.766 R2=0.894 (Best so far=617420.608)
 [I 2025-03-21 17:51:17,532] Trial 4 finished with value: 623231.7659448193 and parameters: {'alpha': 0.005225720043183807, 'solver': 'sag', 'tol': 0.0004897848658725957, 'max_iter': 2000}. Best is trial 1 with value: 617420.6077863937.
-/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+$ULOCAL/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
   warnings.warn(
 [2025-03-21 17:52:40,140][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 9 => RMSE=624988.362 R2=0.894 (Best so far=617420.608)
 [I 2025-03-21 17:52:40,141] Trial 9 finished with value: 624988.362223591 and parameters: {'alpha': 0.00012184336633490636, 'solver': 'sag', 'tol': 4.3438008554734307e-05, 'max_iter': 1600}. Best is trial 1 with value: 617420.6077863937.

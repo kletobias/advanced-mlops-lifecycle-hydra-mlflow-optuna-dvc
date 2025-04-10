@@ -1,6 +1,6 @@
 [2025-03-21 16:56:53,061][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:56:54,471][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny/data/v13/v13.csv, created df
+$PROJECT_ROOT/portfolio_medical_drg_ny/logs/pipeline
+[2025-03-21 16:56:54,471][dependencies.io.csv_to_dataframe][INFO] - Read $PROJECT_ROOT/portfolio_medical_drg_ny/data/v13/v13.csv, created df
 [2025-03-21 16:56:54,474][dependencies.modeling.rf_optuna_trial][INFO] - Starting rf_optuna_trial with 2 trials to run
 [2025-03-21 16:56:54,484][dependencies.modeling.rf_optuna_trial][INFO] - MLflow experiment set to 'rf_optuna_trial_2025-03-21_16-56-53'
 [2025-03-21 17:12:00,654][dependencies.modeling.rf_optuna_trial][INFO] - Trial 0 => RMSE=764781.853 R2=0.849 (No best yet)

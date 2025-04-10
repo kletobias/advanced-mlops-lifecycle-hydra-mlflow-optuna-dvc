@@ -1,3 +1,4 @@
+<!-- documentation/detailed_documentation.md -->
 <!--documentation/detailed_documentation.md-->
 
 # Comprehensive Documentation
@@ -403,7 +404,7 @@ This downloads and saves data as v0 locally.
 3. Run a Single Step in the Pipeline
 
 3.1. Update cmd_python in configs/config.yaml:  
- Replace the default path ("/Users/tobias/.local/share/mamba/envs/ny/bin/python") with your interpreter’s path.
+ Replace the default path ("$ULOCAL/share/mamba/envs/ny/bin/python") with your interpreter’s path.
 
 3.2. (Optional) Adjust the Pipeline  
  Modify base.yaml if you want to add or remove any pipeline stages.
