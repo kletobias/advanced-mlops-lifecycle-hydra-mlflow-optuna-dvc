@@ -1,5 +1,3 @@
-<!--README.md-->
-
 # Medical DRG in NY — A Reproducible ML Pipeline
 
 This repository contains a config-driven pipeline for analyzing New York State hospital DRG (Diagnosis-Related Group) data. It uses **Hydra** for hierarchical configs, **DVC** for data versioning & reproducibility, and **MLflow** for experiment tracking. The main goal is to showcase advanced MLOps patterns—such as modular transformations, data lineage, and hyperparameter optimization—at a senior engineering level.
@@ -7,6 +5,8 @@ This repository contains a config-driven pipeline for analyzing New York State h
 ## Spotlight Series & Deep‑Dive Articles
 
 Links to every Spotlight post and deep‑dive project note on each MLOps pipeline component—DVC, feature engineering, hyperparameter tuning, logging, MLflow, modular code, Jinja2 templates, and transformations.
+
+### Articles
 
 - [Spotlight The Power of a Single dvc.yaml in MLOps](https://deep-learning-mastery.com/blog/2025/spotlight-the-power-of-a-single-dvcyaml-in-mlops/)
 - [Spotlight Feature Engineering for Reproducibility and Scalability](https://deep-learning-mastery.com/blog/2025/spotlight-feature-engineering-for-reproducibility-and-scalability/)
@@ -25,7 +25,18 @@ Links to every Spotlight post and deep‑dive project note on each MLOps pipelin
 - [Automating DVC Pipelines with Jinja2 Templates](https://deep-learning-mastery.com/projects/automating-dvc-pipelines-with-jinja2-templates/)
 - [Transformations as the Backbone of a Modular MLOps Pipeline](https://deep-learning-mastery.com/projects/transformations-as-the-backbone-of-a-modular-mlops-pipeline/)
 
-> **Note**: This repo is primarily a _portfolio project_. The pipeline is mostly reproducible, but may require a few **manual adjustments** to run end-to-end on your machine (explained below). If you just want to inspect the pipeline structure and ML artifacts, you can do so without running the entire pipeline locally.
+### Videos
+
+- [Transformations as the Backbone of a Modular MLOps Pipeline](https://youtu.be/puqy0Cw0TcI)
+- [A Comprehensive Look at Hyperparameter Tuning with Hydra and Optuna in an MLOps Pipeline](https://youtu.be/enACoOgCxBs)
+- [Automating DVC Pipelines with Jinja2 Templates](https://youtu.be/LpklKS1aXkw)
+- [A Comprehensive Look at Modular Code in an MLOps Pipeline](https://youtu.be/lGIJrzQ3-q8)
+- [The Integration Of MLflow In This Project](https://youtu.be/M1WEOWW_9CM)
+- [A Comprehensive Look at Logging in a Modular MLOps Pipeline](https://youtu.be/nDq3mY0Ap7o)
+- [A Comprehensive Look at Feature Engineering in a Modular MLOps Pipeline](https://youtu.be/zWC_Y7ei0kk)
+- [Exploring dvc.yaml The Engine of a Reproducible Pipeline](https://youtu.be/gVPG-DZkI2M)
+
+> **Note**: This repo is primarily a _portfolio project_. The pipeline is mostly reproducible, but may require a few **manual adjustments** to run end‑to‑end on your machine (explained below). If you just want to inspect the pipeline structure and ML artifacts, you can do so without running the entire pipeline locally.
 
 ---
 
