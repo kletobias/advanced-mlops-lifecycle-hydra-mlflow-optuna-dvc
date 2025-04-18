@@ -4,6 +4,27 @@
 
 This repository contains a config-driven pipeline for analyzing New York State hospital DRG (Diagnosis-Related Group) data. It uses **Hydra** for hierarchical configs, **DVC** for data versioning & reproducibility, and **MLflow** for experiment tracking. The main goal is to showcase advanced MLOps patterns—such as modular transformations, data lineage, and hyperparameter optimization—at a senior engineering level.
 
+## Spotlight Series & Deep‑Dive Articles
+
+Links to every Spotlight post and deep‑dive project note on each MLOps pipeline component—DVC, feature engineering, hyperparameter tuning, logging, MLflow, modular code, Jinja2 templates, and transformations.
+
+- [Spotlight The Power of a Single dvc.yaml in MLOps](https://deep-learning-mastery.com/blog/2025/spotlight-the-power-of-a-single-dvcyaml-in-mlops/)
+- [Spotlight Feature Engineering for Reproducibility and Scalability](https://deep-learning-mastery.com/blog/2025/spotlight-feature-engineering-for-reproducibility-and-scalability/)
+- [Spotlight Hyperparameter Tuning with Hydra, Optuna, and MLflow](https://deep-learning-mastery.com/blog/2025/spotlight-hyperparameter-tuning-with-hydra-optuna-and-mlflow/)
+- [Spotlight Logging for MLOps Consistency](https://deep-learning-mastery.com/blog/2025/spotlight-logging-for-mlops-consistency/)
+- [Spotlight MLflow Integration](https://deep-learning-mastery.com/blog/2025/spotlight-mlflow-integration/)
+- [Spotlight Modular Code as a Cornerstone of MLOps](https://deep-learning-mastery.com/blog/2025/spotlight-modular-code-as-a-cornerstone-of-mlops/)
+- [Spotlight Jinja2 Templates for Efficient Pipeline Generation](https://deep-learning-mastery.com/blog/2025/spotlight-jinja2-templates-for-efficient-pipeline-generation/)
+- [Spotlight Modular Transformations](https://deep-learning-mastery.com/blog/2025/spotlight-modular-transformations/)
+- [Exploring dvc.yaml The Engine of a Reproducible Pipeline](https://deep-learning-mastery.com/projects/exploring-dvcyaml-the-engine-of-a-reproducible-pipeline/)
+- [A Comprehensive Look at Feature Engineering in a Modular MLOps Pipeline](https://deep-learning-mastery.com/projects/a-comprehensive-look-at-feature-engineering-in-a-modular-mlops-pipeline/)
+- [A Comprehensive Look at Hyperparameter Tuning with Hydra and Optuna in an MLOps Pipeline](https://deep-learning-mastery.com/projects/a-comprehensive-look-at-hyperparameter-tuning-with-hydra-and-optuna-in-an-mlops-pipeline/)
+- [A Comprehensive Look at Logging in a Modular MLOps Pipeline](https://deep-learning-mastery.com/projects/a-comprehensive-look-at-logging-in-a-modular-mlops-pipeline/)
+- [The Integration Of MLflow In This Project](https://deep-learning-mastery.com/projects/the-integration-of-mlflow-in-this-project/)
+- [A Comprehensive Look at Modular Code in an MLOps Pipeline](https://deep-learning-mastery.com/projects/a-comprehensive-look-at-modular-code-in-an-mlops-pipeline/)
+- [Automating DVC Pipelines with Jinja2 Templates](https://deep-learning-mastery.com/projects/automating-dvc-pipelines-with-jinja2-templates/)
+- [Transformations as the Backbone of a Modular MLOps Pipeline](https://deep-learning-mastery.com/projects/transformations-as-the-backbone-of-a-modular-mlops-pipeline/)
+
 > **Note**: This repo is primarily a _portfolio project_. The pipeline is mostly reproducible, but may require a few **manual adjustments** to run end-to-end on your machine (explained below). If you just want to inspect the pipeline structure and ML artifacts, you can do so without running the entire pipeline locally.
 
 ---
