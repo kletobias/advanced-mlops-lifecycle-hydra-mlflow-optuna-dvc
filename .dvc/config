@@ -1,0 +1,4 @@
+[core]
+    remote = s3_dvc
+['remote "s3_dvc"']
+    url = s3://nyproject25/dvc
