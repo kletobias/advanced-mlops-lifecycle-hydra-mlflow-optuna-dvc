@@ -37,4 +37,5 @@ notebooks/
 TODO.txt
 bin/
 gather_content/
+.envrc
 .env
