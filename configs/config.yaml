@@ -18,7 +18,7 @@ defaults:
 
 cmd_python: "$CMD_PYTHON"
 
-universal_step_script: "./scripts/universal_step.py"
+universal_step_script: "scripts/universal_step.py"
 dvc_default_desc: "Refer to deps/outs for details."
 
 
