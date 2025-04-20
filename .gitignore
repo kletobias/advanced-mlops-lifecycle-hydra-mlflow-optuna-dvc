@@ -1,14 +1,8 @@
-/.pre-commit-config.yaml
 **/.DS_Store
 # Ignore any YYYY-MM-DD named directory under outputs that has hydra logs in it.
 **/outputs/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
 __pycache__/
 *.pyc
-src/data_inspection/outputs/
-*.yaml
-!configs/*.yaml
-!configs/*/*.yaml
-!dvc.yaml
 **/.ipynb_checkpoints/**
 **/.virtual_documents/**
 *.tmp
@@ -30,7 +24,6 @@ files/
 *.txt
 /.troubleshoot/
 portfolio_article
-prefect.yaml
 .ruff_cache/
 .prefectignore
 notebooks/
