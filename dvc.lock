@@ -1,0 +1,510 @@
+schema: '2.0'
+stages:
+  v0_download_and_save_data:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=download_and_save_data
+      transformations=download_and_save_data io_policy.READ_INPUT=False
+    deps:
+    - path: ./configs/data_versions/v0.yaml
+      hash: md5
+      md5: 258d575cae7fabdf3e1e6dd3f35a66e9
+      size: 19
+    - path: ./configs/transformations/download_and_save_data.yaml
+      hash: md5
+      md5: b8a63966e7e14bef2bf1df390f7cd955
+      size: 536
+    - path: ./dependencies/ingestion/download_and_save_data.py
+      hash: md5
+      md5: 043aa8b3f96ace388a8662268188ba45
+      size: 2623
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v0/v0.csv
+      hash: md5
+      md5: 8c19c69cfa38a46003a14250479790e5
+      size: 154786484
+    - path: ./data/v0/v0_metadata.json
+      hash: md5
+      md5: 81b13c1996b1821e4b1b47870a2a914a
+      size: 3075
+  v0_sanitize_column_names:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=sanitize_column_names
+      transformations=sanitize_column_names data_versions.data_version_output=v1
+    deps:
+    - path: ./configs/data_versions/v0.yaml
+      hash: md5
+      md5: 258d575cae7fabdf3e1e6dd3f35a66e9
+      size: 19
+    - path: ./configs/transformations/sanitize_column_names.yaml
+      hash: md5
+      md5: 28cac61da69b878256e8a12b4153bd6b
+      size: 54
+    - path: ./dependencies/cleaning/sanitize_column_names.py
+      hash: md5
+      md5: a3e66d0e7125fbfddf9d40a04bb27bcb
+      size: 482
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v1/v1.csv
+      hash: md5
+      md5: 3f21c6536a40deaa9cd7f18429736caa
+      size: 153299121
+    - path: ./data/v1/v1_metadata.json
+      hash: md5
+      md5: 9cd386577eae7e09388a690385b7bf8b
+      size: 3075
+  v1_drop_description_columns:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=drop_description_columns
+      transformations=drop_description_columns data_versions.data_version_input=v1
+      data_versions.data_version_output=v2
+    deps:
+    - path: ./configs/data_versions/v1.yaml
+      hash: md5
+      md5: 19b8629e96887a87256d1adecbb2d973
+      size: 126
+    - path: ./configs/transformations/drop_description_columns.yaml
+      hash: md5
+      md5: 72501a54f29f6848c7899ba02b973b8b
+      size: 97
+    - path: ./dependencies/transformations/drop_description_columns.py
+      hash: md5
+      md5: 2fd5c0a63fdb530661daf3805bd3a821
+      size: 506
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v2/v2.csv
+      hash: md5
+      md5: 30fcbe4d53df3907e94417937a16c6d9
+      size: 92476810
+    - path: ./data/v2/v2_metadata.json
+      hash: md5
+      md5: 01908cac2c8ad9b3dfc6d313c43c6cf3
+      size: 2489
+  v2_median_profit:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=median_profit
+      transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3
+    deps:
+    - path: ./configs/data_versions/v2.yaml
+      hash: md5
+      md5: 69ed71262306fd89d4be6aa1741c3abb
+      size: 118
+    - path: ./configs/transformations/median_profit.yaml
+      hash: md5
+      md5: bbf2e5bb570a73d0af96fd6abe4c36ef
+      size: 162
+    - path: ./dependencies/transformations/median_profit.py
+      hash: md5
+      md5: 6ea91abee4e71dee88b63669e4759201
+      size: 565
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v3/v3.csv
+      hash: md5
+      md5: 50247671fa689dbf56c3f6c06d19de4f
+      size: 105198573
+    - path: ./data/v3/v3_metadata.json
+      hash: md5
+      md5: 8bc7751af20ac78f059505b65fac6f5d
+      size: 2673
+  v3_mean_profit:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=mean_profit
+      transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4
+    deps:
+    - path: ./configs/data_versions/v3.yaml
+      hash: md5
+      md5: 9d770f84ad565d4110a13af10bc5c279
+      size: 170
+    - path: ./configs/transformations/mean_profit.yaml
+      hash: md5
+      md5: 7809236b5e1bad7157aa0a5f6fa3d5da
+      size: 148
+    - path: ./dependencies/transformations/mean_profit.py
+      hash: md5
+      md5: f4bbd64b3a7a4a0d0df092d3a7f4a3c0
+      size: 541
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v4/v4.csv
+      hash: md5
+      md5: dc8e0ecaace07efc499c73a703accf15
+      size: 117118387
+    - path: ./data/v4/v4_metadata.json
+      hash: md5
+      md5: 9f0d8028599b689f76adfb6758004b45
+      size: 2854
+  v4_total_mean_profit:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=total_mean_profit
+      transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5
+    deps:
+    - path: ./configs/data_versions/v4.yaml
+      hash: md5
+      md5: 6260689b743d28729f022d02ceef3bcc
+      size: 127
+    - path: ./configs/transformations/total_mean_profit.yaml
+      hash: md5
+      md5: 71dfe5ec7bb89c35ddec24f80d7e6d08
+      size: 168
+    - path: ./dependencies/transformations/total_mean_profit.py
+      hash: md5
+      md5: 3dc2e16721289ca44bdac10c947ebad6
+      size: 580
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v5/v5.csv
+      hash: md5
+      md5: 85e8afd6699213c5020072d2d9d478cb
+      size: 129165962
+    - path: ./data/v5/v5_metadata.json
+      hash: md5
+      md5: c07637fb533c98a1f7951a481fabf0c6
+      size: 3041
+  v5_total_median_profit:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=total_median_profit
+      transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
+    deps:
+    - path: ./configs/data_versions/v5.yaml
+      hash: md5
+      md5: 1cb6ef98cde0cd2d44933d52624b5f0b
+      size: 135
+    - path: ./configs/transformations/total_median_profit.yaml
+      hash: md5
+      md5: 75491c9f01837ff536772d46ee840250
+      size: 178
+    - path: ./dependencies/transformations/total_median_profit.py
+      hash: md5
+      md5: 04963708d7d36133b85ab225a81e9854
+      size: 715
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v5_1/v5_1.csv
+      hash: md5
+      md5: 5cd60fc8ef24561c9147a74b9d033c6d
+      size: 141512178
+    - path: ./data/v5_1/v5_1_metadata.json
+      hash: md5
+      md5: 507c38d629cdb1f5dd2c59b7d435ef5c
+      size: 3234
+  v5_1_total_median_cost:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=total_median_cost
+      transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
+    deps:
+    - path: ./configs/data_versions/v5.yaml
+      hash: md5
+      md5: 1cb6ef98cde0cd2d44933d52624b5f0b
+      size: 135
+    - path: ./configs/transformations/total_median_cost.yaml
+      hash: md5
+      md5: 021e9228b65a59ef3b5c0502b9dee694
+      size: 168
+    - path: ./dependencies/transformations/total_median_cost.py
+      hash: md5
+      md5: d0fa8b55d6c5a05515908eb07230b8ab
+      size: 580
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v5_2/v5_2.csv
+      hash: md5
+      md5: 5bb78a2541829f3621250b46684066ce
+      size: 151682980
+    - path: ./data/v5_2/v5_2_metadata.json
+      hash: md5
+      md5: 0863bb7a4ff5b253b5fea548b79e902f
+      size: 3421
+  v5_2_total_mean_cost:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=total_mean_cost
+      transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
+    deps:
+    - path: ./configs/data_versions/v5_2.yaml
+      hash: md5
+      md5: eddebe535fd5d65b4bdaadb183247efa
+      size: 138
+    - path: ./configs/transformations/total_mean_cost.yaml
+      hash: md5
+      md5: 0cbdad5655f7fb9e82e032c80836f562
+      size: 158
+    - path: ./dependencies/transformations/total_mean_cost.py
+      hash: md5
+      md5: 483179bcf47dfd7a2f9a35f0917021e3
+      size: 562
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v6/v6.csv
+      hash: md5
+      md5: bec1eedc70b2028e0acb07c82b4593ba
+      size: 161936326
+    - path: ./data/v6/v6_metadata.json
+      hash: md5
+      md5: f53567bcb93a588251453341fe6ac61a
+      size: 3602
+  v6_drop_rare_drgs:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=drop_rare_drgs
+      transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
+    deps:
+    - path: ./configs/data_versions/v6.yaml
+      hash: md5
+      md5: 49a7b0f6cbc72f231c1010233d2fbc13
+      size: 134
+    - path: ./configs/transformations/drop_rare_drgs.yaml
+      hash: md5
+      md5: c34e5775c1198dd4d2a5f2a057b4e288
+      size: 185
+    - path: ./dependencies/transformations/drop_rare_drgs.py
+      hash: md5
+      md5: d2b7f778704bc2007c4f9e9056badf9d
+      size: 1159
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v7/v7.csv
+      hash: md5
+      md5: cb0ca3b5ad3dc2bb4af170ed97f7dd9c
+      size: 155168448
+    - path: ./data/v7/v7_metadata.json
+      hash: md5
+      md5: 57d727886aeac15b38e82f29309c3e3f
+      size: 3600
+  v7_agg_severities:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=agg_severities
+      transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
+    deps:
+    - path: ./configs/data_versions/v7.yaml
+      hash: md5
+      md5: a3eb86e837fdf3386b81db3b4f2c2ca0
+      size: 197
+    - path: ./configs/transformations/agg_severities.yaml
+      hash: md5
+      md5: 7d3274528193d657d11f94beb62edcd1
+      size: 672
+    - path: ./dependencies/transformations/agg_severities.py
+      hash: md5
+      md5: 959d9755d3d1759e82a50642f8d703da
+      size: 2814
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v8/v8.csv
+      hash: md5
+      md5: 5ec64d07e0f36eaa7644b52760f35f51
+      size: 71265370
+    - path: ./data/v8/v8_metadata.json
+      hash: md5
+      md5: fe78dc147097a910d64605d7111f204c
+      size: 3983
+  v8_ratio_drg_facility_vs_year:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year
+      transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8
+      data_versions.data_version_output=v9
+    deps:
+    - path: ./configs/data_versions/v8.yaml
+      hash: md5
+      md5: 76d7c613afc247f759178b998751077b
+      size: 802
+    - path: ./configs/transformations/ratio_drg_facility_vs_year.yaml
+      hash: md5
+      md5: 31a586028cf4c4cf31643dce373d970b
+      size: 478
+    - path: ./dependencies/transformations/ratio_drg_facility_vs_year.py
+      hash: md5
+      md5: ad743474a8b60b6dcc7eed6bedf07795
+      size: 1920
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v9/v9.csv
+      hash: md5
+      md5: 9d623ccf81a51a3e7d6070c30023f37a
+      size: 79740145
+    - path: ./data/v9/v9_metadata.json
+      hash: md5
+      md5: bd01854c82e98a546e15ecfe2ee085a7
+      size: 4536
+  v9_yearly_discharge_bin:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=yearly_discharge_bin
+      transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
+    deps:
+    - path: ./configs/data_versions/v9.yaml
+      hash: md5
+      md5: d8ca8aa1c18c22e6228aa6b89634fd35
+      size: 337
+    - path: ./configs/transformations/yearly_discharge_bin.yaml
+      hash: md5
+      md5: 80c9bdbb14764ce109a03eaa4114cf42
+      size: 528
+    - path: ./dependencies/transformations/yearly_discharge_bin.py
+      hash: md5
+      md5: df3d714bc29ad3437d62b23f7f89b8e1
+      size: 1782
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v10/v10.csv
+      hash: md5
+      md5: 3c37138e25153ae3b3b0056de99a6dbc
+      size: 80439047
+    - path: ./data/v10/v10_metadata.json
+      hash: md5
+      md5: f1f569aa6571379378044f9b46355616
+      size: 4721
+  v10_lag_columns:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=lag_columns
+      transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
+    deps:
+    - path: ./configs/data_versions/v10.yaml
+      hash: md5
+      md5: 736b47c5ef807b65c4ac2d4b216d3459
+      size: 192
+    - path: ./configs/transformations/lag_columns.yaml
+      hash: md5
+      md5: 1a141277ae23cf3f5c520a39b69547f3
+      size: 577
+    - path: ./dependencies/transformations/lag_columns.py
+      hash: md5
+      md5: 580cc4232b22b259d64004115b88dacd
+      size: 975
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v11/v11.csv
+      hash: md5
+      md5: f49788b7182657ea4df4b5dc1d0100ad
+      size: 136078511
+    - path: ./data/v11/v11_metadata.json
+      hash: md5
+      md5: ceed39e3a48a430132baf461076ef2d5
+      size: 7643
+  v11_rolling_columns:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=rolling_columns
+      transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
+    deps:
+    - path: ./configs/data_versions/v11.yaml
+      hash: md5
+      md5: b54ee69f4501f9b6e022b49e2e1b924c
+      size: 733
+    - path: ./configs/transformations/rolling_columns.yaml
+      hash: md5
+      md5: a2e88090ef9d2e673e1475eefc85dac8
+      size: 450
+    - path: ./dependencies/transformations/rolling_columns.py
+      hash: md5
+      md5: 3627344678384740f5b5d7171878dc0a
+      size: 1423
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v12/v12.csv
+      hash: md5
+      md5: 871e4295e4f5e77ea59cf6419bbd8f32
+      size: 187073670
+    - path: ./data/v12/v12_metadata.json
+      hash: md5
+      md5: 90168adccf566388a76880852c1f32e4
+      size: 10436
+  v12_drop_non_lag_columns:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=drop_non_lag_columns
+      transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
+    deps:
+    - path: ./configs/data_versions/v12.yaml
+      hash: md5
+      md5: fc6c09d0b951e6d9f2d24a7697b3862d
+      size: 395
+    - path: ./configs/transformations/drop_non_lag_columns.yaml
+      hash: md5
+      md5: add048768f6c41ed9e1afb45d6e7a6ba
+      size: 391
+    - path: ./dependencies/transformations/drop_non_lag_columns.py
+      hash: md5
+      md5: b19537455d092f3725a4388d38ba4597
+      size: 317
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+    outs:
+    - path: ./data/v13/v13.csv
+      hash: md5
+      md5: 0cb8e7322c0e11c8318bedfee1f03c5d
+      size: 133443674
+    - path: ./data/v13/v13_metadata.json
+      hash: md5
+      md5: a60dd84526b1c95b4d40951ff58e9287
+      size: 7909
+  v13_rf_optuna_trial:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=rf_optuna_trial
+      transformations=rf_optuna_trial data_versions.data_version_input=v13 io_policy.WRITE_OUTPUT=false
+      model_params=rf_optuna_trial_params
+    deps:
+    - path: ./configs/data_versions/v13.yaml
+      hash: md5
+      md5: 687ea7fc0239d393ad885075c2b8cce0
+      size: 158
+    - path: ./configs/transformations/rf_optuna_trial.yaml
+      hash: md5
+      md5: 8e98312f8b49f88bec33731a9ed0d5d4
+      size: 946
+    - path: ./dependencies/modeling/rf_optuna_trial.py
+      hash: md5
+      md5: 73f85cf04c0a5b0ec7d1c864b0b41bcf
+      size: 6950
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
+  v13_ridge_optuna_trial:
+    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=ridge_optuna_trial
+      transformations=ridge_optuna_trial data_versions.data_version_input=v13 data_versions.data_version_output=v13
+      io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
+    deps:
+    - path: ./configs/data_versions/v13.yaml
+      hash: md5
+      md5: 687ea7fc0239d393ad885075c2b8cce0
+      size: 158
+    - path: ./configs/transformations/ridge_optuna_trial.yaml
+      hash: md5
+      md5: 42897206069b3be424ec1eccc808035c
+      size: 788
+    - path: ./dependencies/modeling/ridge_optuna_trial.py
+      hash: md5
+      md5: 16dab6eb24b4901ef7430a982b6b67ec
+      size: 5601
+    - path: ./scripts/universal_step.py
+      hash: md5
+      md5: ebba3140ec3dac5c94112e3990a9152d
+      size: 7087
