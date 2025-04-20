@@ -1,0 +1,3 @@
+- setup.script_base_name=sanitize_column_names
+- transformations=sanitize_column_names
+- data_versions.data_version_output=v1

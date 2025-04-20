@@ -1,0 +1,5 @@
+- setup.script_base_name=rf_optuna_trial
+- transformations=rf_optuna_trial
+- data_versions.data_version_input=v13
+- io_policy.WRITE_OUTPUT=false
+- model_params=rf_optuna_trial_params

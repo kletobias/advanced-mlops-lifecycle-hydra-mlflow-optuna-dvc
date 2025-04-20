@@ -1,0 +1,4 @@
+- setup.script_base_name=rolling_columns
+- transformations=rolling_columns
+- data_versions.data_version_input=v11
+- data_versions.data_version_output=v12

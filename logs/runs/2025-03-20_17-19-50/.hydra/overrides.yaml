@@ -1,0 +1,4 @@
+- setup.script_base_name=median_profit
+- transformations=median_profit
+- data_versions.data_version_input=v2
+- data_versions.data_version_output=v3

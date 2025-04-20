@@ -1,0 +1,6 @@
+- setup.script_base_name=ridge_optuna_trial
+- transformations=ridge_optuna_trial
+- data_versions.data_version_input=v13
+- data_versions.data_version_output=v13
+- io_policy.WRITE_OUTPUT=false
+- model_params=ridge_optuna_trial_params

@@ -1,0 +1,3 @@
+- setup.script_base_name=download_and_save_data
+- transformations=download_and_save_data
+- io_policy.READ_INPUT=False
