@@ -1,5 +1,0 @@
-outs:
-- md5: f00c117fe738b5e0de602c8d6fb6c001
-  size: 481
-  hash: md5
-  path: ridge_optuna_trial_params.yaml

@@ -1,5 +1,0 @@
-outs:
-- md5: 0de2e4d10611eabb278f97eb2a852b6d
-  size: 56
-  hash: md5
-  path: s3_dvc.yaml

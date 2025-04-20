@@ -1,5 +1,0 @@
-outs:
-- md5: 28cac61da69b878256e8a12b4153bd6b
-  size: 54
-  hash: md5
-  path: sanitize_column_names.yaml

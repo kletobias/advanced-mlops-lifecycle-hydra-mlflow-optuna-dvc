@@ -1,5 +1,0 @@
-outs:
-- md5: c6c58e46144a01063c7a051d7f7bfe2d
-  size: 185
-  hash: md5
-  path: pull_mlruns_s3.yaml

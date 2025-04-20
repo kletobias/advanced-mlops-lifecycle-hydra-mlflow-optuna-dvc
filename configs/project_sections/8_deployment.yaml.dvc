@@ -1,5 +1,0 @@
-outs:
-- md5: bec03a64d601f8d9b2b4963ed7205606
-  size: 68
-  hash: md5
-  path: 8_deployment.yaml
