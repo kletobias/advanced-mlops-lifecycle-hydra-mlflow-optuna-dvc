@@ -1,4 +1,4 @@
-"""Run one data‑pipeline step chosen by Hydra config."""
+"""Run one data-pipeline step chosen by Hydra config."""
 # scripts/universal_step.py
 import logging
 
