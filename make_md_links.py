@@ -1,3 +1,4 @@
+# make_md_links.py
 import os
 import re
 import subprocess
@@ -5,15 +6,17 @@ import subprocess
 MARKDOWN_LUA = "/Users/tobias/.config/nvim/lua/luasnippets/markdown.lua"
 REPO_URL = "https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/tree/main"
 
+
 def sanitize_for_lua(name: str) -> str:
     # Remove all leading characters that are not letters
-    name = re.sub(r'^[^a-zA-Z]+', '', name)
+    name = re.sub(r"^[^a-zA-Z]+", "", name)
     # Replace any remaining non-alphanumeric chars with underscores
-    name = re.sub(r'[^a-zA-Z0-9]', '_', name)
+    name = re.sub(r"[^a-zA-Z0-9]", "_", name)
     # Fallback if empty
     if not name:
         name = "file"
     return name
+
 
 def main():
     # Gather tracked files
@@ -38,20 +41,22 @@ def main():
 
     for path in file_list:
         parent_dir = os.path.basename(os.path.dirname(path))
-        basename   = os.path.basename(path)
+        basename = os.path.basename(path)
         base_no_ext, ext = os.path.splitext(basename)
 
         # Strip leading non-alpha from parent and base
-        parent_dir  = sanitize_for_lua(parent_dir)
+        parent_dir = sanitize_for_lua(parent_dir)
         base_no_ext = sanitize_for_lua(base_no_ext)
 
-        # If the file is literally named "base" (after sanitize) and there's a parent, combine them
+        # If the file is literally named "base" (after sanitize) and there's a parent,
+        # combine them
         if base_no_ext.lower() == "base" and parent_dir:
             snippet_core = f"{parent_dir}_{base_no_ext}"
         else:
             snippet_core = base_no_ext
 
-        # Final name: remove the extension from snippet_core if it ended up with leftover underscores
+        # Final name: remove the extension from snippet_core if it ended up
+        # with leftover underscores
         # (Not strictly necessary, but helps keep it short.)
         snippet_name = snippet_core
 
@@ -64,7 +69,7 @@ def main():
         used_names.add(snippet_name)
 
         # The Lua variable and snippet trigger both end with _snippet
-        lua_var_name    = snippet_name + "_snippet"
+        lua_var_name = snippet_name + "_snippet"
         snippet_trigger = snippet_name + "_snippet"
 
         snippet_def = (
@@ -74,11 +79,11 @@ def main():
         snippet_defs.append(snippet_def)
         snippet_refs.append(f"  {lua_var_name},")
 
-    with open(MARKDOWN_LUA, "r") as f:
+    with open(MARKDOWN_LUA) as f:
         lines = f.readlines()
 
     add_snippets_start = None
-    add_snippets_end   = None
+    add_snippets_end = None
     brace_depth = 0
     found_block = False
 
@@ -126,6 +131,7 @@ def main():
         f.writelines(new_content)
 
     os.replace(MARKDOWN_LUA + ".new", MARKDOWN_LUA)
+
 
 if __name__ == "__main__":
     main()
