@@ -10,6 +10,9 @@
 *.pkl
 *.json
 *.bak
+*.log
+!logs/runs/2025-04-21_*.log
+!logs/pipeline/2025-04-21_11-20-11.log
 
 # Visualization outputs
 *.png

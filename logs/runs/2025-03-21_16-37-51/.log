@@ -1,4 +1,0 @@
-[2025-03-21 16:37:51,456][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
-/Users/tobias/.local/projects/portfolio_medical_drg_ny/logs/pipeline
-[2025-03-21 16:37:51,456][root][INFO] - Reading config, validating user stages
-[2025-03-21 16:37:51,456][root][INFO] - User stages valid
