@@ -1,5 +1,6 @@
 import logging
 from typing import Literal
+
 import pandas as pd
 
 logger = logging.getLogger(__name__)

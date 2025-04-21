@@ -44,7 +44,7 @@ def rolling_columns(
         ].transform(
             lambda s: s.shift(shift_periods)
             .rolling(window=window, min_periods=min_periods)
-            .mean()
+            .mean(),
         )
 
     rolling_cols = [f"{col}{rolling_str}{window}" for col in columns_to_transform]

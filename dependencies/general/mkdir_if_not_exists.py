@@ -1,7 +1,7 @@
 import logging
+import os
 
 logger = logging.getLogger(__name__)
-import os
 
 
 def mkdir_(directory: str) -> None:

@@ -1,7 +1,7 @@
 # dependencies/modeling/ridge_optuna_trial.py
 
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from math import sqrt
 
 import mlflow
@@ -15,9 +15,7 @@ from sklearn.model_selection import TimeSeriesSplit, cross_validate
 from dependencies.logging_utils.calculate_and_log_importances_as_artifact import (
     calculate_and_log_importances_as_artifact,
 )
-from dependencies.modeling.optuna_random_search_util import (
-    optuna_random_search_util,
-)
+from dependencies.modeling.optuna_random_search_util import optuna_random_search_util
 from dependencies.modeling.ridge_sklearn_instantiate_ridge_class import (
     ridge_sklearn_instantiate_ridge_class,
 )
@@ -106,7 +104,7 @@ def ridge_optuna_trial(
         cv_obj = TimeSeriesSplit(n_splits=cv_splits)
         scoring = {"rmse": "neg_root_mean_squared_error", "r2": "r2"}
         results = cross_validate(
-            model, X_train, y_train, cv=cv_obj, scoring=scoring, n_jobs=n_jobs_cv
+            model, X_train, y_train, cv=cv_obj, scoring=scoring, n_jobs=n_jobs_cv,
         )
 
         rmse = -np.mean(results["test_rmse"])
@@ -130,7 +128,7 @@ def ridge_optuna_trial(
             )
         else:
             logger.info(
-                "Trial %d => RMSE=%.3f R2=%.3f (No best yet)", trial.number, rmse, r2
+                "Trial %d => RMSE=%.3f R2=%.3f (No best yet)", trial.number, rmse, r2,
             )
 
         return rmse
@@ -159,7 +157,7 @@ def ridge_optuna_trial(
 
         # Permutation importances
         calculate_and_log_importances_as_artifact(
-            permutation_importances_filename, final_model, X_train, y_train
+            permutation_importances_filename, final_model, X_train, y_train,
         )
 
     logger.info("Done with ridge_optuna_trial. All outputs in ./mlruns/")

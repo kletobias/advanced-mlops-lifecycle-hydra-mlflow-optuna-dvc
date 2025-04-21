@@ -7,6 +7,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class AggSeveritiesConfig:
     weighted_mean_weight_col_name: str
@@ -19,6 +20,7 @@ class AggSeveritiesConfig:
     median_cols: list[str]
     groupby_cols: list[str]
     as_index: bool
+
 
 def agg_severities(
     df: pd.DataFrame,
@@ -58,17 +60,25 @@ def agg_severities(
             )
         for col in mean_cols:
             if col in grp.columns:
-                results[f"w_{col}"] = weighted_mean(grp, value_col=col, weight_col=weighted_mean_weight_col_name)
+                results[f"w_{col}"] = weighted_mean(
+                    grp, value_col=col, weight_col=weighted_mean_weight_col_name,
+                )
 
         for col in median_cols:
             if col in grp.columns:
-                results[f"w_{col}"] = weighted_median(grp, value_col=col, weight_col=weighted_median_weight_col_name)
+                results[f"w_{col}"] = weighted_median(
+                    grp, value_col=col, weight_col=weighted_median_weight_col_name,
+                )
         return pd.Series(results)
 
     groupby_cols = list(groupby_cols)
     as_index = bool(as_index)
-    aggregated = df.groupby(groupby_cols, as_index=as_index).apply(aggregate_facility_rows)
+    aggregated = df.groupby(groupby_cols, as_index=as_index).apply(
+        aggregate_facility_rows,
+    )
     aggregated = aggregated.reset_index(drop=False)
     logger.info("Done with core transformation: agg_severities")
-    assert 'w_total_median_profit' in aggregated.columns.tolist(), "'w_total_median_profit' not in columns!"
+    assert (
+        "w_total_median_profit" in aggregated.columns.tolist()
+    ), "'w_total_median_profit' not in columns!"
     return aggregated

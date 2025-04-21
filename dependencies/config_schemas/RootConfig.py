@@ -1,6 +1,6 @@
 # dependencies/config_schemas/RootConfig.py
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from hydra.core.config_store import ConfigStore
 
@@ -31,14 +31,14 @@ class DataVersionsConfig:
     data_version_output: str
     description: str
     dataset_url: str
-    data_version: Optional[str] = None
+    data_version: str | None = None
 
 
 @dataclass
 class HydraConfig:
-    job: Dict[str, str]
-    run: Dict[str, str]
-    sweep: Dict[str, str]
+    job: dict[str, str]
+    run: dict[str, str]
+    sweep: dict[str, str]
 
 
 @dataclass
@@ -47,7 +47,7 @@ class LoggingUtilsConfig:
     log_file_path: str
     formatter: str
     level: int
-    log_cfg_job: Dict[str, Any]
+    log_cfg_job: dict[str, Any]
 
 
 @dataclass
@@ -57,9 +57,9 @@ class MLExperimentsConfig:
     n_jobs_final_model: int
     target_col_modeling: str
     year_col: str
-    train_range: List[int]
-    val_range: List[int]
-    test_range: List[int]
+    train_range: list[int]
+    val_range: list[int]
+    test_range: list[int]
     experiment_prefix: str
     experiment_id: str
     artifact_directory_path: str
@@ -69,7 +69,7 @@ class MLExperimentsConfig:
     optuna_n_trials: int
     cv_splits: int
     direction: str
-    scoring: Dict[str, str]
+    scoring: dict[str, str]
 
 
 @dataclass
@@ -108,20 +108,20 @@ class SetupConfig:
 @dataclass
 class TransformationsConfig:
     name: str = "none"  # which transform is active (e.g. 'mean_profit')
-    drop_description_columns: Optional[DropDescriptionColumnsConfig] = None
-    drop_non_lag_columns: Optional[DropNonLagColumnsConfig] = None
-    drop_rare_drgs: Optional[DropRareDrgsConfig] = None
-    ratio_drg_facility_vs_year: Optional[RatioDrgFacilityVsYearConfig] = None
-    yearly_discharge_bin: Optional[YearlyDischargeBinConfig] = None
-    agg_severities: Optional[AggSeveritiesConfig] = None
-    mean_profit: Optional[MeanProfitConfig] = None
-    median_profit: Optional[MedianProfitConfig] = None
-    total_mean_cost: Optional[TotalMeanCostConfig] = None
-    total_mean_profit: Optional[TotalMeanProfitConfig] = None
-    total_median_cost: Optional[TotalMedianCostConfig] = None
-    total_median_profit: Optional[TotalMedianProfitConfig] = None
-    lag_columns: Optional[LagColumnsConfig] = None
-    rolling_columns: Optional[RollingColumnsConfig] = None
+    drop_description_columns: DropDescriptionColumnsConfig | None = None
+    drop_non_lag_columns: DropNonLagColumnsConfig | None = None
+    drop_rare_drgs: DropRareDrgsConfig | None = None
+    ratio_drg_facility_vs_year: RatioDrgFacilityVsYearConfig | None = None
+    yearly_discharge_bin: YearlyDischargeBinConfig | None = None
+    agg_severities: AggSeveritiesConfig | None = None
+    mean_profit: MeanProfitConfig | None = None
+    median_profit: MedianProfitConfig | None = None
+    total_mean_cost: TotalMeanCostConfig | None = None
+    total_mean_profit: TotalMeanProfitConfig | None = None
+    total_median_cost: TotalMedianCostConfig | None = None
+    total_median_profit: TotalMedianProfitConfig | None = None
+    lag_columns: LagColumnsConfig | None = None
+    rolling_columns: RollingColumnsConfig | None = None
 
 
 @dataclass
@@ -160,33 +160,36 @@ class DataStorageConfig:
     output_file_path_db: str
     output_metadata_file_path: str
 
+
 @dataclass
 class StageConfig:
     name: str
-    cmd_python: Optional[str] = None
-    script: Optional[str] = None
-    overrides: Optional[Dict[str, Any]] = field(default_factory=dict)
-    deps: Optional[List[str]] = field(default_factory=list)
-    outs: Optional[List[str]] = field(default_factory=list)
+    cmd_python: str | None = None
+    script: str | None = None
+    overrides: dict[str, Any] | None = field(default_factory=dict)
+    deps: list[str] | None = field(default_factory=list)
+    outs: list[str] | None = field(default_factory=list)
+
 
 @dataclass
 class Pipeline:
-    stages: Optional[List[StageConfig]] = field(default_factory=list)
-    stages_list: Optional[List[StageConfig]] = field(default_factory=list)
-    stages_to_run: Optional[List[str]] = field(default_factory=list)
-    force_run: Optional[bool] = None
-    pipeline_run: Optional[bool] = None
-    allow_dvc_changes: Optional[bool] = None
-    skip_generation: Optional[bool] = None
-    search_path: Optional[str] = None
-    template_name: Optional[str] = None
-    dvc_yaml_file_path: Optional[str] = None
-    log_file_path: Optional[str] = None
+    stages: list[StageConfig] | None = field(default_factory=list)
+    stages_list: list[StageConfig] | None = field(default_factory=list)
+    stages_to_run: list[str] | None = field(default_factory=list)
+    force_run: bool | None = None
+    pipeline_run: bool | None = None
+    allow_dvc_changes: bool | None = None
+    skip_generation: bool | None = None
+    search_path: str | None = None
+    template_name: str | None = None
+    dvc_yaml_file_path: str | None = None
+    log_file_path: str | None = None
 
 
 @dataclass
 class PipelineConfig:
-    pipeline: Optional[Pipeline] = None
+    pipeline: Pipeline | None = None
+
 
 @dataclass
 class RootConfig:

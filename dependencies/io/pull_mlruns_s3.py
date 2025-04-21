@@ -1,10 +1,10 @@
 import logging
-import subprocess
 import os
+import subprocess
 from dataclasses import dataclass
-from typing import List
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class PullMlrunsS3Config:
@@ -12,20 +12,21 @@ class PullMlrunsS3Config:
     prefix: str
     local_mlruns_dir: str
     remote_uri: str
-    sync_command: List[str]
+    sync_command: list[str]
     overwrite_local: bool
+
 
 def pull_mlruns_s3(
     local_mlruns_dir: str,
     remote_uri: str,
-    sync_command: List[str],
+    sync_command: list[str],
     overwrite_local: bool,
 ):
     if os.path.exists(local_mlruns_dir):
         logger.info(
             "Local mlruns directory '%s' already exists. "
             "Files pulled from S3 may overwrite local files.",
-            local_mlruns_dir
+            local_mlruns_dir,
         )
         if overwrite_local:
             confirm = input("Proceed with overwriting local files? [y/N]: ")
@@ -43,15 +44,18 @@ def pull_mlruns_s3(
     subprocess.run(sync_command, check=True)
     logger.info("Pull complete.")
 
+
 if __name__ == "__main__":
-    import hydra
-    from dependencies.config_schemas.RootConfig import RootConfig
     import sys
+
+    import hydra
+
+    from dependencies.config_schemas.RootConfig import RootConfig
 
     sys.argv = [
         sys.argv[0],
-        'utility_functions=pull_mlruns_s3',
-        'remote_storage=s3_mlflow',
+        "utility_functions=pull_mlruns_s3",
+        "remote_storage=s3_mlflow",
     ]
 
     @hydra.main(version_base=None, config_path="../../configs", config_name="config")

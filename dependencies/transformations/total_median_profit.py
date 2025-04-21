@@ -23,6 +23,8 @@ def total_median_profit(
         df[median_profit_col_name] * df[discharges_col_name]
     )
     logger.info("Done with core transformation: total_median_profit")
-    assert total_median_profit_col_name in df.columns.tolist(), "total_median_profit not in columns"
+    assert (
+        total_median_profit_col_name in df.columns.tolist()
+    ), "total_median_profit not in columns"
 
     return df

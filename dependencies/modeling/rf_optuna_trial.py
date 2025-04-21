@@ -1,8 +1,8 @@
 # dependencies/modeling/rf_optuna_trial.py
-from dataclasses import dataclass
 import logging
-from math import sqrt
 import os
+from dataclasses import dataclass
+from math import sqrt
 
 import mlflow
 import numpy as np
@@ -15,9 +15,7 @@ from sklearn.model_selection import TimeSeriesSplit, cross_validate
 from dependencies.logging_utils.calculate_and_log_importances_as_artifact import (
     calculate_and_log_importances_as_artifact,
 )
-from dependencies.modeling.optuna_random_search_util import (
-    optuna_random_search_util,
-)
+from dependencies.modeling.optuna_random_search_util import optuna_random_search_util
 from dependencies.modeling.rf_sklearn_instantiate_rfr_class import (
     rf_sklearn_instantiate_rfr_class,
 )
@@ -67,11 +65,9 @@ def rf_optuna_trial(
     n_jobs_final_model: int,
     random_state: int,
 ) -> None:
-    """
-    Minimal version using MLflow's default local './mlruns' directory.
+    """Minimal version using MLflow's default local './mlruns' directory.
     We do not use any output/experiment paths from the config.
     """
-
     validate_parallelism(n_jobs_cv=n_jobs_cv, n_jobs_study=n_jobs_study)
     logger.info("Starting rf_optuna_trial with %i trials to run", n_trials)
 
@@ -119,7 +115,7 @@ def rf_optuna_trial(
         cv_obj = TimeSeriesSplit(n_splits=cv_splits)
         scoring = {"rmse": "neg_root_mean_squared_error", "r2": "r2"}
         results = cross_validate(
-            model, X_train, y_train, cv=cv_obj, scoring=scoring, n_jobs=n_jobs_cv
+            model, X_train, y_train, cv=cv_obj, scoring=scoring, n_jobs=n_jobs_cv,
         )
 
         rmse = -np.mean(results["test_rmse"])
@@ -143,7 +139,7 @@ def rf_optuna_trial(
             )
         else:
             logger.info(
-                "Trial %d => RMSE=%.3f R2=%.3f (No best yet)", trial.number, rmse, r2
+                "Trial %d => RMSE=%.3f R2=%.3f (No best yet)", trial.number, rmse, r2,
             )
 
         return rmse
@@ -159,7 +155,7 @@ def rf_optuna_trial(
     logger.info("Training final model on best_params")
     best_params = study.best_params
     final_model = RandomForestRegressor(
-        **best_params, random_state=random_state, n_jobs=n_jobs_final_model
+        **best_params, random_state=random_state, n_jobs=n_jobs_final_model,
     )
     final_model.fit(X_train, y_train)
 
@@ -174,7 +170,7 @@ def rf_optuna_trial(
 
         # Permutation importances
         calculate_and_log_importances_as_artifact(
-            permutation_importances_filename, final_model, X_train, y_train
+            permutation_importances_filename, final_model, X_train, y_train,
         )
 
         # RandomForest importances
@@ -185,15 +181,15 @@ def rf_optuna_trial(
             mlflow.log_metric(f"rf_importance_{feat}", rf_import[feat])
 
         pd.DataFrame(
-            [{"feature": f, "importance": rf_import[f]} for f in sorted_rf]
+            [{"feature": f, "importance": rf_import[f]} for f in sorted_rf],
         ).to_csv(randomforest_importances_filename, index=False)
         mlflow.log_artifact(
-            randomforest_importances_filename, artifact_path="importances"
+            randomforest_importances_filename, artifact_path="importances",
         )
         if os.path.exists(randomforest_importances_filename):
             os.remove(randomforest_importances_filename)
             logger.info(
-                "Removed %s project root directory", randomforest_importances_filename
+                "Removed %s project root directory", randomforest_importances_filename,
             )
 
     logger.info("Done with rf_optuna_trial. All outputs in ./mlruns/")

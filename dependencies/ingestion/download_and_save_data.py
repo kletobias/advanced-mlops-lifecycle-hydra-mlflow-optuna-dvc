@@ -1,14 +1,13 @@
-from dataclasses import dataclass
+import glob
 import logging
+import os
 import subprocess
+from dataclasses import dataclass
 from typing import NoReturn
 
 from dependencies.general.mkdir_if_not_exists import mkdir_
-from dependencies.config_schemas.RootConfig import RootConfig
-from dependencies.metadata.calculate_metadata import calculate_and_save_metadata
 from dependencies.io.csv_to_dataframe import csv_to_dataframe
-import glob
-import os
+from dependencies.metadata.calculate_metadata import calculate_and_save_metadata
 
 logger = logging.getLogger(__name__)
 
@@ -35,13 +34,11 @@ def download_and_save_data(
     low_memory: bool,
     output_metadata_file_path: str,
 ) -> NoReturn:
-    """
-    Downloads a dataset from Kaggle, extracts it, and renames the CSV file if needed.
-    """
+    """Downloads a dataset from Kaggle, extracts it, and renames the CSV file if needed."""
     mkdir_(target_dir)
     try:
         subprocess.run(
-            ["kaggle", "datasets", "download", dataset, "-p", target_dir], check=True
+            ["kaggle", "datasets", "download", dataset, "-p", target_dir], check=True,
         )
         logger.info("Successfully downloaded and saved the dataset.")
     except subprocess.CalledProcessError as e:
