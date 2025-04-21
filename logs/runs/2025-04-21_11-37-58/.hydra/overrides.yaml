@@ -1,0 +1,4 @@
+- setup.script_base_name=drop_non_lag_columns
+- transformations=drop_non_lag_columns
+- data_versions.data_version_input=v12
+- data_versions.data_version_output=v13

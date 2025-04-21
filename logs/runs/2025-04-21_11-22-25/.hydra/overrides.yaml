@@ -1,0 +1,4 @@
+- setup.script_base_name=agg_severities
+- transformations=agg_severities
+- data_versions.data_version_input=v7
+- data_versions.data_version_output=v8

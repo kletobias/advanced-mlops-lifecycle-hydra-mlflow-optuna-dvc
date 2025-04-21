@@ -1,0 +1,4 @@
+- setup.script_base_name=total_mean_cost
+- transformations=total_mean_cost
+- data_versions.data_version_input=v5_2
+- data_versions.data_version_output=v6

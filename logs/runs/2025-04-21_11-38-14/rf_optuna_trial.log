@@ -1,0 +1,12 @@
+[2025-04-21 11:38:14,987][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:38:16,372][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v13/v13.csv, created df
+[2025-04-21 11:38:16,375][dependencies.modeling.rf_optuna_trial][INFO] - Starting rf_optuna_trial with 2 trials to run
+[2025-04-21 11:38:16,384][dependencies.modeling.rf_optuna_trial][INFO] - MLflow experiment set to 'rf_optuna_trial_2025-04-21_11-38-14'
+[2025-04-21 12:06:57,942][dependencies.modeling.rf_optuna_trial][INFO] - Trial 1 => RMSE=706761.206 R2=0.869 (No best yet)
+[2025-04-21 12:20:47,798][dependencies.modeling.rf_optuna_trial][INFO] - Trial 0 => RMSE=742997.569 R2=0.856 (Best so far=706761.206)
+[2025-04-21 12:20:47,798][dependencies.modeling.rf_optuna_trial][INFO] - Training final model on best_params
+[2025-04-21 12:42:33,277][dependencies.logging_utils.calculate_and_log_importances_as_artifact][INFO] - Removed permutation_importances.csv project root directory
+[2025-04-21 12:42:33,306][dependencies.modeling.rf_optuna_trial][INFO] - Removed randomforest_importances.csv project root directory
+[2025-04-21 12:42:33,307][dependencies.modeling.rf_optuna_trial][INFO] - Done with rf_optuna_trial. All outputs in ./mlruns/
+[2025-04-21 12:42:33,312][__main__][INFO] - Sucessfully executed step: rf_optuna_trial

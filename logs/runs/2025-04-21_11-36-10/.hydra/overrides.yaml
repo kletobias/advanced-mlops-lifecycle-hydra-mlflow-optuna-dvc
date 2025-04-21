@@ -1,0 +1,4 @@
+- setup.script_base_name=yearly_discharge_bin
+- transformations=yearly_discharge_bin
+- data_versions.data_version_input=v9
+- data_versions.data_version_output=v10

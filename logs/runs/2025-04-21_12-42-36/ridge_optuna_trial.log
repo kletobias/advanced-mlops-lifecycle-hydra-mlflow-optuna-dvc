@@ -1,0 +1,19 @@
+[2025-04-21 12:42:36,611][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 12:42:38,077][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v13/v13.csv, created df
+[2025-04-21 12:42:38,079][dependencies.modeling.ridge_optuna_trial][INFO] - Starting ridge_optuna_trial with 10 trials to run
+[2025-04-21 12:42:38,088][dependencies.modeling.ridge_optuna_trial][INFO] - MLflow experiment set to 'rf_optuna_trial_2025-04-21_12-42-36'
+[2025-04-21 12:42:38,679][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 3 => RMSE=625414.556 R2=0.894 (No best yet)
+[2025-04-21 12:42:38,689][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 0 => RMSE=618459.228 R2=0.897 (Best so far=618459.228)
+[2025-04-21 12:42:39,101][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 1 => RMSE=631517.005 R2=0.890 (Best so far=618459.228)
+[2025-04-21 12:42:39,513][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 4 => RMSE=634187.007 R2=0.888 (Best so far=618459.228)
+[2025-04-21 12:42:40,165][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 5 => RMSE=634187.007 R2=0.888 (Best so far=618459.228)
+[2025-04-21 12:42:40,673][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 7 => RMSE=634197.439 R2=0.888 (Best so far=618459.228)
+[2025-04-21 12:42:40,898][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 8 => RMSE=634187.007 R2=0.888 (Best so far=618459.228)
+[2025-04-21 12:42:55,170][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 6 => RMSE=619526.916 R2=0.896 (Best so far=618459.228)
+[2025-04-21 12:43:26,489][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 2 => RMSE=620402.377 R2=0.896 (Best so far=618459.228)
+[2025-04-21 12:45:26,982][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 9 => RMSE=624394.332 R2=0.894 (Best so far=618459.228)
+[2025-04-21 12:45:26,983][dependencies.modeling.ridge_optuna_trial][INFO] - Training final ridge model on best_params
+[2025-04-21 12:45:33,080][dependencies.logging_utils.calculate_and_log_importances_as_artifact][INFO] - Removed permutation_importances.csv project root directory
+[2025-04-21 12:45:33,082][dependencies.modeling.ridge_optuna_trial][INFO] - Done with ridge_optuna_trial. All outputs in ./mlruns/
+[2025-04-21 12:45:33,087][__main__][INFO] - Sucessfully executed step: ridge_optuna_trial

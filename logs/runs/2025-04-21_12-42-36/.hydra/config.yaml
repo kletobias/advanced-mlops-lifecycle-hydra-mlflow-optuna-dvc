@@ -1,0 +1,449 @@
+paths:
+  directories:
+    project_root: ${oc.env:PROJECT_ROOT}
+    bin: ${.project_root}/bin
+    configs: ${.project_root}/configs
+    data: ${.project_root}/data
+    dependencies: ${.project_root}/dependencies
+    documentation: ${.project_root}/documentation
+    logs: ${.project_root}/logs
+    outputs: ${.project_root}/outputs
+    scripts: ${.project_root}/scripts
+    templates: ${.project_root}/templates
+    mlruns: ${.project_root}/mlruns
+setup:
+  script_base_name: ridge_optuna_trial
+project_sections:
+  id: 3
+  name: data_transformation_and_feature_engineering
+  alias: transformation
+data_versions:
+  name: hospital_inpatient_cost_data_by_new_york_state
+  data_version_input: v13
+  data_version_output: v13
+  description: 'dataset name: `hospital_inpatient_cost_data_by_new_york_state`
+
+    Original, unmodified data, as downloaded from kaggle.
+
+    See ''dataset_url'' for further information.
+
+    '
+  dataset_url: https://www.kaggle.com/datasets/thedevastator/2010-new-york-state-hospital-inpatient-discharge
+data_storage:
+  input_file_path_csv: ${paths.directories.data}/${data_versions.data_version_input}/${data_versions.data_version_input}.csv
+  input_file_path_json: ${paths.directories.data}/${data_versions.data_version_input}/${data_versions.data_version_input}.json
+  input_file_path_db: ${paths.directories.data}/${data_versions.data_version_input}/${data_versions.data_version_input}.db
+  input_metadata_file_path: ${paths.directories.data}/${data_versions.data_version_input}/${data_versions.data_version_input}_metadata.json
+  output_file_path_csv: ${paths.directories.data}/${data_versions.data_version_output}/${data_versions.data_version_output}.csv
+  output_file_path_json: ${paths.directories.data}/${data_versions.data_version_output}/${data_versions.data_version_output}.json
+  output_file_path_db: ${paths.directories.data}/${data_versions.data_version_output}/${data_versions.data_version_output}.db
+  output_metadata_file_path: ${paths.directories.data}/${data_versions.data_version_output}/${data_versions.data_version_output}_metadata.json
+remote_storage:
+  s3_bucket:
+    bucket_name: nyproject25
+    prefix: ''
+    remote_uri: s3://${.bucket_name}/${.prefix}
+utility_functions:
+  csv_to_dataframe:
+    csv_file_path: ${data_storage.input_file_path_csv}
+    low_memory: false
+  dataframe_to_csv:
+    output_file_path_csv: ${data_storage.output_file_path_csv}
+    include_index: false
+  calculate_and_save_metadata:
+    data_file_path: ${data_storage.output_file_path_csv}
+    output_metadata_file_path: ${data_storage.output_metadata_file_path}
+logging_utils:
+  log_directory_path: ${paths.directories.logs}/pipeline
+  log_file_path: ${.log_directory_path}/${now:%Y-%m-%d_%H-%M-%S}.log
+  formatter: '%(asctime)s %(levelname)s:%(message)s'
+  level: 20
+  log_cfg_job:
+    log_for_each_step: false
+    output_cfg_job_directory_path: ${hydra.run.dir}
+    output_cfg_job_file_path: ${hydra.run.dir}/cfg_job_${hydra.job.name}.yaml
+    resolve: true
+io_policy:
+  READ_INPUT: true
+  WRITE_OUTPUT: false
+model_params:
+  hyperparameters:
+    alpha:
+      tune: true
+      type: float
+      low: 1.0e-05
+      high: 1000.0
+      step: null
+      log: true
+    solver:
+      tune: true
+      type: categorical
+      values:
+      - auto
+      - svd
+      - cholesky
+      - lsqr
+      - sag
+      - saga
+      step: null
+    tol:
+      tune: true
+      type: float
+      low: 1.0e-06
+      high: 0.01
+      step: null
+      log: true
+    max_iter:
+      tune: true
+      type: int
+      low: 100
+      high: 2000
+      step: 100
+ml_experiments:
+  rng_seed: ${rng_seed}
+  n_jobs_study: 1
+  n_jobs_cv: -1
+  n_jobs_final_model: -1
+  target_col_modeling: w_total_median_profit
+  year_col: year
+  train_range:
+  - 2010
+  - 2014
+  val_range:
+  - 2015
+  - 2015
+  test_range:
+  - 2016
+  - 2017
+  experiment_prefix: rf_optuna_trial
+  experiment_id: ${.experiment_prefix}_${now:%Y-%m-%d_%H-%M-%S}
+  artifact_directory_path: artifacts
+  permutation_importances_filename: permutation_importances.csv
+  randomforest_importances_filename: randomforest_importances.csv
+  top_n_importances: 10
+  optuna_n_trials: 5
+  cv_splits: 4
+  direction: minimize
+  scoring:
+    rmse: neg_root_mean_squared_error
+    r2: r2
+transformations:
+  RETURNS: null
+  model_params:
+    hyperparameters:
+      alpha:
+        tune: true
+        type: float
+        low: 1.0e-05
+        high: 1000.0
+        step: null
+        log: true
+      solver:
+        tune: true
+        type: categorical
+        values:
+        - auto
+        - svd
+        - cholesky
+        - lsqr
+        - sag
+        - saga
+        step: null
+      tol:
+        tune: true
+        type: float
+        low: 1.0e-06
+        high: 0.01
+        step: null
+        log: true
+      max_iter:
+        tune: true
+        type: int
+        low: 100
+        high: 2000
+        step: 100
+  ridge_optuna_trial:
+    target_col: ${ml_experiments.target_col_modeling}
+    year_col: ${ml_experiments.year_col}
+    train_range: ${ml_experiments.train_range}
+    val_range: ${ml_experiments.val_range}
+    test_range: ${ml_experiments.test_range}
+    experiment_name: ${ml_experiments.experiment_prefix}_${now:%Y-%m-%d_%H-%M-%S}
+    cv_splits: ${ml_experiments.cv_splits}
+    n_trials: 10
+    top_n_importances: ${ml_experiments.top_n_importances}
+    permutation_importances_filename: ${ml_experiments.permutation_importances_filename}
+    hyperparameters: ${model_params.hyperparameters}
+    n_jobs_study: 5
+    n_jobs_cv: 1
+    random_state: ${ml_experiments.rng_seed}
+pipeline:
+  stages:
+  - name: v0_download_and_save_data
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=download_and_save_data transformations=download_and_save_data
+      io_policy.READ_INPUT=False
+    desc: ${dvc_default_desc}
+    frozen: true
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/download_and_save_data.yaml
+    - ./dependencies/ingestion/download_and_save_data.py
+    - ./configs/data_versions/v0.yaml
+    outs:
+    - ./data/v0/v0.csv
+    - ./data/v0/v0_metadata.json
+  - name: v0_sanitize_column_names
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=sanitize_column_names transformations=sanitize_column_names
+      data_versions.data_version_output=v1
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/sanitize_column_names.yaml
+    - ./dependencies/cleaning/sanitize_column_names.py
+    - ./configs/data_versions/v0.yaml
+    outs:
+    - ./data/v1/v1.csv
+    - ./data/v1/v1_metadata.json
+  - name: v1_drop_description_columns
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=drop_description_columns transformations=drop_description_columns
+      data_versions.data_version_input=v1 data_versions.data_version_output=v2
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/drop_description_columns.yaml
+    - ./dependencies/transformations/drop_description_columns.py
+    - ./configs/data_versions/v1.yaml
+    outs:
+    - ./data/v2/v2.csv
+    - ./data/v2/v2_metadata.json
+  - name: v2_median_profit
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=median_profit transformations=median_profit
+      data_versions.data_version_input=v2 data_versions.data_version_output=v3
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/median_profit.yaml
+    - ./dependencies/transformations/median_profit.py
+    - ./configs/data_versions/v2.yaml
+    outs:
+    - ./data/v3/v3.csv
+    - ./data/v3/v3_metadata.json
+  - name: v3_mean_profit
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3
+      data_versions.data_version_output=v4
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/mean_profit.yaml
+    - ./dependencies/transformations/mean_profit.py
+    - ./configs/data_versions/v3.yaml
+    outs:
+    - ./data/v4/v4.csv
+    - ./data/v4/v4_metadata.json
+  - name: v4_total_mean_profit
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=total_mean_profit transformations=total_mean_profit
+      data_versions.data_version_input=v4 data_versions.data_version_output=v5
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/total_mean_profit.yaml
+    - ./dependencies/transformations/total_mean_profit.py
+    - ./configs/data_versions/v4.yaml
+    outs:
+    - ./data/v5/v5.csv
+    - ./data/v5/v5_metadata.json
+  - name: v5_total_median_profit
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=total_median_profit transformations=total_median_profit
+      data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/total_median_profit.yaml
+    - ./dependencies/transformations/total_median_profit.py
+    - ./configs/data_versions/v5.yaml
+    outs:
+    - ./data/v5_1/v5_1.csv
+    - ./data/v5_1/v5_1_metadata.json
+  - name: v5_1_total_median_cost
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=total_median_cost transformations=total_median_cost
+      data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/total_median_cost.yaml
+    - ./dependencies/transformations/total_median_cost.py
+    - ./configs/data_versions/v5.yaml
+    outs:
+    - ./data/v5_2/v5_2.csv
+    - ./data/v5_2/v5_2_metadata.json
+  - name: v5_2_total_mean_cost
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=total_mean_cost transformations=total_mean_cost
+      data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/total_mean_cost.yaml
+    - ./dependencies/transformations/total_mean_cost.py
+    - ./configs/data_versions/v5_2.yaml
+    outs:
+    - ./data/v6/v6.csv
+    - ./data/v6/v6_metadata.json
+  - name: v6_drop_rare_drgs
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs
+      data_versions.data_version_input=v6 data_versions.data_version_output=v7
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/drop_rare_drgs.yaml
+    - ./dependencies/transformations/drop_rare_drgs.py
+    - ./configs/data_versions/v6.yaml
+    outs:
+    - ./data/v7/v7.csv
+    - ./data/v7/v7_metadata.json
+  - name: v7_agg_severities
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=agg_severities transformations=agg_severities
+      data_versions.data_version_input=v7 data_versions.data_version_output=v8
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/agg_severities.yaml
+    - ./dependencies/transformations/agg_severities.py
+    - ./configs/data_versions/v7.yaml
+    outs:
+    - ./data/v8/v8.csv
+    - ./data/v8/v8_metadata.json
+  - name: v8_ratio_drg_facility_vs_year
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year
+      data_versions.data_version_input=v8 data_versions.data_version_output=v9
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/ratio_drg_facility_vs_year.yaml
+    - ./dependencies/transformations/ratio_drg_facility_vs_year.py
+    - ./configs/data_versions/v8.yaml
+    outs:
+    - ./data/v9/v9.csv
+    - ./data/v9/v9_metadata.json
+  - name: v9_yearly_discharge_bin
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin
+      data_versions.data_version_input=v9 data_versions.data_version_output=v10
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/yearly_discharge_bin.yaml
+    - ./dependencies/transformations/yearly_discharge_bin.py
+    - ./configs/data_versions/v9.yaml
+    outs:
+    - ./data/v10/v10.csv
+    - ./data/v10/v10_metadata.json
+  - name: v10_lag_columns
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10
+      data_versions.data_version_output=v11
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/lag_columns.yaml
+    - ./dependencies/transformations/lag_columns.py
+    - ./configs/data_versions/v10.yaml
+    outs:
+    - ./data/v11/v11.csv
+    - ./data/v11/v11_metadata.json
+  - name: v11_rolling_columns
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=rolling_columns transformations=rolling_columns
+      data_versions.data_version_input=v11 data_versions.data_version_output=v12
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/rolling_columns.yaml
+    - ./dependencies/transformations/rolling_columns.py
+    - ./configs/data_versions/v11.yaml
+    outs:
+    - ./data/v12/v12.csv
+    - ./data/v12/v12_metadata.json
+  - name: v12_drop_non_lag_columns
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns
+      data_versions.data_version_input=v12 data_versions.data_version_output=v13
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/drop_non_lag_columns.yaml
+    - ./dependencies/transformations/drop_non_lag_columns.py
+    - ./configs/data_versions/v12.yaml
+    outs:
+    - ./data/v13/v13.csv
+    - ./data/v13/v13_metadata.json
+  - name: v13_rf_optuna_trial
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial
+      data_versions.data_version_input=v13 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/rf_optuna_trial.yaml
+    - ./dependencies/modeling/rf_optuna_trial.py
+    - ./configs/data_versions/v13.yaml
+    outs: []
+  - name: v13_ridge_optuna_trial
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=ridge_optuna_trial transformations=ridge_optuna_trial
+      data_versions.data_version_input=v13 data_versions.data_version_output=v13 io_policy.WRITE_OUTPUT=false
+      model_params=ridge_optuna_trial_params
+    desc: ${dvc_default_desc}
+    deps:
+    - ${universal_step_script}
+    - ./configs/transformations/ridge_optuna_trial.yaml
+    - ./dependencies/modeling/ridge_optuna_trial.py
+    - ./configs/data_versions/v13.yaml
+    outs: []
+  plots:
+  - mlruns/267770527945916909/c0265242dba948829ad10cae3c7e55d8/artifacts/importances/permutation_importances.csv:
+      template: bar_horizontal_sorted
+      x: importances
+      'y': feature
+  stages_to_run: []
+  force_run: false
+  pipeline_run: false
+  allow_dvc_changes: true
+  skip_generation: false
+  search_path: ${paths.directories.templates}/dvc
+  template_name: generate_dvc.yaml.j2
+  dvc_yaml_file_path: ${paths.directories.project_root}/dvc.yaml
+  log_file_path: ${logging_utils.log_file_path}
+cmd_python: $CMD_PYTHON
+universal_step_script: scripts/universal_step.py
+dvc_default_desc: Refer to deps/outs for details.
+rng_seed: 42

@@ -1,0 +1,4 @@
+- setup.script_base_name=drop_description_columns
+- transformations=drop_description_columns
+- data_versions.data_version_input=v1
+- data_versions.data_version_output=v2

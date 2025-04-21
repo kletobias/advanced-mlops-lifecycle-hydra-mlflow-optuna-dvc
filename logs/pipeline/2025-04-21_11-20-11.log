@@ -1,0 +1,323 @@
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline/2025-04-21_11-20-11.log
+WARNING: stage: 'v0_download_and_save_data' is frozen. Its dependencies are not going to be reproduced.
+Verifying outputs in frozen stage: 'v0_download_and_save_data'
+Updating lock file 'dvc.lock'
+
+Running stage 'v0_sanitize_column_names':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1
+[2025-04-21 11:20:15,190][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:20:16,110][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v0/v0.csv, created df
+[2025-04-21 11:20:16,110][dependencies.cleaning.sanitize_column_names][INFO] - Column names sanitized
+[2025-04-21 11:20:16,111][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v1
+[2025-04-21 11:20:20,403][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v1/v1.csv
+[2025-04-21 11:20:25,007][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 15a50fb860214881660dc9312e2cfcf5681cf196f38bd7ac007228d42030b566
+[2025-04-21 11:20:26,092][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v1/v1.csv
+[2025-04-21 11:20:26,092][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v1/v1_metadata.json
+[2025-04-21 11:20:26,093][__main__][INFO] - Sucessfully executed step: sanitize_column_names
+Updating lock file 'dvc.lock'
+
+Running stage 'v1_drop_description_columns':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2
+[2025-04-21 11:20:28,655][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:20:29,571][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v1/v1.csv, created df
+[2025-04-21 11:20:29,595][dependencies.transformations.drop_description_columns][INFO] - Done with core transformation: drop_description_columns
+[2025-04-21 11:20:29,625][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v2
+[2025-04-21 11:20:33,036][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v2/v2.csv
+[2025-04-21 11:20:36,646][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 36be7b8464a95baef03b734b88e68b6b84e98f4a8be6527e627bb47eacd2054a
+[2025-04-21 11:20:37,166][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v2/v2.csv
+[2025-04-21 11:20:37,167][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v2/v2_metadata.json
+[2025-04-21 11:20:37,167][__main__][INFO] - Sucessfully executed step: drop_description_columns
+Updating lock file 'dvc.lock'
+
+Running stage 'v2_median_profit':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3
+[2025-04-21 11:20:39,571][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:20:40,131][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v2/v2.csv, created df
+[2025-04-21 11:20:40,135][dependencies.transformations.median_profit][INFO] - Done with core transformation: median_profit
+[2025-04-21 11:20:40,136][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3
+[2025-04-21 11:20:44,017][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3/v3.csv
+[2025-04-21 11:20:48,118][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 561645009ed897fc9be67e4e740de4d7fe57a738dc51ce77c59938f7442abd88
+[2025-04-21 11:20:48,649][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3/v3.csv
+[2025-04-21 11:20:48,650][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3/v3_metadata.json
+[2025-04-21 11:20:48,650][__main__][INFO] - Sucessfully executed step: median_profit
+Updating lock file 'dvc.lock'
+
+Running stage 'v3_mean_profit':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4
+[2025-04-21 11:20:51,085][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:20:51,722][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3/v3.csv, created df
+[2025-04-21 11:20:51,725][dependencies.transformations.mean_profit][INFO] - Done with core transformation: mean_profit
+[2025-04-21 11:20:51,726][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v4
+[2025-04-21 11:20:56,230][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v4/v4.csv
+[2025-04-21 11:21:00,978][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: e6052d4b565b98018360c93c0f0b89e1d04795e3945d9c2663270807f07b53a2
+[2025-04-21 11:21:01,562][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v4/v4.csv
+[2025-04-21 11:21:01,563][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v4/v4_metadata.json
+[2025-04-21 11:21:01,563][__main__][INFO] - Sucessfully executed step: mean_profit
+Updating lock file 'dvc.lock'
+
+Running stage 'v4_total_mean_profit':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5
+[2025-04-21 11:21:04,075][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:21:04,793][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v4/v4.csv, created df
+[2025-04-21 11:21:04,796][dependencies.transformations.total_mean_profit][INFO] - Done with core transformation: total_mean_profit
+[2025-04-21 11:21:04,797][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5
+[2025-04-21 11:21:10,209][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5/v5.csv
+[2025-04-21 11:21:15,551][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: fa737cb4f467612932e7cd83556c17c12b7ea9c3d4b210b61854840442bb77f4
+[2025-04-21 11:21:16,164][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5/v5.csv
+[2025-04-21 11:21:16,165][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5/v5_metadata.json
+[2025-04-21 11:21:16,165][__main__][INFO] - Sucessfully executed step: total_mean_profit
+Updating lock file 'dvc.lock'
+
+Running stage 'v5_total_median_profit':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
+[2025-04-21 11:21:18,653][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:21:19,430][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5/v5.csv, created df
+[2025-04-21 11:21:19,434][dependencies.transformations.total_median_profit][INFO] - Done with core transformation: total_median_profit
+[2025-04-21 11:21:19,435][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_1
+[2025-04-21 11:21:25,055][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_1/v5_1.csv
+[2025-04-21 11:21:30,950][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: e8e0f91206c80b5eef7dc329c58ad9f295bc4b23bb137d76b7afcba68cad063f
+[2025-04-21 11:21:31,592][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_1/v5_1.csv
+[2025-04-21 11:21:31,593][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_1/v5_1_metadata.json
+[2025-04-21 11:21:31,593][__main__][INFO] - Sucessfully executed step: total_median_profit
+Updating lock file 'dvc.lock'
+
+Running stage 'v5_1_total_median_cost':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
+[2025-04-21 11:21:34,116][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:21:34,970][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_1/v5_1.csv, created df
+[2025-04-21 11:21:34,974][dependencies.transformations.total_median_cost][INFO] - Done with core transformation: total_median_cost
+[2025-04-21 11:21:34,975][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_2
+[2025-04-21 11:21:41,090][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_2/v5_2.csv
+[2025-04-21 11:21:47,468][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: a815d5b494b48ddb5425f96f5ffadf52f726e148b5970c0ca5548a92ec2b0cd5
+[2025-04-21 11:21:48,135][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_2/v5_2.csv
+[2025-04-21 11:21:48,136][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_2/v5_2_metadata.json
+[2025-04-21 11:21:48,136][__main__][INFO] - Sucessfully executed step: total_median_cost
+Updating lock file 'dvc.lock'
+
+Running stage 'v5_2_total_mean_cost':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
+[2025-04-21 11:21:50,655][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:21:51,588][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v5_2/v5_2.csv, created df
+[2025-04-21 11:21:51,592][dependencies.transformations.total_mean_cost][INFO] - Done with core transformation: total_mean_cost
+[2025-04-21 11:21:51,593][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v6
+[2025-04-21 11:21:58,200][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v6/v6.csv
+[2025-04-21 11:22:05,095][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 444d178166159a4520b7e7f3fdd03dd67cd15fbe383f7664e9bd1dc1c30d18cd
+[2025-04-21 11:22:05,805][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v6/v6.csv
+[2025-04-21 11:22:05,806][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v6/v6_metadata.json
+[2025-04-21 11:22:05,806][__main__][INFO] - Sucessfully executed step: total_mean_cost
+Updating lock file 'dvc.lock'
+
+Running stage 'v6_drop_rare_drgs':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
+[2025-04-21 11:22:08,376][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:22:09,386][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v6/v6.csv, created df
+[2025-04-21 11:22:09,458][dependencies.transformations.drop_rare_drgs][INFO] - Done with core transformation: drop_rare_drgs
+[2025-04-21 11:22:09,465][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v7
+[2025-04-21 11:22:15,801][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v7/v7.csv
+[2025-04-21 11:22:22,466][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 40b1a11bd4f319efde8d6c8bab9fe811aac9eef579f083c8e237c03cc07e5820
+[2025-04-21 11:22:23,142][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v7/v7.csv
+[2025-04-21 11:22:23,143][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v7/v7_metadata.json
+[2025-04-21 11:22:23,143][__main__][INFO] - Sucessfully executed step: drop_rare_drgs
+Updating lock file 'dvc.lock'
+
+Running stage 'v7_agg_severities':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
+[2025-04-21 11:22:25,723][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:22:26,700][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v7/v7.csv, created df
+[2025-04-21 11:35:51,290][dependencies.transformations.agg_severities][INFO] - Done with core transformation: agg_severities
+[2025-04-21 11:35:51,298][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v8
+[2025-04-21 11:35:54,585][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v8/v8.csv
+[2025-04-21 11:35:57,865][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 0cee898257560d8e67d10b502b136054d5340a30fa1836d59e40cc53cbd45144
+[2025-04-21 11:35:58,018][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v8/v8.csv
+[2025-04-21 11:35:58,019][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v8/v8_metadata.json
+[2025-04-21 11:35:58,019][__main__][INFO] - Sucessfully executed step: agg_severities
+Updating lock file 'dvc.lock'
+
+Running stage 'v8_ratio_drg_facility_vs_year':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9
+[2025-04-21 11:36:00,561][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:36:01,043][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v8/v8.csv, created df
+[2025-04-21 11:36:01,065][dependencies.pandas_specific.df_merge][INFO] - Successfully merged df1, and df2 on: year, how: left
+[2025-04-21 11:36:01,068][dependencies.pandas_specific.df_merge][INFO] - Successfully merged df1, and df2 on: ['year', 'facility_id'], how: left
+[2025-04-21 11:36:01,094][dependencies.transformations.ratio_drg_facility_vs_year][INFO] - Done with core transformation: ratio_drg_facility_vs_year
+[2025-04-21 11:36:01,096][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v9
+[2025-04-21 11:36:04,540][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v9/v9.csv
+[2025-04-21 11:36:08,132][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 4be093c9d4efa865d712d38d289b8c6c17cd44f26bc57b345c36a85cc5806de7
+[2025-04-21 11:36:08,270][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v9/v9.csv
+[2025-04-21 11:36:08,271][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v9/v9_metadata.json
+[2025-04-21 11:36:08,271][__main__][INFO] - Sucessfully executed step: ratio_drg_facility_vs_year
+Updating lock file 'dvc.lock'
+
+Running stage 'v9_yearly_discharge_bin':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
+[2025-04-21 11:36:10,730][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:36:11,230][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v9/v9.csv, created df
+[2025-04-21 11:36:11,247][dependencies.transformations.yearly_discharge_bin][INFO] - Done with core transformation: yearly_discharge_bin
+[2025-04-21 11:36:11,248][dependencies.pandas_specific.df_merge][INFO] - Successfully merged df1, and df2 on: ['year', 'facility_id'], how: left
+[2025-04-21 11:36:11,269][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v10
+[2025-04-21 11:36:14,698][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v10/v10.csv
+[2025-04-21 11:36:18,238][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 37bae522b643b14e65b5764f928d127911eb5d6f8d1935742b396088cc067a44
+[2025-04-21 11:36:18,371][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v10/v10.csv
+[2025-04-21 11:36:18,372][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v10/v10_metadata.json
+[2025-04-21 11:36:18,372][__main__][INFO] - Sucessfully executed step: yearly_discharge_bin
+Updating lock file 'dvc.lock'
+
+Running stage 'v10_lag_columns':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
+[2025-04-21 11:36:20,790][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:36:21,364][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v10/v10.csv, created df
+[2025-04-21 11:36:21,535][dependencies.transformations.lag_columns][INFO] - Done with core transformation: lag_columns
+[2025-04-21 11:36:21,537][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v11
+[2025-04-21 11:36:27,795][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v11/v11.csv
+[2025-04-21 11:36:34,217][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 85b89b3126ee6cfa18ad5fc716081f6baad1a3abf3470cd505ff588309c1c30e
+[2025-04-21 11:36:34,456][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v11/v11.csv
+[2025-04-21 11:36:34,457][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v11/v11_metadata.json
+[2025-04-21 11:36:34,457][__main__][INFO] - Sucessfully executed step: lag_columns
+Updating lock file 'dvc.lock'
+
+Running stage 'v11_rolling_columns':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
+[2025-04-21 11:36:36,957][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:36:38,450][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v11/v11.csv, created df
+[2025-04-21 11:37:38,339][dependencies.transformations.rolling_columns][INFO] - Done with core transformation: rolling_columns
+[2025-04-21 11:37:38,342][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12
+[2025-04-21 11:37:46,736][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12/v12.csv
+[2025-04-21 11:37:55,490][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 2dde80f76d1b672bd6d8e443b9bd8d72b5c7c36ab75af47044e51a1b08e6bd3d
+[2025-04-21 11:37:55,807][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12/v12.csv
+[2025-04-21 11:37:55,809][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12/v12_metadata.json
+[2025-04-21 11:37:55,809][__main__][INFO] - Sucessfully executed step: rolling_columns
+Updating lock file 'dvc.lock'
+
+Running stage 'v12_drop_non_lag_columns':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
+[2025-04-21 11:37:58,397][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:38:00,593][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12/v12.csv, created df
+[2025-04-21 11:38:00,606][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v13
+[2025-04-21 11:38:06,349][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v13/v13.csv
+[2025-04-21 11:38:12,248][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 2f92cfb558ccda998478ee1c80f149402d9c01c40bd700eac82638bf2d53f0cc
+[2025-04-21 11:38:12,487][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v13/v13.csv
+[2025-04-21 11:38:12,488][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v13/v13_metadata.json
+[2025-04-21 11:38:12,488][__main__][INFO] - Sucessfully executed step: drop_non_lag_columns
+Updating lock file 'dvc.lock'
+
+Running stage 'v13_rf_optuna_trial':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v13 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params
+[2025-04-21 11:38:14,987][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:38:16,372][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v13/v13.csv, created df
+[2025-04-21 11:38:16,375][dependencies.modeling.rf_optuna_trial][INFO] - Starting rf_optuna_trial with 2 trials to run
+[2025-04-21 11:38:16,384][dependencies.modeling.rf_optuna_trial][INFO] - MLflow experiment set to 'rf_optuna_trial_2025-04-21_11-38-14'
+[I 2025-04-21 11:38:16,412] A new study created in memory with name: no-name-a89091e9-5451-4240-8348-b65fc342f492
+[2025-04-21 12:06:57,942][dependencies.modeling.rf_optuna_trial][INFO] - Trial 1 => RMSE=706761.206 R2=0.869 (No best yet)
+[I 2025-04-21 12:06:57,942] Trial 1 finished with value: 706761.20629484 and parameters: {'n_estimators': 837, 'max_depth': 5, 'min_samples_split': 6, 'max_features': 0.5570168026438108}. Best is trial 1 with value: 706761.20629484.
+[2025-04-21 12:20:47,798][dependencies.modeling.rf_optuna_trial][INFO] - Trial 0 => RMSE=742997.569 R2=0.856 (Best so far=706761.206)
+[I 2025-04-21 12:20:47,798] Trial 0 finished with value: 742997.5694521867 and parameters: {'n_estimators': 819, 'max_depth': 10, 'min_samples_split': 42, 'max_features': 0.44529056490039093}. Best is trial 1 with value: 706761.20629484.
+[2025-04-21 12:20:47,798][dependencies.modeling.rf_optuna_trial][INFO] - Training final model on best_params
+[31m2025/04/21 12:35:36 WARNING mlflow.models.model: Model logged without a signature and input example. Please set `input_example` parameter when logging the model to auto infer the model signature.[0m
+[2025-04-21 12:42:33,277][dependencies.logging_utils.calculate_and_log_importances_as_artifact][INFO] - Removed permutation_importances.csv project root directory
+[2025-04-21 12:42:33,306][dependencies.modeling.rf_optuna_trial][INFO] - Removed randomforest_importances.csv project root directory
+[2025-04-21 12:42:33,307][dependencies.modeling.rf_optuna_trial][INFO] - Done with rf_optuna_trial. All outputs in ./mlruns/
+[2025-04-21 12:42:33,312][__main__][INFO] - Sucessfully executed step: rf_optuna_trial
+Updating lock file 'dvc.lock'
+
+Running stage 'v13_ridge_optuna_trial':
+> $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ridge_optuna_trial transformations=ridge_optuna_trial data_versions.data_version_input=v13 data_versions.data_version_output=v13 io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
+[2025-04-21 12:42:36,611][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 12:42:38,077][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v13/v13.csv, created df
+[2025-04-21 12:42:38,079][dependencies.modeling.ridge_optuna_trial][INFO] - Starting ridge_optuna_trial with 10 trials to run
+[2025-04-21 12:42:38,088][dependencies.modeling.ridge_optuna_trial][INFO] - MLflow experiment set to 'rf_optuna_trial_2025-04-21_12-42-36'
+[I 2025-04-21 12:42:38,124] A new study created in memory with name: no-name-d359d33c-a7d8-4a4c-94ff-e70050d08ca0
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/dependencies/modeling/optuna_random_search_util.py:32: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+  final_params[param_name] = trial.suggest_int(
+[2025-04-21 12:42:38,679][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 3 => RMSE=625414.556 R2=0.894 (No best yet)
+[I 2025-04-21 12:42:38,680] Trial 3 finished with value: 625414.5559284231 and parameters: {'alpha': 2.1489843326335256, 'solver': 'lsqr', 'tol': 0.00038115104605408414, 'max_iter': 1500}. Best is trial 3 with value: 625414.5559284231.
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/dependencies/modeling/optuna_random_search_util.py:32: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+  final_params[param_name] = trial.suggest_int(
+[2025-04-21 12:42:38,689][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 0 => RMSE=618459.228 R2=0.897 (Best so far=618459.228)
+[I 2025-04-21 12:42:38,690] Trial 0 finished with value: 618459.2275426085 and parameters: {'alpha': 0.0005038690611600913, 'solver': 'lsqr', 'tol': 0.004038164399846396, 'max_iter': 1200}. Best is trial 0 with value: 618459.2275426085.
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/dependencies/modeling/optuna_random_search_util.py:32: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+  final_params[param_name] = trial.suggest_int(
+[2025-04-21 12:42:39,101][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 1 => RMSE=631517.005 R2=0.890 (Best so far=618459.228)
+[I 2025-04-21 12:42:39,101] Trial 1 finished with value: 631517.0051356988 and parameters: {'alpha': 0.4023479079309944, 'solver': 'lsqr', 'tol': 1.6264091504457227e-06, 'max_iter': 1000}. Best is trial 0 with value: 618459.2275426085.
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/dependencies/modeling/optuna_random_search_util.py:32: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+  final_params[param_name] = trial.suggest_int(
+[2025-04-21 12:42:39,513][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 4 => RMSE=634187.007 R2=0.888 (Best so far=618459.228)
+[I 2025-04-21 12:42:39,513] Trial 4 finished with value: 634187.0066687429 and parameters: {'alpha': 0.00012488457360744094, 'solver': 'svd', 'tol': 2.380950519209193e-06, 'max_iter': 1300}. Best is trial 0 with value: 618459.2275426085.
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/dependencies/modeling/optuna_random_search_util.py:32: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+  final_params[param_name] = trial.suggest_int(
+[2025-04-21 12:42:40,165][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 5 => RMSE=634187.007 R2=0.888 (Best so far=618459.228)
+[I 2025-04-21 12:42:40,166] Trial 5 finished with value: 634187.0071069715 and parameters: {'alpha': 0.005578185279858095, 'solver': 'svd', 'tol': 4.9088302064991924e-05, 'max_iter': 1300}. Best is trial 0 with value: 618459.2275426085.
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/dependencies/modeling/optuna_random_search_util.py:32: FutureWarning: suggest_int() got {'step'} as positional arguments but they were expected to be given as keyword arguments.
+  final_params[param_name] = trial.suggest_int(
+[2025-04-21 12:42:40,673][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 7 => RMSE=634197.439 R2=0.888 (Best so far=618459.228)
+[I 2025-04-21 12:42:40,674] Trial 7 finished with value: 634197.4388922604 and parameters: {'alpha': 260.24929166706886, 'solver': 'svd', 'tol': 0.0008896368656492155, 'max_iter': 1000}. Best is trial 0 with value: 618459.2275426085.
+[2025-04-21 12:42:40,898][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 8 => RMSE=634187.007 R2=0.888 (Best so far=618459.228)
+[I 2025-04-21 12:42:40,898] Trial 8 finished with value: 634187.0066605373 and parameters: {'alpha': 1.6489177217634967e-05, 'solver': 'cholesky', 'tol': 0.0011818937216862696, 'max_iter': 800}. Best is trial 0 with value: 618459.2275426085.
+/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+[2025-04-21 12:42:55,170][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 6 => RMSE=619526.916 R2=0.896 (Best so far=618459.228)
+[I 2025-04-21 12:42:55,170] Trial 6 finished with value: 619526.9157621881 and parameters: {'alpha': 0.2319034654986825, 'solver': 'saga', 'tol': 0.002985605831864511, 'max_iter': 1100}. Best is trial 0 with value: 618459.2275426085.
+/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+[2025-04-21 12:43:26,489][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 2 => RMSE=620402.377 R2=0.896 (Best so far=618459.228)
+[I 2025-04-21 12:43:26,490] Trial 2 finished with value: 620402.3771385751 and parameters: {'alpha': 1.1361571022638845e-05, 'solver': 'saga', 'tol': 3.0994462358105034e-06, 'max_iter': 300}. Best is trial 0 with value: 618459.2275426085.
+/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+/Users/tobias/.local/share/mamba/envs/ny/lib/python3.12/site-packages/sklearn/linear_model/_sag.py:348: ConvergenceWarning: The max_iter was reached which means the coef_ did not converge
+  warnings.warn(
+[2025-04-21 12:45:26,982][dependencies.modeling.ridge_optuna_trial][INFO] - Trial 9 => RMSE=624394.332 R2=0.894 (Best so far=618459.228)
+[I 2025-04-21 12:45:26,983] Trial 9 finished with value: 624394.3318316222 and parameters: {'alpha': 0.0053639806065548055, 'solver': 'sag', 'tol': 2.1164461424010853e-05, 'max_iter': 1200}. Best is trial 0 with value: 618459.2275426085.
+[2025-04-21 12:45:26,983][dependencies.modeling.ridge_optuna_trial][INFO] - Training final ridge model on best_params
+[31m2025/04/21 12:45:30 WARNING mlflow.models.model: Model logged without a signature and input example. Please set `input_example` parameter when logging the model to auto infer the model signature.[0m
+[2025-04-21 12:45:33,080][dependencies.logging_utils.calculate_and_log_importances_as_artifact][INFO] - Removed permutation_importances.csv project root directory
+[2025-04-21 12:45:33,082][dependencies.modeling.ridge_optuna_trial][INFO] - Done with ridge_optuna_trial. All outputs in ./mlruns/
+[2025-04-21 12:45:33,087][__main__][INFO] - Sucessfully executed step: ridge_optuna_trial
+Updating lock file 'dvc.lock'
+
+To track the changes with git, run:
+
+	git add dvc.lock
+
+To enable auto staging, run:
+
+	dvc config core.autostage true
+Use `dvc push` to send your updates to remote storage.

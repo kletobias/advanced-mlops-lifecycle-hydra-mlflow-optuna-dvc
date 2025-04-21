@@ -1,0 +1,11 @@
+[2025-04-21 11:20:39,571][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:20:40,131][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v2/v2.csv, created df
+[2025-04-21 11:20:40,135][dependencies.transformations.median_profit][INFO] - Done with core transformation: median_profit
+[2025-04-21 11:20:40,136][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3
+[2025-04-21 11:20:44,017][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3/v3.csv
+[2025-04-21 11:20:48,118][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 561645009ed897fc9be67e4e740de4d7fe57a738dc51ce77c59938f7442abd88
+[2025-04-21 11:20:48,649][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3/v3.csv
+[2025-04-21 11:20:48,650][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v3/v3_metadata.json
+[2025-04-21 11:20:48,650][__main__][INFO] - Sucessfully executed step: median_profit
