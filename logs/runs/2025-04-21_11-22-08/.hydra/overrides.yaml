@@ -1,0 +1,4 @@
+- setup.script_base_name=drop_rare_drgs
+- transformations=drop_rare_drgs
+- data_versions.data_version_input=v6
+- data_versions.data_version_output=v7

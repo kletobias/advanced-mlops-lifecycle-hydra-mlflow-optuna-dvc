@@ -1,0 +1,11 @@
+[2025-04-21 11:36:36,957][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/logs/pipeline
+[2025-04-21 11:36:38,450][dependencies.io.csv_to_dataframe][INFO] - Read /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v11/v11.csv, created df
+[2025-04-21 11:37:38,339][dependencies.transformations.rolling_columns][INFO] - Done with core transformation: rolling_columns
+[2025-04-21 11:37:38,342][dependencies.general.mkdir_if_not_exists][INFO] - Directory exists, skipping creation
+/Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12
+[2025-04-21 11:37:46,736][dependencies.io.dataframe_to_csv][INFO] - Exported df to csv using filepath: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12/v12.csv
+[2025-04-21 11:37:55,490][dependencies.metadata.compute_file_hash][INFO] - Generated file hash: 2dde80f76d1b672bd6d8e443b9bd8d72b5c7c36ab75af47044e51a1b08e6bd3d
+[2025-04-21 11:37:55,807][dependencies.metadata.calculate_metadata][INFO] - Generated metadata for file: /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12/v12.csv
+[2025-04-21 11:37:55,809][dependencies.metadata.calculate_metadata][INFO] - Metadata successfully saved to /Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/data/v12/v12_metadata.json
+[2025-04-21 11:37:55,809][__main__][INFO] - Sucessfully executed step: rolling_columns
