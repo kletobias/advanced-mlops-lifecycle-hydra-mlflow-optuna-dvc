@@ -1,4 +1,3 @@
-# .github/workflows/ci.yaml
 name: CI
 
 on: [push, pull_request]
@@ -8,14 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          cache: "pip"
 
       - uses: pre-commit/action@v3.0.0
 
@@ -73,7 +72,7 @@ jobs:
       - name: Assume AWS role via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam:123456789012:role/GithubOIDCRole
+          role-to-assume: arn:aws:iam::123456789012:role/GithubOIDCRole
           aws-region: eu-central-1
 
       - name: Reproduce DVC pipeline
@@ -81,6 +80,7 @@ jobs:
 
       - name: Push artefacts to S3
         run: |
+          dvc push --verbose --jobs 4
           aws s3 sync mlruns s3://bucket/mlruns --delete
 
       - uses: actions/upload-artifact@v4
