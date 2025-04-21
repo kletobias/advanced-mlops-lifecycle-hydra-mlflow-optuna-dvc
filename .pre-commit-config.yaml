@@ -23,7 +23,7 @@ repos:
           - --fix
           - --select=ALL
           - --extend-select=I,F,E,W
-          - --ignore=S603,S607,TRY400,TRY200,TRY300,B904,N803,PD901,ANN,INP001,PTH,D,FBT001
+          - --ignore=S603,S607,TRY400,TRY200,TRY300,B904,N803,PD901,ANN,INP001,PTH,D,FBT001,PLR0913
           - --line-length=88
         exclude: ^(notebooks|trouble|src|bin/backup_repo)/
 

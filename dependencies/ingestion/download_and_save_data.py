@@ -1,9 +1,9 @@
+# dependencies/ingestion/download_and_save_data.py
 import glob
 import logging
 import os
 import subprocess
 from dataclasses import dataclass
-from typing import NoReturn
 
 from dependencies.general.mkdir_if_not_exists import mkdir_
 from dependencies.io.csv_to_dataframe import csv_to_dataframe
@@ -33,12 +33,15 @@ def download_and_save_data(
     glob_pattern_zip_files: str,
     low_memory: bool,
     output_metadata_file_path: str,
-) -> NoReturn:
-    """Downloads a dataset from Kaggle, extracts it, and renames the CSV file if needed."""
+) -> None:
+    """Downloads a dataset from Kaggle, extracts it,
+    and renames the CSV file if needed.
+    """
     mkdir_(target_dir)
     try:
         subprocess.run(
-            ["kaggle", "datasets", "download", dataset, "-p", target_dir], check=True,
+            ["kaggle", "datasets", "download", dataset, "-p", target_dir],
+            check=True,
         )
         logger.info("Successfully downloaded and saved the dataset.")
     except subprocess.CalledProcessError as e:
@@ -60,12 +63,12 @@ def download_and_save_data(
         subprocess.run(["unzip", "-o", v0_zip_file_path, "-d", target_dir], check=True)
     except subprocess.CalledProcessError as e:
         logger.critical("Unzip failed: %s", e)
-        raise RuntimeError(f"Unzip failed: {e}") from e
+        raise RuntimeError from e
 
     csv_files = glob.glob(glob_pattern_csv_files)
     if not csv_files:
         logger.critical("No CSV file found after extraction")
-        raise FileNotFoundError("No CSV file found after extraction.")
+        raise FileNotFoundError
     extracted_csv = csv_files[0]
 
     if os.path.abspath(extracted_csv) != v0_csv_file_path:
