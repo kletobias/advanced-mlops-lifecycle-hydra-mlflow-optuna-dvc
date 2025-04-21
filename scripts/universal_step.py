@@ -1,3 +1,4 @@
+"""Run one data‑pipeline step chosen by Hydra config."""
 # scripts/universal_step.py
 import logging
 
@@ -147,6 +148,7 @@ TRANSFORMATIONS = {
 
 @hydra.main(version_base=None, config_path="../configs", config_name="config")
 def universal_step(cfg: RootConfig) -> None:
+    """Dispatch to the step in `TRANSFORMATIONS`, handle I/O, log, exit."""
     setup_logging(cfg)
     logger = logging.getLogger(__name__)
 
@@ -156,7 +158,8 @@ def universal_step(cfg: RootConfig) -> None:
         log_cfg_job(cfg)
     else:
         logger.debug(
-            "Not logging cfg job: 'log_cfg_job_flag' == %s", bool(log_cfg_job_flag),
+            "Not logging cfg job: 'log_cfg_job_flag' == %s",
+            bool(log_cfg_job_flag),
         )
 
     transform_name = cfg.setup.script_base_name
@@ -197,7 +200,8 @@ def universal_step(cfg: RootConfig) -> None:
         if write_output:
             dataframe_to_csv(df, **cfg.utility_functions.dataframe_to_csv)
             calculate_and_save_metadata(
-                df, **cfg.utility_functions.calculate_and_save_metadata,
+                df,
+                **cfg.utility_functions.calculate_and_save_metadata,
             )
 
     logger.info("Sucessfully executed step: %s", transform_name)
