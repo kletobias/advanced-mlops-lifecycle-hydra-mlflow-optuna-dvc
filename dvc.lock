@@ -292,7 +292,7 @@ stages:
       md5: 05913cb78a35e682e277de3fa848e2a4
       size: 3600
   v7_agg_severities:
-    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=agg_severities
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=agg_severities
       transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
     deps:
     - path: ./configs/data_versions/v7.yaml
@@ -305,12 +305,12 @@ stages:
       size: 672
     - path: ./dependencies/transformations/agg_severities.py
       hash: md5
-      md5: 959d9755d3d1759e82a50642f8d703da
-      size: 2814
-    - path: ./scripts/universal_step.py
+      md5: fba5adb13c270b9dbdc3bb0785156998
+      size: 2925
+    - path: scripts/universal_step.py
       hash: md5
-      md5: ebba3140ec3dac5c94112e3990a9152d
-      size: 7087
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
     outs:
     - path: ./data/v8/v8.csv
       hash: md5
@@ -318,10 +318,10 @@ stages:
       size: 71265370
     - path: ./data/v8/v8_metadata.json
       hash: md5
-      md5: ae7d1f6ee10e2e5c269e093416d18dc7
+      md5: 521b01d6b2640337714c89fac6d1b565
       size: 3983
   v8_ratio_drg_facility_vs_year:
-    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year
       transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8
       data_versions.data_version_output=v9
     deps:
@@ -335,12 +335,12 @@ stages:
       size: 478
     - path: ./dependencies/transformations/ratio_drg_facility_vs_year.py
       hash: md5
-      md5: ad743474a8b60b6dcc7eed6bedf07795
-      size: 1920
-    - path: ./scripts/universal_step.py
+      md5: 28026a7e8315e28b2871e1d29d302a7d
+      size: 1932
+    - path: scripts/universal_step.py
       hash: md5
-      md5: ebba3140ec3dac5c94112e3990a9152d
-      size: 7087
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
     outs:
     - path: ./data/v9/v9.csv
       hash: md5
@@ -348,10 +348,10 @@ stages:
       size: 79740145
     - path: ./data/v9/v9_metadata.json
       hash: md5
-      md5: d2eb0abaf641e5798fcc7bda9714204f
+      md5: 4b837d4db538ef9f2ddbcfeda145c0ab
       size: 4536
   v9_yearly_discharge_bin:
-    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=yearly_discharge_bin
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=yearly_discharge_bin
       transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
     deps:
     - path: ./configs/data_versions/v9.yaml
@@ -364,12 +364,12 @@ stages:
       size: 528
     - path: ./dependencies/transformations/yearly_discharge_bin.py
       hash: md5
-      md5: df3d714bc29ad3437d62b23f7f89b8e1
-      size: 1782
-    - path: ./scripts/universal_step.py
+      md5: 79b75fdda2ab2dd80335d89be2bb4a01
+      size: 1783
+    - path: scripts/universal_step.py
       hash: md5
-      md5: ebba3140ec3dac5c94112e3990a9152d
-      size: 7087
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
     outs:
     - path: ./data/v10/v10.csv
       hash: md5
@@ -377,10 +377,10 @@ stages:
       size: 80439047
     - path: ./data/v10/v10_metadata.json
       hash: md5
-      md5: 53709b9ccec9f6fab3d71966050cf5b2
+      md5: f863a47250dee613cf7da05a7a06ce11
       size: 4721
   v10_lag_columns:
-    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=lag_columns
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=lag_columns
       transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
     deps:
     - path: ./configs/data_versions/v10.yaml
@@ -393,12 +393,12 @@ stages:
       size: 577
     - path: ./dependencies/transformations/lag_columns.py
       hash: md5
-      md5: 580cc4232b22b259d64004115b88dacd
-      size: 975
-    - path: ./scripts/universal_step.py
+      md5: 911943aea7ddcdbe08136a98ab1cf1e2
+      size: 976
+    - path: scripts/universal_step.py
       hash: md5
-      md5: ebba3140ec3dac5c94112e3990a9152d
-      size: 7087
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
     outs:
     - path: ./data/v11/v11.csv
       hash: md5
@@ -406,10 +406,10 @@ stages:
       size: 136078511
     - path: ./data/v11/v11_metadata.json
       hash: md5
-      md5: 16d354f46974d7aca091cfef92ef402b
+      md5: 0f09fb30c806bc99053f2a76f00f2d6f
       size: 7643
   v11_rolling_columns:
-    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=rolling_columns
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rolling_columns
       transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
     deps:
     - path: ./configs/data_versions/v11.yaml
@@ -422,12 +422,12 @@ stages:
       size: 450
     - path: ./dependencies/transformations/rolling_columns.py
       hash: md5
-      md5: 3627344678384740f5b5d7171878dc0a
-      size: 1423
-    - path: ./scripts/universal_step.py
+      md5: af8c93091454363c9cf336f62723e1ef
+      size: 1424
+    - path: scripts/universal_step.py
       hash: md5
-      md5: ebba3140ec3dac5c94112e3990a9152d
-      size: 7087
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
     outs:
     - path: ./data/v12/v12.csv
       hash: md5
@@ -435,10 +435,10 @@ stages:
       size: 187073670
     - path: ./data/v12/v12_metadata.json
       hash: md5
-      md5: 6dffa8271891f2e8820c65a49d90b39a
+      md5: c59be26335453730f229c18639f736ab
       size: 10436
   v12_drop_non_lag_columns:
-    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=drop_non_lag_columns
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_non_lag_columns
       transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
     deps:
     - path: ./configs/data_versions/v12.yaml
@@ -453,10 +453,10 @@ stages:
       hash: md5
       md5: b19537455d092f3725a4388d38ba4597
       size: 317
-    - path: ./scripts/universal_step.py
+    - path: scripts/universal_step.py
       hash: md5
-      md5: ebba3140ec3dac5c94112e3990a9152d
-      size: 7087
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
     outs:
     - path: ./data/v13/v13.csv
       hash: md5
@@ -464,10 +464,10 @@ stages:
       size: 133443674
     - path: ./data/v13/v13_metadata.json
       hash: md5
-      md5: ead74001a5bd13481916d9b15547e347
+      md5: d693ed06127abfa61f801b63abfe5337
       size: 7909
   v13_rf_optuna_trial:
-    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=rf_optuna_trial
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rf_optuna_trial
       transformations=rf_optuna_trial data_versions.data_version_input=v13 io_policy.WRITE_OUTPUT=false
       model_params=rf_optuna_trial_params
     deps:
@@ -481,14 +481,14 @@ stages:
       size: 946
     - path: ./dependencies/modeling/rf_optuna_trial.py
       hash: md5
-      md5: 73f85cf04c0a5b0ec7d1c864b0b41bcf
-      size: 6950
-    - path: ./scripts/universal_step.py
+      md5: c9704b7cf3c796b881129a84d86641e7
+      size: 6942
+    - path: scripts/universal_step.py
       hash: md5
-      md5: ebba3140ec3dac5c94112e3990a9152d
-      size: 7087
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
   v13_ridge_optuna_trial:
-    cmd: $CMD_PYTHON ./scripts/universal_step.py setup.script_base_name=ridge_optuna_trial
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ridge_optuna_trial
       transformations=ridge_optuna_trial data_versions.data_version_input=v13 data_versions.data_version_output=v13
       io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
     deps:
@@ -502,9 +502,9 @@ stages:
       size: 788
     - path: ./dependencies/modeling/ridge_optuna_trial.py
       hash: md5
-      md5: 16dab6eb24b4901ef7430a982b6b67ec
-      size: 5601
-    - path: ./scripts/universal_step.py
+      md5: 76c1eaea61693a66208079e82354d96c
+      size: 5595
+    - path: scripts/universal_step.py
       hash: md5
-      md5: ebba3140ec3dac5c94112e3990a9152d
-      size: 7087
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
