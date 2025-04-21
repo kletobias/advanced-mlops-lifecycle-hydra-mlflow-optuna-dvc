@@ -30,7 +30,9 @@ def ensure_dvc_is_clean():
     logger = get_run_logger()
     logger.info("Checking for uncommitted DVC changes")
     result = subprocess.run(
-        ["git", "status", "--porcelain"], stdout=subprocess.PIPE, check=True,
+        ["git", "status", "--porcelain"],
+        stdout=subprocess.PIPE,
+        check=True,
     ).stdout.decode()
     changes = [
         line
@@ -97,20 +99,19 @@ def generate_dvc_yaml(
         logger.info("No differences detected between old and new dvc.yaml")
         os.remove(original_path)
         os.rename(temp_path, original_path)
+    elif not allow_dvc_changes:
+        logger.error(
+            "New dvc.yaml differs from existing and allow_dvc_changes=False",
+        )
+        os.remove(original_path)
+        os.rename(temp_path, original_path)
+        msg = "New dvc.yaml differs. Use allow_dvc_changes=True to overwrite."
+        raise RuntimeError(
+            msg,
+        )
     else:
-        if not allow_dvc_changes:
-            logger.error(
-                "New dvc.yaml differs from existing and allow_dvc_changes=False",
-            )
-            os.remove(original_path)
-            os.rename(temp_path, original_path)
-            msg = "New dvc.yaml differs. Use allow_dvc_changes=True to overwrite."
-            raise RuntimeError(
-                msg,
-            )
-        else:
-            logger.info("Accepting new dvc.yaml because allow_dvc_changes=True")
-            os.remove(temp_path)
+        logger.info("Accepting new dvc.yaml because allow_dvc_changes=True")
+        os.remove(temp_path)
 
 
 @task
@@ -138,7 +139,7 @@ def run_dvc_repro(
         with open(log_file_path, "a") as f:
             subprocess.run(base_cmd, stdout=f, stderr=subprocess.STDOUT, check=True)
     else:
-        logger.info(f"Repro only these stages: {stages}")
+        logger.info("Repro only these stages: %s", stages)
         for s in stages:
             cmd = [*base_cmd, s]
             with open(log_file_path, "a") as f:
