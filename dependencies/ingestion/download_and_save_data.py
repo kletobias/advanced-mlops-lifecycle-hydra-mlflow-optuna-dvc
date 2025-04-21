@@ -3,7 +3,7 @@ import logging
 import subprocess
 from typing import NoReturn
 
-from general.mkdir_if_not_exists import mkdir_
+from dependencies.general.mkdir_if_not_exists import mkdir_
 from dependencies.config_schemas.RootConfig import RootConfig
 from dependencies.metadata.calculate_metadata import calculate_and_save_metadata
 from dependencies.io.csv_to_dataframe import csv_to_dataframe
