@@ -6,7 +6,6 @@ import pandas as pd
 
 from dependencies.cleaning.sanitize_column_names import sanitize_column_names
 from dependencies.config_schemas.RootConfig import RootConfig
-import dependencies.general.resolvers
 from dependencies.ingestion.download_and_save_data import (
     DownloadAndSaveDataConfig,
     download_and_save_data,
@@ -18,6 +17,10 @@ from dependencies.logging_utils.log_function_call import log_function_call
 from dependencies.logging_utils.setup_logging import setup_logging
 from dependencies.metadata.calculate_metadata import calculate_and_save_metadata
 from dependencies.modeling.rf_optuna_trial import RfOptunaTrialConfig, rf_optuna_trial
+from dependencies.modeling.ridge_optuna_trial import (
+    RidgeOptunaTrialConfig,
+    ridge_optuna_trial,
+)
 from dependencies.transformations.agg_severities import (
     AggSeveritiesConfig,
     agg_severities,
@@ -65,11 +68,6 @@ from dependencies.transformations.yearly_discharge_bin import (
     YearlyDischargeBinConfig,
     yearly_discharge_bin,
 )
-from dependencies.modeling.ridge_optuna_trial import (
-    RidgeOptunaTrialConfig,
-    ridge_optuna_trial,
-)
-
 
 TRANSFORMATIONS = {
     "download_and_save_data": {
@@ -158,7 +156,7 @@ def universal_step(cfg: RootConfig) -> None:
         log_cfg_job(cfg)
     else:
         logger.debug(
-            "Not logging cfg job: 'log_cfg_job_flag' == %s", bool(log_cfg_job_flag)
+            "Not logging cfg job: 'log_cfg_job_flag' == %s", bool(log_cfg_job_flag),
         )
 
     transform_name = cfg.setup.script_base_name
@@ -188,21 +186,18 @@ def universal_step(cfg: RootConfig) -> None:
             df = pd.DataFrame()
 
         cfg_obj = step_cls(**step_params) if step_cls else None
-        returned_value = step_fn(
-            df,
-            **(cfg_obj.__dict__ if cfg_obj else {})
-        )
+        returned_value = step_fn(df, **(cfg_obj.__dict__ if cfg_obj else {}))
 
-        if cfg.transformations.RETURNS == "df":
-            if returned_value is not None:
-                if not isinstance(returned_value, pd.DataFrame):
-                    raise TypeError(f"{transform_name} did not return a DataFrame.")
-                df = returned_value
+        if cfg.transformations.RETURNS == "df" and returned_value is not None:
+            if not isinstance(returned_value, pd.DataFrame):
+                msg = f"{transform_name} did not return a DataFrame."
+                raise TypeError(msg)
+            df = returned_value
 
         if write_output:
             dataframe_to_csv(df, **cfg.utility_functions.dataframe_to_csv)
             calculate_and_save_metadata(
-                df, **cfg.utility_functions.calculate_and_save_metadata
+                df, **cfg.utility_functions.calculate_and_save_metadata,
             )
 
     logger.info("Sucessfully executed step: %s", transform_name)
