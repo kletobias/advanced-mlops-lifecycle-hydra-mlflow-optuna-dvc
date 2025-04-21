@@ -23,7 +23,7 @@ repos:
           - --fix
           - --select=ALL
           - --extend-select=I,F,E,W
-          - --ignore=S603,S607,TRY400,TRY200,TRY300,B904,N803,PD901,ANN,INP001,PTH
+          - --ignore=S603,S607,TRY400,TRY200,TRY300,B904,N803,PD901,ANN,INP001,PTH,D
           - --line-length=88
         exclude: ^(notebooks|trouble|src|bin/backup_repo)/
 
@@ -32,5 +32,5 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
-          - pydantic               # pin a version if you like: pydantic==2.7.0
+          - pydantic
         exclude: ^(notebooks|trouble|src|bin/backup_repo)/
