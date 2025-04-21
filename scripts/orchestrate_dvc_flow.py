@@ -2,7 +2,7 @@
 import logging
 import os
 import subprocess
-from typing import Any, List, Optional
+from typing import Any
 
 import hydra
 from prefect import flow, get_run_logger, task
@@ -15,8 +15,7 @@ from dependencies.templates.generate_dvc_yaml_core import generate_dvc_yaml_core
 
 @task
 def set_environment_vars():
-    """
-    Sets environment variables so Hydra shows full errors (no short tracebacks),
+    """Sets environment variables so Hydra shows full errors (no short tracebacks),
     and OmegaConf displays root cause errors.
     """
     logger = get_run_logger()
@@ -27,13 +26,11 @@ def set_environment_vars():
 
 @task
 def ensure_dvc_is_clean():
-    """
-    Checks if there are uncommitted DVC files. If so, raises RuntimeError.
-    """
+    """Checks if there are uncommitted DVC files. If so, raises RuntimeError."""
     logger = get_run_logger()
     logger.info("Checking for uncommitted DVC changes")
     result = subprocess.run(
-        ["git", "status", "--porcelain"], stdout=subprocess.PIPE, check=True
+        ["git", "status", "--porcelain"], stdout=subprocess.PIPE, check=True,
     ).stdout.decode()
     changes = [
         line
@@ -42,26 +39,26 @@ def ensure_dvc_is_clean():
     ]
     if changes:
         logger.error("Found uncommitted changes in DVC files")
-        raise RuntimeError("Uncommitted DVC changes. Commit or stash them first.")
+        msg = "Uncommitted DVC changes. Commit or stash them first."
+        raise RuntimeError(msg)
     logger.info("No uncommitted DVC changes found")
 
 
 @task
 def generate_dvc_yaml(
-    stages_list: List,
+    stages_list: list,
     search_path: str,
     template_name: str,
     dvc_yaml_file_path: str,
     allow_dvc_changes: bool = False,
 ):
-    """
-    1) If dvc.yaml does NOT exist, run the script, done.
+    """1) If dvc.yaml does NOT exist, run the script, done.
     2) If dvc.yaml exists, rename to dvc.yaml.tmp
     3) Generate a fresh dvc.yaml via the script
     4) If new dvc.yaml differs from dvc.yaml.tmp:
          - If allow_dvc_changes=True, accept new.
          - Otherwise revert to tmp and raise RuntimeError
-       Else restore dvc.yaml.tmp as final (no changes)
+       Else restore dvc.yaml.tmp as final (no changes).
     """
     logger = get_run_logger()
     logger.info("Attempting to generate dvc.yaml for diff checking")
@@ -92,7 +89,7 @@ def generate_dvc_yaml(
         os.rename(temp_path, original_path)
         return
 
-    with open(temp_path, "r") as f_old, open(original_path, "r") as f_new:
+    with open(temp_path) as f_old, open(original_path) as f_new:
         old_content = f_old.read()
         new_content = f_new.read()
 
@@ -103,12 +100,13 @@ def generate_dvc_yaml(
     else:
         if not allow_dvc_changes:
             logger.error(
-                "New dvc.yaml differs from existing and allow_dvc_changes=False"
+                "New dvc.yaml differs from existing and allow_dvc_changes=False",
             )
             os.remove(original_path)
             os.rename(temp_path, original_path)
+            msg = "New dvc.yaml differs. Use allow_dvc_changes=True to overwrite."
             raise RuntimeError(
-                "New dvc.yaml differs. Use allow_dvc_changes=True to overwrite."
+                msg,
             )
         else:
             logger.info("Accepting new dvc.yaml because allow_dvc_changes=True")
@@ -117,13 +115,12 @@ def generate_dvc_yaml(
 
 @task
 def run_dvc_repro(
-    stages: Optional[List[str]] = None,
+    stages: list[str] | None = None,
     force: bool = False,
     pipeline: bool = False,
     log_file_path: str = "",
 ):
-    """
-    Calls 'dvc repro' for either all stages or a subset.
+    """Calls 'dvc repro' for either all stages or a subset.
     Redirects stdout and stderr to the specified log_file_path.
     """
     logger = get_run_logger()
@@ -143,7 +140,7 @@ def run_dvc_repro(
     else:
         logger.info(f"Repro only these stages: {stages}")
         for s in stages:
-            cmd = base_cmd + [s]
+            cmd = [*base_cmd, s]
             with open(log_file_path, "a") as f:
                 subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT, check=True)
 
@@ -155,18 +152,17 @@ def dvc_flow(
     search_path: str,
     template_name: str,
     dvc_yaml_file_path: str,
-    stages_to_run: Optional[List[str]] = None,
+    stages_to_run: list[str] | None = None,
     force_run: bool = False,
     pipeline_run: bool = False,
     allow_dvc_changes: bool = False,
     skip_generation: bool = False,
 ):
-    """
-    Orchestration flow that:
-      1) Sets environment vars
-      2) Ensures DVC is clean
-      3) Optionally generates dvc.yaml
-      4) Runs 'dvc repro'
+    """Orchestration flow that:
+    1) Sets environment vars
+    2) Ensures DVC is clean
+    3) Optionally generates dvc.yaml
+    4) Runs 'dvc repro'.
     """
     logger = get_run_logger()
     logger.info("Flow start")
@@ -219,8 +215,9 @@ def main(cfg: RootConfig):
     if invalid:
         valid_str = ", ".join(defined_stages)
         logger.error("Invalid stage(s): %s. Valid stage(s): %s", invalid, valid_str)
+        msg = f"Invalid stage(s) requested: {invalid}. Valid stages: {valid_str}"
         raise RuntimeError(
-            f"Invalid stage(s) requested: {invalid}. Valid stages: {valid_str}"
+            msg,
         )
 
     logger.info("User stages valid")
@@ -247,7 +244,7 @@ def main(cfg: RootConfig):
             pipeline_run=pipeline_run,
             allow_dvc_changes=allow_dvc_changes,
             skip_generation=skip_generation,
-        )
+        ),
     )
 
 
