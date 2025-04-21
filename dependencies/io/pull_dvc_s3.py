@@ -5,21 +5,22 @@ from dataclasses import dataclass
 from typing import NoReturn
 
 import hydra
+
 from dependencies.config_schemas.RootConfig import RootConfig
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class DvcPullS3Config:
-    """
-    Holds the config needed to pull from a DVC remote on S3.
-    """
+    """Holds the config needed to pull from a DVC remote on S3."""
+
     remote_uri: str
     remote_name: str
 
+
 def pull_dvc_s3(remote_uri: str, remote_name: str) -> NoReturn:
-    """
-    1) Checks if 'remote_name' is in DVC's remote list.
+    """1) Checks if 'remote_name' is in DVC's remote list.
     2) If not, adds it via: dvc remote add -d <remote_name> <remote_uri>.
     3) Finally calls: dvc pull -r <remote_name>.
     """
@@ -37,11 +38,17 @@ def pull_dvc_s3(remote_uri: str, remote_name: str) -> NoReturn:
             existing_remotes[parts[0]] = parts[1]
 
     if remote_name in existing_remotes:
-        logger.info("DVC remote '%s' already exists: %s", remote_name, existing_remotes[remote_name])
+        logger.info(
+            "DVC remote '%s' already exists: %s",
+            remote_name,
+            existing_remotes[remote_name],
+        )
     else:
         logger.info("Adding DVC remote '%s' -> %s", remote_name, remote_uri)
         try:
-            subprocess.run(["dvc", "remote", "add", "-d", remote_name, remote_uri], check=True)
+            subprocess.run(
+                ["dvc", "remote", "add", "-d", remote_name, remote_uri], check=True,
+            )
         except subprocess.CalledProcessError as e:
             logger.error("Failed to add DVC remote: %s", e)
             return
@@ -53,17 +60,13 @@ def pull_dvc_s3(remote_uri: str, remote_name: str) -> NoReturn:
     except subprocess.CalledProcessError as e:
         logger.error("Failed to pull DVC data: %s", e)
 
+
 if __name__ == "__main__":
-    sys.argv = [
-        sys.argv[0],
-        'utility_functions=pull_dvc_s3',
-        'remote_storage=s3_dvc'
-    ]
+    sys.argv = [sys.argv[0], "utility_functions=pull_dvc_s3", "remote_storage=s3_dvc"]
 
     @hydra.main(version_base=None, config_path="../../configs", config_name="config")
     def main(cfg: RootConfig) -> None:
-        """
-        Expects something like:
+        """Expects something like:
 
         remote_storage:
           s3_bucket:

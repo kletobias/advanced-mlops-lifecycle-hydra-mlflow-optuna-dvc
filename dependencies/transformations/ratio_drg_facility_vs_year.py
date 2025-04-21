@@ -1,10 +1,13 @@
 # dependencies/transformations/ratio_drg_facility_vs_year.py
 import logging
 from dataclasses import dataclass
+
 import pandas as pd
+
 from dependencies.pandas_specific.df_merge import df_merge
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class RatioDrgFacilityVsYearConfig:
@@ -18,6 +21,7 @@ class RatioDrgFacilityVsYearConfig:
     year_merge_how: str
     final_merge_on: list[str]
     final_merge_how: str
+
 
 def ratio_drg_facility_vs_year(
     df: pd.DataFrame,
@@ -55,7 +59,8 @@ def ratio_drg_facility_vs_year(
     )
 
     df_fac_and_yr_merged[ratio_drg_facility_vs_year_col_name] = (
-        df_fac_and_yr_merged[facility_drg_count_col_name] / df_fac_and_yr_merged[year_drg_count_col_name]
+        df_fac_and_yr_merged[facility_drg_count_col_name]
+        / df_fac_and_yr_merged[year_drg_count_col_name]
     )
 
     df_merged_back = df_merge(

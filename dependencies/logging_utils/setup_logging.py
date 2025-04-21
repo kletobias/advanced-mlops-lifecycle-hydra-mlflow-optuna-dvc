@@ -1,7 +1,7 @@
 import logging
 import sys
+from functools import cache
 from pathlib import Path
-from functools import lru_cache
 
 try:
     import colorlog
@@ -11,25 +11,31 @@ except ImportError:
 from dependencies.config_schemas.RootConfig import RootConfig
 from dependencies.general.mkdir_if_not_exists import mkdir_
 from dependencies.logging_utils.log_function_call import log_function_call
-import dependencies.general.resolvers
 
 _REPO_ROOT = Path(__file__).resolve()
-while not (_REPO_ROOT / ".git").exists() and _REPO_ROOT != _REPO_ROOT.parent:
+while not (_REPO_ROOT / ".git").exists() and _REPO_ROOT.parent != _REPO_ROOT:
     _REPO_ROOT = _REPO_ROOT.parent
 
-@lru_cache(maxsize=None)
+
+@cache
 def _rel(p: str) -> str:
     try:
         return str(Path(p).resolve().relative_to(_REPO_ROOT))
     except Exception:
         return p
 
+
 _old_factory = logging.getLogRecordFactory()
+
+
 def _factory(*args, **kwargs):
     r = _old_factory(*args, **kwargs)
     r.pathname = _rel(r.pathname)
     return r
+
+
 logging.setLogRecordFactory(_factory)
+
 
 @log_function_call
 def setup_logging(cfg: RootConfig) -> logging.Logger:

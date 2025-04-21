@@ -33,7 +33,7 @@ def lag_columns(
 
     for col in columns_to_transform:
         df[f"{col}{lag1_suffix}"] = df.groupby(groupby_lag_cols)[col].shift(
-            shift_periods
+            shift_periods,
         )
 
     logger.info("Done with core transformation: lag_columns")

@@ -2,6 +2,7 @@ import logging
 from dataclasses import dataclass
 
 import pandas as pd
+
 from dependencies.pandas_specific.df_merge import df_merge
 
 logger = logging.getLogger(__name__)
