@@ -26,7 +26,8 @@ def push_mlruns_s3(
 ):
     if not os.path.exists(local_mlruns_dir):
         logger.error(
-            "Aborting push: Local mlruns directory %s does not exist", local_mlruns_dir,
+            "Aborting push: Local mlruns directory %s does not exist",
+            local_mlruns_dir,
         )
         return
 
