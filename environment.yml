@@ -1,0 +1,5 @@
+name: ci
+channels:
+dependencies:
+
+prefix: "/Users/tobias/.local/share/mamba/envs/ci"
