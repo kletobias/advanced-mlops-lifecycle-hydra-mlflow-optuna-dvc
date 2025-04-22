@@ -30,7 +30,10 @@ def optuna_random_search_util(
                 high = param_values["high"]
                 if step:
                     final_params[param_name] = trial.suggest_int(
-                        param_name, low, high, step,
+                        param_name,
+                        low,
+                        high,
+                        step,
                     )
                 else:
                     final_params[param_name] = trial.suggest_int(param_name, low, high)
@@ -40,24 +43,37 @@ def optuna_random_search_util(
                 if step:
                     if log:
                         final_params[param_name] = trial.suggest_float(
-                            param_name, low, high, step, log=True,
+                            param_name,
+                            low,
+                            high,
+                            step,
+                            log=True,
                         )
                     else:
                         final_params[param_name] = trial.suggest_float(
-                            param_name, low, high, step,
+                            param_name,
+                            low,
+                            high,
+                            step,
                         )
                 else:
                     if log:
                         final_params[param_name] = trial.suggest_float(
-                            param_name, low, high, log=True,
+                            param_name,
+                            low,
+                            high,
+                            log=True,
                         )
                     else:
                         final_params[param_name] = trial.suggest_float(
-                            param_name, low, high,
+                            param_name,
+                            low,
+                            high,
                         )
             elif p_type == "bool":
                 final_params[param_name] = trial.suggest_categorical(
-                    param_name, [True, False],
+                    param_name,
+                    [True, False],
                 )
             elif p_type == "categorical":
                 values = list(param_values["values"])
