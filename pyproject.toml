@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.ruff]
+line-length = 88
+select = ["ALL"]
+extend-select = ["I", "F", "E", "W"]
+ignore = ["S603","S607","TRY400","TRY200","TRY300","B904","N803","PD901","ANN","INP001","PTH","D"]
+fix = true
