@@ -1,8 +1,8 @@
+# dependencies/io/pull_dvc_s3.py
 import logging
 import subprocess
 import sys
 from dataclasses import dataclass
-from typing import NoReturn
 
 import hydra
 
@@ -19,7 +19,11 @@ class DvcPullS3Config:
     remote_name: str
 
 
-def pull_dvc_s3(remote_uri: str, remote_name: str) -> NoReturn:
+def pull_dvc_s3(
+    remote_uri: str,
+    remote_name: str,
+    num_parts_expected: int = 2,
+) -> None:
     """1) Checks if 'remote_name' is in DVC's remote list.
     2) If not, adds it via: dvc remote add -d <remote_name> <remote_uri>.
     3) Finally calls: dvc pull -r <remote_name>.
@@ -28,13 +32,12 @@ def pull_dvc_s3(remote_uri: str, remote_name: str) -> NoReturn:
         out = subprocess.check_output(["dvc", "remote", "list"], text=True)
     except subprocess.CalledProcessError as e:
         logger.error("Failed to list DVC remotes: %s", e)
-        return
 
     # Parse existing remote lines into a dict
     existing_remotes = {}
     for line in out.strip().splitlines():
         parts = line.split(maxsplit=1)
-        if len(parts) == 2:
+        if len(parts) == num_parts_expected:
             existing_remotes[parts[0]] = parts[1]
 
     if remote_name in existing_remotes:
@@ -47,11 +50,11 @@ def pull_dvc_s3(remote_uri: str, remote_name: str) -> NoReturn:
         logger.info("Adding DVC remote '%s' -> %s", remote_name, remote_uri)
         try:
             subprocess.run(
-                ["dvc", "remote", "add", "-d", remote_name, remote_uri], check=True,
+                ["dvc", "remote", "add", "-d", remote_name, remote_uri],
+                check=True,
             )
         except subprocess.CalledProcessError as e:
             logger.error("Failed to add DVC remote: %s", e)
-            return
 
     logger.info("Pulling data from remote '%s'", remote_name)
     try:
