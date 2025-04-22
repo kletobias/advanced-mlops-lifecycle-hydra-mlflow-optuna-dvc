@@ -5,32 +5,33 @@ on: [push, pull_request]
 jobs:
   lint-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
 
-      - uses: mamba-org/setup-micromamba@v1
+      - uses: actions/setup-python@v5
         with:
-          environment-name: ci
-          create-args: "python=3.12 pip"
-          cache-downloads: true
-          cache-environment: true
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
 
       - uses: pre-commit/action@v3.0.0
 
-      - name: Set up DVC
-        uses: iterative/setup-dvc@v1
-
-      - name: Install project dependencies
+      - name: Install deps
         run: |
           pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Set up DVC
+        uses: iterative/setup-dvc@v1
 
       - name: Cache DVC data
         uses: actions/cache@v4
         with:
           path: .dvc/cache
-          key: dvc-${{ runner.os }}-${{ hashFiles('dvc.lock') }}
+          key: dvc-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('dvc.lock') }}
           restore-keys: |
-            dvc-${{ runner.os }}-
+            dvc-${{ runner.os }}-${{ matrix.python-version }}-
 
       - name: Pull data/params
         run: dvc pull --verbose --jobs 4
@@ -62,31 +63,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: mamba-org/setup-micromamba@v1
+      - uses: actions/setup-python@v5
         with:
-          environment-name: ci
-          create-args: "python=3.12 pip"
-          cache-downloads: true
-          cache-environment: true
+          python-version: 3.10
 
       - uses: iterative/setup-dvc@v1
-
-      - name: Install project dependencies
-        run: |
-          pip install -r requirements.txt -r requirements-dev.txt
 
       - name: Assume AWS role via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::123456789012:role/GithubOIDCRole
-          aws-region: eu-central-1
+          role-to-assume: arn:aws:iam:123456789012:role/GithubOIDCRole
+          aws-region: us-east-1
 
       - name: Reproduce DVC pipeline
         run: dvc repro --pull -P
 
       - name: Push artefacts to S3
         run: |
-          dvc push --verbose --jobs 4
           aws s3 sync mlruns s3://bucket/mlruns --delete
 
       - uses: actions/upload-artifact@v4
@@ -95,4 +88,4 @@ jobs:
           path: |
             data/**
             models/**
-            logs/**
+            
