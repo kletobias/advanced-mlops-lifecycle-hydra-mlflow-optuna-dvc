@@ -6,7 +6,8 @@ logger = logging.getLogger(__name__)
 
 
 def rf_sklearn_instantiate_rfr_class(
-    final_params: dict, rfr_options: dict,
+    final_params: dict,
+    rfr_options: dict,
 ) -> RandomForestRegressor:
     kwargs_instantiate_rfr_class = final_params.copy()
     kwargs_instantiate_rfr_class.update(rfr_options)
