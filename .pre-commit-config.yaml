@@ -1,36 +1,18 @@
-repos:
-  - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
-    hooks:
-      - id: isort
-        name: isort
-        args:
-          - --profile=black
-        exclude: ^(notebooks|trouble|src|bin/backup_repo)/
+default_stages: [commit, push]
 
+repos:
   - repo: https://github.com/psf/black
     rev: 23.12.1
-    hooks:
-      - id: black
-        args: ["--line-length=88"]
-        exclude: ^(notebooks|trouble|src|bin/backup_repo)/
-
+    hooks: [{id: black, exclude: ^(notebooks|trouble|src|bin/backup_repo)/}]
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks: [{id: isort, exclude: ^(notebooks|trouble|src|bin/backup_repo)/}]
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.0.277
-    hooks:
-      - id: ruff
-        args:
-          - --fix
-          - --select=ALL
-          - --extend-select=I,F,E,W
-          - --ignore=S603,S607,TRY400,TRY200,TRY300,B904,N803,PD901,ANN,INP001,PTH,D,FBT,PLR0913,C901,PLR0912,PLR5501
-          - --line-length=88
-        exclude: ^(notebooks|trouble|src|bin/backup_repo)/
-
+    hooks: [{id: ruff, exclude: ^(notebooks|trouble|src|bin/backup_repo)/}]
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.991
     hooks:
       - id: mypy
-        additional_dependencies:
-          - pydantic
+        additional_dependencies: [pydantic]
         exclude: ^(notebooks|trouble|src|bin/backup_repo)/
