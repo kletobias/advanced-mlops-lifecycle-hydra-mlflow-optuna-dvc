@@ -13,7 +13,10 @@ logger = logging.getLogger(__name__)
 
 
 def calculate_and_log_importances_as_artifact(
-    importances_filename: str, model: Any, X: pd.DataFrame, y: pd.Series,
+    importances_filename: str,
+    model: Any,
+    X: pd.DataFrame,
+    y: pd.Series,
 ) -> None:
     perm_dict = compute_permutation_importances(model, X, y)
     sorted_perm = sorted(perm_dict, key=lambda f: abs(perm_dict[f]), reverse=True)
