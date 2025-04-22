@@ -1,46 +1,40 @@
 name: CI
-
 on: [push, pull_request]
 
 jobs:
+# --------------------------------------------------------------------- #
+# 1) lint + tests                                                       #
+# --------------------------------------------------------------------- #
   lint-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          environment-file: environment.lock.yml
+          environment-name: ci
+          cache-downloads: true
+          cache-env: true
 
-      - uses: pre-commit/action@v3.0.0
+      # run the same hooks as locally
+      - name: pre‑commit (all files)
+        run: micromamba run -n ci pre-commit run --all-files --color never
 
-      - name: Install deps
-        run: |
-          pip install -r requirements.txt -r requirements-dev.txt
-
-      - name: Set up DVC
-        uses: iterative/setup-dvc@v1
+      - uses: iterative/setup-dvc@v1   # dvc in env already, adds credentials helpers
 
       - name: Cache DVC data
         uses: actions/cache@v4
         with:
           path: .dvc/cache
-          key: dvc-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('dvc.lock') }}
-          restore-keys: |
-            dvc-${{ runner.os }}-${{ matrix.python-version }}-
+          key: dvc-${{ runner.os }}-${{ hashFiles('dvc.lock') }}
+          restore-keys: dvc-${{ runner.os }}-
 
-      - name: Pull data/params
-        run: dvc pull --verbose --jobs 4
-
-      - name: Flake8
-        run: flake8 .
+      - name: Pull data / params
+        run: micromamba run -n ci dvc pull --verbose --jobs 4
 
       - name: Pytest + coverage
-        run: pytest -q --cov=src --cov-report=xml
+        run: micromamba run -n ci pytest -q --cov=src --cov-report=xml
 
       - uses: codecov/codecov-action@v4
         with:
@@ -53,6 +47,9 @@ jobs:
           path: mlruns
           retention-days: 5
 
+# --------------------------------------------------------------------- #
+# 2) GPU pipeline                                                       #
+# --------------------------------------------------------------------- #
   gpu-pipeline:
     needs: lint-test
     runs-on: self-hosted-gpu
@@ -63,23 +60,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          python-version: 3.10
+          environment-file: environment.lock.yml
+          environment-name: ci
+          cache-downloads: true
+          cache-env: true
 
       - uses: iterative/setup-dvc@v1
 
       - name: Assume AWS role via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam:123456789012:role/GithubOIDCRole
-          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::123456789012:role/GithubOIDCRole
+          aws-region: eu-central-1
 
       - name: Reproduce DVC pipeline
-        run: dvc repro --pull -P
+        run: micromamba run -n ci dvc repro --pull -P
 
       - name: Push artefacts to S3
         run: |
+          micromamba run -n ci dvc push --verbose --jobs 4
           aws s3 sync mlruns s3://bucket/mlruns --delete
 
       - uses: actions/upload-artifact@v4
@@ -88,4 +89,4 @@ jobs:
           path: |
             data/**
             models/**
-            
+            logs/**
