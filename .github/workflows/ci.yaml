@@ -1,84 +1,92 @@
 name: CI
 on: [push, pull_request]
 
+# ------------------------------------------------------------- #
+# 1) Lint, unit tests & coverage on 3 Python versions           #
+# ------------------------------------------------------------- #
 jobs:
-# --------------------------------------------------------------------- #
-# 1) lint + tests                                                       #
-# --------------------------------------------------------------------- #
-  lint-test:
+  quality:
+    name: quality-${{ matrix.python-version }}
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false          # show all version failures
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: patch env file for solver
-        run: |
-          sed -i '/^  - libgfortran=/d' environment.yml
-          sed -i '/^  - libgfortran5=/d' environment.yml
-          sed -i '/^  - libintl=/d' environment.yml
-          sed -i '/^  - libopenblas=/d' environment.yml
-
-      - uses: mamba-org/setup-micromamba@v1
+      - uses: actions/setup-python@v5
         with:
-          environment-file: environment.yml
-          environment-name: ny
-          cache-downloads: true
-          cache-environment: true
+          python-version: ${{ matrix.python-version }}
 
-      - name: pre‑commit (all files)
-        run: micromamba run -n ny pre-commit run --all-files --color never
-
-      - uses: iterative/setup-dvc@v1
-
-      - name: Cache DVC data
+      - name: Cache pip wheels
         uses: actions/cache@v4
         with:
-          path: .dvc/cache
-          key: dvc-${{ runner.os }}-${{ hashFiles('dvc.lock') }}
-          restore-keys: dvc-${{ runner.os }}-
+          path: ~/.cache/pip
+          key: >-
+            pip-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: pip-${{ runner.os }}-${{ matrix.python-version }}-
 
+      - name: Install CI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            "dvc[s3]" \
+            pre-commit \
+            ruff \
+            black \
+            isort \
+            mypy \
+            pytest \
+            coverage[toml]
+
+      # --- Static analysis & formatting ------------------------------------
+      - name: Run pre‑commit hooks
+        run: pre-commit run --all-files --color never
+
+      # --- Pull the latest tracked data ------------------------------------
       - name: Pull data / params
-        run: micromamba run -n ny dvc pull --verbose --jobs 4
+        run: dvc pull --verbose --jobs 4
 
+      # --- Tests + coverage -------------------------------------------------
       - name: Pytest + coverage
-        run: micromamba run -n ny pytest -q --cov=src --cov-report=xml
+        run: pytest -q --cov=src --cov-report=xml
 
       - uses: codecov/codecov-action@v4
         with:
           files: coverage.xml
 
-      - name: Upload MLflow artefacts
-        uses: actions/upload-artifact@v4
+      # --- Publish MLflow runs for reviewers -------------------------------
+      - uses: actions/upload-artifact@v4
         with:
-          name: mlruns
+          name: mlruns-${{ matrix.python-version }}
           path: mlruns
-          retention-days: 5
+          retention-days: 7
 
-# --------------------------------------------------------------------- #
-# 2) GPU pipeline                                                       #
-# --------------------------------------------------------------------- #
+# ------------------------------------------------------------- #
+# 2) Full pipeline on self‑hosted GPU (runs only if quality OK) #
+# ------------------------------------------------------------- #
   gpu-pipeline:
-    needs: lint-test
-    runs-on: self-hosted-gpu
+    needs: quality
+    runs-on: self-hosted-gpu   # label on your on‑prem runner
     permissions:
-      id-token: write
+      id-token: write          # for OIDC
       contents: read
     environment: production
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: patch env file for solver
-        run: |
-          sed -i '/^  - libgfortran=/d' environment.yml
-          sed -i '/^  - libgfortran5=/d' environment.yml
-          sed -i '/^  - libintl=/d' environment.yml
-          sed -i '/^  - libopenblas=/d' environment.yml
-
-      - uses: mamba-org/setup-micromamba@v1
+      - uses: actions/setup-python@v5
         with:
-          environment-file: environment.yml
-          environment-name: ny
-          cache-downloads: true
-          cache-environment: true
+          python-version: '3.12'   # pin one version for prod pipeline
+
+      - name: Install runtime deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install "dvc[s3]"
 
       - uses: iterative/setup-dvc@v1
 
@@ -89,11 +97,11 @@ jobs:
           aws-region: eu-central-1
 
       - name: Reproduce DVC pipeline
-        run: micromamba run -n ny dvc repro --pull -P
+        run: dvc repro --pull -P
 
       - name: Push artefacts to S3
         run: |
-          micromamba run -n ny dvc push --verbose --jobs 4
+          dvc push --verbose --jobs 4
           aws s3 sync mlruns s3://bucket/mlruns --delete
 
       - uses: actions/upload-artifact@v4

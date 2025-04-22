@@ -2,8 +2,6 @@
     autostage = true
     remote = s3_dvc
     checksum_jobs = 5
-[cache]
-    dir = ./dvc/cache/
 ['remote "s3_dvc"']
     url = s3://nyproject25/dvc
     jobs = 5
