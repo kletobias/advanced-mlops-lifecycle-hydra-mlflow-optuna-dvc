@@ -15,7 +15,7 @@ jobs:
           environment-file: environment.lock.yml
           environment-name: ci
           cache-downloads: true
-          cache-env: true
+          cache-environment: true
 
       # run the same hooks as locally
       - name: pre‑commit (all files)
@@ -65,7 +65,7 @@ jobs:
           environment-file: environment.lock.yml
           environment-name: ci
           cache-downloads: true
-          cache-env: true
+          cache-environment: true
 
       - uses: iterative/setup-dvc@v1
 
