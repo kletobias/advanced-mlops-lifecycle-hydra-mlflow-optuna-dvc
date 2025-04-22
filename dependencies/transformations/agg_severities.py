@@ -1,9 +1,15 @@
 # dependencies/transformations/agg_severities.py
+from __future__ import annotations
+
 import logging
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
+
+if TYPE_CHECKING:
+    from numpy.dtypes import BoolDType
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +39,7 @@ def agg_severities(
     mean_cols: list[str],
     median_cols: list[str],
     groupby_cols: list[str],
-    as_index: bool,
+    as_index: BoolDType,
 ) -> pd.DataFrame:
     def weighted_mean(grp: pd.DataFrame, value_col: str, weight_col: str) -> float:
         total_wt = grp[weight_col].sum()
@@ -53,7 +59,6 @@ def agg_severities(
         total_dis = grp[discharges_col_name].sum()
         results = {sum_discharges_key: total_dis}
         for severity_level in severity_levels:
-            severity_level = int(severity_level)
             sub = grp[grp[apr_severity_of_illness_code_col_name] == severity_level]
             results[f"severity_{severity_level}_portion"] = (
                 sub[discharges_col_name].sum() / total_dis if total_dis else 0
@@ -61,13 +66,17 @@ def agg_severities(
         for col in mean_cols:
             if col in grp.columns:
                 results[f"w_{col}"] = weighted_mean(
-                    grp, value_col=col, weight_col=weighted_mean_weight_col_name,
+                    grp,
+                    value_col=col,
+                    weight_col=weighted_mean_weight_col_name,
                 )
 
         for col in median_cols:
             if col in grp.columns:
                 results[f"w_{col}"] = weighted_median(
-                    grp, value_col=col, weight_col=weighted_median_weight_col_name,
+                    grp,
+                    value_col=col,
+                    weight_col=weighted_median_weight_col_name,
                 )
         return pd.Series(results)
 
@@ -78,7 +87,7 @@ def agg_severities(
     )
     aggregated = aggregated.reset_index(drop=False)
     logger.info("Done with core transformation: agg_severities")
-    assert (
-        "w_total_median_profit" in aggregated.columns.tolist()
-    ), "'w_total_median_profit' not in columns!"
+    if "w_total_median_profit" not in aggregated.columns.tolist():
+        logger.critical("'w_total_median_profit' not in columns!")
+        raise AssertionError
     return aggregated
