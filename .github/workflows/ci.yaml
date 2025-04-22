@@ -1,3 +1,4 @@
+# .github/workflows/ci.yaml
 name: CI
 on: [push, pull_request]
 
@@ -93,7 +94,7 @@ jobs:
       - name: Assume AWS role via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::123456789012:role/GithubOIDCRole
+          role-to-assume: arn:aws:iam::513065063624:role/GithubOIDCRole
           aws-region: eu-central-1
 
       - name: Reproduce DVC pipeline
@@ -102,7 +103,7 @@ jobs:
       - name: Push artefacts to S3
         run: |
           dvc push --verbose --jobs 4
-          aws s3 sync mlruns s3://bucket/mlruns --delete
+          aws s3 sync mlruns s3://ghcicd/mlruns --delete
 
       - uses: actions/upload-artifact@v4
         with:
