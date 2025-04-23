@@ -1,7 +1,8 @@
+# dependencies/metadata/compute_file_hash.py
+import hashlib
 import logging
 
 logger = logging.getLogger(__name__)
-import hashlib
 
 
 def compute_file_hash(file_path: str) -> str:
