@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import logging
-import os
 
 import jinja2
 from logging_utils.log_function_call import log_function_call
@@ -18,7 +17,21 @@ def generate_dvc_yaml_core(
     dvc_yaml_file_path: str,
     plots_list: list | None = None,
 ) -> None:
-    logger.info("Entering function 'generate_dvc_yaml_core'")
+    """generate_dvc_yaml_core.
+
+    :param stages_list:
+    :type stages_list: list
+    :param search_path:
+    :type search_path: str
+    :param template_name:
+    :type template_name: str
+    :param dvc_yaml_file_path:
+    :type dvc_yaml_file_path: str
+    :param plots_list:
+    :type plots_list: list | None
+    :rtype: None
+    """
+
     loader = jinja2.FileSystemLoader(searchpath=search_path)
     env = jinja2.Environment(loader=loader, autoescape=False)
     template = env.get_template(template_name)
@@ -27,9 +40,6 @@ def generate_dvc_yaml_core(
 
     with open(dvc_yaml_file_path, "w", encoding="utf-8") as f:
         f.write(rendered)
-
-    if os.path.exists(dvc_yaml_file_path):
-        logger.info("Success: 'generate_dvc_yaml_core'")
 
 
 if __name__ == "__main__":
