@@ -56,20 +56,19 @@ def optuna_random_search_util(
                             high,
                             step,
                         )
+                elif log:
+                    final_params[param_name] = trial.suggest_float(
+                        param_name,
+                        low,
+                        high,
+                        log=True,
+                    )
                 else:
-                    if log:
-                        final_params[param_name] = trial.suggest_float(
-                            param_name,
-                            low,
-                            high,
-                            log=True,
-                        )
-                    else:
-                        final_params[param_name] = trial.suggest_float(
-                            param_name,
-                            low,
-                            high,
-                        )
+                    final_params[param_name] = trial.suggest_float(
+                        param_name,
+                        low,
+                        high,
+                    )
             elif p_type == "bool":
                 final_params[param_name] = trial.suggest_categorical(
                     param_name,
