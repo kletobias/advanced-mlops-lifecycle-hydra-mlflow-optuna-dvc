@@ -1,7 +1,7 @@
 import logging
+import subprocess
 
 logger = logging.getLogger(__name__)
-import subprocess
 
 
 def get_repo_root() -> str:
