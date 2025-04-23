@@ -45,6 +45,7 @@ jobs:
             isort \
             mypy \
             pytest \
+            pytest-cov \
             coverage[toml]
 
       # --- Static analysis & formatting ------------------------------------
