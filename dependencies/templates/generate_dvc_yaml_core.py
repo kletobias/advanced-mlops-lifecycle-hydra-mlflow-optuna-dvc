@@ -1,13 +1,16 @@
 # dependencies/templates/generate_dvc_yaml_core.py
+from __future__ import annotations
+
 import logging
 import os
-import time
 
 import jinja2
+from logging_utils.log_function_call import log_function_call
 
 logger = logging.getLogger(__name__)
 
 
+@log_function_call
 def generate_dvc_yaml_core(
     stages_list: list,
     search_path: str,
@@ -26,10 +29,7 @@ def generate_dvc_yaml_core(
         f.write(rendered)
 
     if os.path.exists(dvc_yaml_file_path):
-        logger.info(
-            "Exiting function 'generate_dvc_yaml_core', most recent change: dvc.yaml %s",
-            time.time() - os.path.getmtime(dvc_yaml_file_path),
-        )
+        logger.info("Success: 'generate_dvc_yaml_core'")
 
 
 if __name__ == "__main__":
