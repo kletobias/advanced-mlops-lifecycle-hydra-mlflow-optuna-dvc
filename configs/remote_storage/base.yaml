@@ -1,4 +1,4 @@
 s3_bucket:
-  bucket_name: nyproject25
+  bucket_name: ghcicd
   prefix: ""
   remote_uri: "s3://${.bucket_name}/${.prefix}"
