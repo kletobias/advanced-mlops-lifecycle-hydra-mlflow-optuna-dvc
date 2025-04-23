@@ -9,5 +9,5 @@ line_length = 88
 line-length = 88
 lint.select = ["ALL"]
 lint.extend-select = ["I", "F", "E", "W"]
-lint.ignore = ["S603","S607","TRY400","TRY300","B904","N803","PD901","ANN","INP001","PTH","D","PLR","N806","B905", "FBT001","FBT002","BLE","PD","N999","COM","TC"]
+lint.ignore = ["S603","S607","TRY400","TRY300","B904","N803","PD901","ANN","INP001","PTH","D","C","PLR","N806","B905", "FBT001","FBT002","BLE","PD","N999","COM","TC"]
 fix = true
