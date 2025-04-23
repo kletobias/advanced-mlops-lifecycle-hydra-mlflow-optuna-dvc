@@ -155,7 +155,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    # environment: production
 
     steps:
       - uses: actions/checkout@v4
