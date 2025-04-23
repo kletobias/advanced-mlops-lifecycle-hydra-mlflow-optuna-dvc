@@ -1,10 +1,11 @@
 # .github/workflows/ci.yaml
 name: CI
+
 on:
   push:
   pull_request:
   schedule:
-    - cron: '0 4 * * 6'
+    - cron: '0 4 * * 6'   # weekly Saturday 04:00 UTC
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -15,17 +16,81 @@ permissions:
   contents: read
 
 # ------------------------------------------------------------- #
-# 1) Lint, unit tests & coverage on 3 Python versions           #
+# 1A) Quick quality check — every push/PR (Python 3.12)         #
 # ------------------------------------------------------------- #
 jobs:
-  quality:
+  quick-quality:
+    name: quality-3.12
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip wheels
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: >-
+            pip-${{ runner.os }}-3.12-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: pip-${{ runner.os }}-3.12-
+
+      - name: Install CI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            "dvc[s3]" \
+            pre-commit \
+            ruff \
+            black \
+            isort \
+            mypy \
+            pytest \
+            pytest-cov \
+            coverage[toml]
+
+      - name: Run pre‑commit hooks
+        run: pre-commit run --all-files --color never
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::513065063624:role/GithubOIDCRole
+          aws-region: eu-central-1
+
+      - name: Pull data / params
+        run: dvc pull --verbose --jobs 4
+
+      # --- Tests + coverage (optional) ------------------------
+      # - name: Pytest + coverage
+      #   run: pytest -q --cov=src --cov-report=xml
+
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     files: coverage.xml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mlruns-3.12
+          path: mlruns
+          retention-days: 7
+
+# ------------------------------------------------------------- #
+# 1B) Full quality matrix — weekly cron only (Py 3.10 & 3.11)   #
+# ------------------------------------------------------------- #
+  full-quality:
     name: quality-${{ matrix.python-version }}
     runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
 
     strategy:
-      fail-fast: true          # show all version failures
+      fail-fast: true
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11']
 
     steps:
       - uses: actions/checkout@v4
@@ -56,7 +121,6 @@ jobs:
             pytest-cov \
             coverage[toml]
 
-      # --- Static analysis & formatting ------------------------------------
       - name: Run pre‑commit hooks
         run: pre-commit run --all-files --color never
 
@@ -66,19 +130,9 @@ jobs:
           role-to-assume: arn:aws:iam::513065063624:role/GithubOIDCRole
           aws-region: eu-central-1
 
-      # --- Pull the latest tracked data ------------------------------------
       - name: Pull data / params
         run: dvc pull --verbose --jobs 4
 
-      # --- Tests + coverage -------------------------------------------------
-      # - name: Pytest + coverage
-      #   run: pytest -q --cov=src --cov-report=xml
-
-      # - uses: codecov/codecov-action@v4
-      #   with:
-      #     files: coverage.xml
-
-      # --- Publish MLflow runs for reviewers -------------------------------
       - uses: actions/upload-artifact@v4
         with:
           name: mlruns-${{ matrix.python-version }}
@@ -86,27 +140,29 @@ jobs:
           retention-days: 7
 
 # ------------------------------------------------------------- #
-# 2) Full pipeline on self-hosted GPU (optional)                #
+# 2) Full pipeline on GPU — cron, manual, or [gpu] commit       #
 # ------------------------------------------------------------- #
   gpu-pipeline:
-    needs: quality
+    needs: [quick-quality, full-quality]
     runs-on: ubuntu-22.04-gpu
     continue-on-error: true
-    timeout-minutes: 3
+    timeout-minutes: 5
     if: |
       github.event_name == 'schedule' ||
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'push' && contains(github.event.head_commit.message, '[gpu]'))
+
     permissions:
       id-token: write
       contents: read
     environment: production
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'   # pin one version for prod pipeline
+          python-version: '3.12'
 
       - name: Install runtime deps
         run: |
