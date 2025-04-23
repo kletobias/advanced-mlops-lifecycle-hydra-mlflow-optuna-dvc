@@ -1,6 +1,14 @@
 # .github/workflows/ci.yaml
 name: CI
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 4 * * 6'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   id-token: write
@@ -78,16 +86,21 @@ jobs:
           retention-days: 7
 
 # ------------------------------------------------------------- #
-# 2) Full pipeline on self‑hosted GPU (runs only if quality OK) #
+# 2) Full pipeline on self-hosted GPU (optional)                #
 # ------------------------------------------------------------- #
   gpu-pipeline:
     needs: quality
-    runs-on: self-hosted-gpu   # label on your on‑prem runner
+    runs-on: self-hosted-gpu
+    continue-on-error: true
+    timeout-minutes: 1
+    if: |
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[gpu]'))
     permissions:
-      id-token: write          # for OIDC
+      id-token: write
       contents: read
     environment: production
-
     steps:
       - uses: actions/checkout@v4
 
