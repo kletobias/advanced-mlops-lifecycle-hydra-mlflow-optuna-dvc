@@ -2,6 +2,10 @@
 name: CI
 on: [push, pull_request]
 
+permissions:
+  id-token: write
+  contents: read
+
 # ------------------------------------------------------------- #
 # 1) Lint, unit tests & coverage on 3 Python versions           #
 # ------------------------------------------------------------- #
@@ -11,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: false          # show all version failures
+      fail-fast: true          # show all version failures
       matrix:
         python-version: ['3.10', '3.11', '3.12']
 
