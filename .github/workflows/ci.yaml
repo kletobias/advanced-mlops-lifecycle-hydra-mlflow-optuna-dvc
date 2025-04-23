@@ -65,6 +65,10 @@ jobs:
       - name: Pull data / params
         run: dvc pull --verbose --jobs 4
 
+      - name: Sync MLflow runs to S3           # <--- add
+        if: always()                           # still runs if tests fail
+        run: aws s3 sync mlruns s3://ghcicd/mlruns --exact-timestamps --delete
+
       # --- Tests + coverage (optional) ------------------------
       # - name: Pytest + coverage
       #   run: pytest -q --cov=src --cov-report=xml
