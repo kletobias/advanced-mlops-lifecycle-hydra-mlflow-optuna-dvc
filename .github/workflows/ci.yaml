@@ -90,9 +90,9 @@ jobs:
 # ------------------------------------------------------------- #
   gpu-pipeline:
     needs: quality
-    runs-on: self-hosted-gpu
+    runs-on: ubuntu-22.04-gpu
     continue-on-error: true
-    timeout-minutes: 1
+    timeout-minutes: 3
     if: |
       github.event_name == 'schedule' ||
       github.event_name == 'workflow_dispatch' ||
