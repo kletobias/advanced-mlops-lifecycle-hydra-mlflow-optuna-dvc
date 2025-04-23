@@ -14,7 +14,7 @@ credentials/
 *.log
 !logs/runs/2025-04-21_*.log
 !logs/pipeline/2025-04-21_11-20-11.log
-
+!.github/workflows/ci.yaml
 # Visualization outputs
 *.png
 !examples/*.png
