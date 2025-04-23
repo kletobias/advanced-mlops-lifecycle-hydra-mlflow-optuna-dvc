@@ -1,3 +1,4 @@
+# dependencies/metadata/calculate_metadata.py
 import hashlib
 import json
 import logging
@@ -59,7 +60,7 @@ def get_index_metadata(df: pd.DataFrame) -> dict[str, Any]:
 
 
 def calculate_metadata(df: pd.DataFrame, data_file_path: str) -> dict[str, Any]:
-    timestamp = datetime.utcnow().isoformat() + "Z"
+    timestamp = datetime.datetime.now(tz="utc") + "Z"
     try:
         file_size = os.path.getsize(data_file_path)
     except OSError:
