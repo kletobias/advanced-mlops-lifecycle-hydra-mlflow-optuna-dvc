@@ -47,6 +47,12 @@ jobs:
       - name: Run pre‑commit hooks
         run: pre-commit run --all-files --color never
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::513065063624:role/GithubOIDCRole
+          aws-region: eu-central-1
+
       # --- Pull the latest tracked data ------------------------------------
       - name: Pull data / params
         run: dvc pull --verbose --jobs 4
