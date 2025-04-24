@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/mlruns/428083997585167660/a0c7dcf3d16942ec83c72390b097bc29/artifacts
+end_time: 1745232160672
+entry_point_name: ''
+experiment_id: '428083997585167660'
+lifecycle_stage: active
+run_id: a0c7dcf3d16942ec83c72390b097bc29
+run_name: trial_7
+run_uuid: a0c7dcf3d16942ec83c72390b097bc29
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1745232160663
+status: 3
+tags: []
+user_id: tobias
