@@ -1,4 +1,3 @@
-credentials/
 **/.DS_Store
 # Ignore any YYYY-MM-DD named directory under outputs that has hydra logs in it.
 **/outputs/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
@@ -14,17 +13,15 @@ credentials/
 *.log
 !logs/runs/2025-04-21_*.log
 !logs/pipeline/2025-04-21_11-20-11.log
-!.github/workflows/ci.yaml
+
 # Visualization outputs
 *.png
 !examples/*.png
 *.jpeg
 *.pdf
 *.tiff
-/mlruns
 files/
 *.txt
-!requirements.txt
 /.troubleshoot/
 portfolio_article
 .ruff_cache/
