@@ -1,0 +1,6 @@
+artifact_location: file:///Users/tobias/.local/projects/portfolio_medical_drg_ny_gh/mlruns/968730031109807048
+creation_time: 1745228296383
+experiment_id: '968730031109807048'
+last_update_time: 1745228296383
+lifecycle_stage: active
+name: rf_optuna_trial_2025-04-21_11-38-14
