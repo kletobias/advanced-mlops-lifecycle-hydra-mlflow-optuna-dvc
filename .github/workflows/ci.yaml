@@ -67,7 +67,7 @@ jobs:
 
       - name: Sync MLflow runs to S3           # <--- add
         if: always()                           # still runs if tests fail
-        run: aws s3 sync mlruns s3://ghcicd/mlruns --exact-timestamps --delete
+        run: aws s3 sync mlruns s3://ghcicd/mlruns --exact-timestamps
 
       # --- Tests + coverage (optional) ------------------------
       # - name: Pytest + coverage
