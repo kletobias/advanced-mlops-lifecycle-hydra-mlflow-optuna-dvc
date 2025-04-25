@@ -1,3 +1,4 @@
+<!-- README.md -->
 [![CI](https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/actions/workflows/ci.yaml/badge.svg)](https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/actions/workflows/ci.yaml)
 
 ![female_doctor_banner](https://github.com/user-attachments/assets/57c84662-3e84-4154-8650-41362552e1b7)
@@ -149,6 +150,9 @@ micromamba activate ny
 
 Some Hydra configs reference environment variables like `$CMD_PYTHON` or `$PROJECT_ROOT`. You can set these manually or via a .env file. For example:
 
+Environment variables should be defined in an `.envrc` file or similar.
+The following two environment variables are required:
+
 ```bash
 export CMD_PYTHON=/path/to/your/conda/envs/ny/bin/python
 export PROJECT_ROOT=/path/to/this/repo
@@ -175,6 +179,7 @@ This populates the `mlruns/` folder with finalized experiments.
 ### 4. Check or Adjust dvc.yaml
 
 This repo includes a pre-generated `dvc.yaml` that defines the pipeline stages. If you find references to an environment path that doesn’t match your local machine, you may need to edit the commands in `dvc.yaml` or in `configs/pipeline/`.
+
 
 ⸻
 
@@ -230,18 +235,18 @@ This logs metrics and artifacts (model pickle, feature importances) to `mlruns/`
 ## Known Caveats
 
 1. Manual Pipeline Config Adjustments
-   You may need to tweak commands in dvc.yaml or Hydra configs if your environment paths differ from mine.
-   Some references to cmd_python or project root might be out of date if you cloned the repo to a different location.
+    - Preferred – export the required environment variables (PYTHONPATH, AWS creds, etc.) so DVC and Hydra can resolve them automatically.
+    - Alternative – if your directory layout differs, update paths in dvc.yaml (cmd:) or override Hydra config values (e.g. hydra.run.dir, paths.*) on the CLI.
+    - Heads-up: hard-coded references such as cmd_python or project_root may be stale after cloning to another location.
+
 
 2. Mixed Git/DVC Tracking
-   The pipeline definition (dvc.yaml) is tracked in Git.
-   Large data and model outputs are tracked by DVC. If you encounter an error about “file tracked by Git” or “tracked by both Git and DVC,” remove or untrack it from DVC.
+    - dvc.yaml and every Hydra config are version-controlled in Git.
+    - Everything under [data/](data/) is tracked by DVC (see [3. Pull Data & Artifacts from S3 (Optional)](#3-pull-data-artifacts-from-s3-optional))
+    - Inside mlruns/, all metadata except model artifact files (*.pkl) is tracked in Git (same link as above).
 
 3. S3 Accessibility
-   The data and MLflow artifacts are stored in a public S3 bucket. If you can’t access them, you might need to set up AWS credentials or bypass corporate firewalls.
-
-4. Focus on Portfolio
-   This project demonstrates MLOps patterns, but it may not be fully turnkey for every environment. (For instance, the pipeline might reference paths/base.yaml with absolute paths that differ from your machine.)
+    - All datasets and MLflow model artifacts live in a public S3 bucket.
 
 ⸻
 
