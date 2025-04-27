@@ -1,7 +1,7 @@
 <!-- README.md -->
 [![CI](https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/actions/workflows/ci.yaml/badge.svg)](https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/actions/workflows/ci.yaml)
 
-![female_doctor_banner](https://github.com/user-attachments/assets/57c84662-3e84-4154-8650-41362552e1b7)
+![abstract_city_data_visualization_neon_blue-2](https://github.com/user-attachments/assets/d9110e94-98b5-42cf-95db-336400b0fb99)
 
 # Medical DRG in NY — A Reproducible ML Pipeline
 
