@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 import multiprocessing
-from typing import BooleanDtype
+from typing import Bool
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ except ImportError:
     HAS_PSUTIL = False
 
 
-def detect_max_cores(use_physical: BooleanDtype) -> int:
+def detect_max_cores(use_physical: Bool) -> int:
     """Returns the number of CPU cores on this machine.
     If use_physical=True and psutil is installed, returns physical core count.
     Otherwise returns the total logical cores (incl. hyperthreads).
