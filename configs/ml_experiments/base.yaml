@@ -24,3 +24,9 @@ direction: minimize
 scoring:
   rmse: neg_root_mean_squared_error
   r2: r2
+
+mlflow_tags:
+  run_id_tag: ${run_id_outputs}
+  data_version_tag: ${data_versions.data_version_input}
+  model_tag: ""
+  num_trials_tag: ${.optuna_n_trials}
