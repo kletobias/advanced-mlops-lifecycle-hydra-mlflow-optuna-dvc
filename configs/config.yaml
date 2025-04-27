@@ -21,6 +21,8 @@ cmd_python: "$CMD_PYTHON"
 universal_step_script: "scripts/universal_step.py"
 dvc_default_desc: "Refer to deps/outs for details."
 
-
 # hardcode random_state
 rng_seed: 42
+
+# dynamically generated unique run identifier
+run_id_outputs: ${now:%Y%m%d_%H%M%S}
