@@ -25,7 +25,7 @@ rf_optuna_trial:
   rfr_options:
     bootstrap: true
     oob_score: true
-  n_jobs_study: 5
+  n_jobs_study: 2
   n_jobs_cv: 1
   n_jobs_final_model: 1
   random_state: ${ml_experiments.rng_seed}
