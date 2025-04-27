@@ -481,8 +481,8 @@ stages:
       size: 946
     - path: ./dependencies/modeling/rf_optuna_trial.py
       hash: md5
-      md5: 87ef30563cd1627b768a1c25b43a6132
-      size: 7130
+      md5: 99a97d6c4d2d24c5136d96ce487ea83d
+      size: 7577
     - path: scripts/universal_step.py
       hash: md5
       md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
@@ -504,6 +504,27 @@ stages:
       hash: md5
       md5: d8587d6c93cada01ee538973d65f16e6
       size: 5711
+    - path: scripts/universal_step.py
+      hash: md5
+      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
+      size: 7179
+  v14_rf_optuna_trial:
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rf_optuna_trial
+      transformations=rf_optuna_trial data_versions.data_version_input=v14 data_versions.data_version_output=v14
+      io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params logging_utils.level=10
+    deps:
+    - path: ./configs/data_versions/v14.yaml
+      hash: md5
+      md5: 4aa722e152030dd65ff094396ca16ac7
+      size: 131
+    - path: ./configs/transformations/rf_optuna_trial.yaml
+      hash: md5
+      md5: 8e98312f8b49f88bec33731a9ed0d5d4
+      size: 946
+    - path: ./dependencies/modeling/rf_optuna_trial.py
+      hash: md5
+      md5: 4a6d2718f21c8cd4fcf3ed840ed3dac9
+      size: 7670
     - path: scripts/universal_step.py
       hash: md5
       md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
