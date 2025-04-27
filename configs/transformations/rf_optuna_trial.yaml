@@ -6,6 +6,9 @@ defaults:
 
 RETURNS: null
 
+mlflow_tags:
+  model_tag: RandomForestRegressor
+
 rf_optuna_trial:
   target_col: ${ml_experiments.target_col_modeling}
   year_col: ${ml_experiments.year_col}
@@ -26,3 +29,4 @@ rf_optuna_trial:
   n_jobs_cv: 1
   n_jobs_final_model: 1
   random_state: ${ml_experiments.rng_seed}
+  rfr_mlflow_tags: ${..mlflow_tags}
