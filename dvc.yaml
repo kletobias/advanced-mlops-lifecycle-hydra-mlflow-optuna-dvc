@@ -1,3 +1,4 @@
+# dvc.yaml
 stages:
   v0_download_and_save_data:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=download_and_save_data transformations=download_and_save_data io_policy.READ_INPUT=False
@@ -84,88 +85,7 @@ stages:
       - ./data/v5_1/v5_1.csv
       - ./data/v5_1/v5_1_metadata.json
 
-  v5_1_total_median_cost:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
-    desc: Refer to deps/outs for details.
-    deps:
-      - scripts/universal_step.py
-      - ./configs/transformations/total_median_cost.yaml
-      - ./dependencies/transformations/total_median_cost.py
-      - ./configs/data_versions/v5.yaml
-    outs:
-      - ./data/v5_2/v5_2.csv
-      - ./data/v5_2/v5_2_metadata.json
-
-  v5_2_total_mean_cost:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
-    desc: Refer to deps/outs for details.
-    deps:
-      - scripts/universal_step.py
-      - ./configs/transformations/total_mean_cost.yaml
-      - ./dependencies/transformations/total_mean_cost.py
-      - ./configs/data_versions/v5_2.yaml
-    outs:
-      - ./data/v6/v6.csv
-      - ./data/v6/v6_metadata.json
-
-  v6_drop_rare_drgs:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
-    desc: Refer to deps/outs for details.
-    deps:
-      - scripts/universal_step.py
-      - ./configs/transformations/drop_rare_drgs.yaml
-      - ./dependencies/transformations/drop_rare_drgs.py
-      - ./configs/data_versions/v6.yaml
-    outs:
-      - ./data/v7/v7.csv
-      - ./data/v7/v7_metadata.json
-
-  v7_agg_severities:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
-    desc: Refer to deps/outs for details.
-    deps:
-      - scripts/universal_step.py
-      - ./configs/transformations/agg_severities.yaml
-      - ./dependencies/transformations/agg_severities.py
-      - ./configs/data_versions/v7.yaml
-    outs:
-      - ./data/v8/v8.csv
-      - ./data/v8/v8_metadata.json
-
-  v8_ratio_drg_facility_vs_year:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9
-    desc: Refer to deps/outs for details.
-    deps:
-      - scripts/universal_step.py
-      - ./configs/transformations/ratio_drg_facility_vs_year.yaml
-      - ./dependencies/transformations/ratio_drg_facility_vs_year.py
-      - ./configs/data_versions/v8.yaml
-    outs:
-      - ./data/v9/v9.csv
-      - ./data/v9/v9_metadata.json
-
-  v9_yearly_discharge_bin:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
-    desc: Refer to deps/outs for details.
-    deps:
-      - scripts/universal_step.py
-      - ./configs/transformations/yearly_discharge_bin.yaml
-      - ./dependencies/transformations/yearly_discharge_bin.py
-      - ./configs/data_versions/v9.yaml
-    outs:
-      - ./data/v10/v10.csv
-      - ./data/v10/v10_metadata.json
-
-  v10_lag_columns:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
-    desc: Refer to deps/outs for details.
-    deps:
-      - scripts/universal_step.py
-      - ./configs/transformations/lag_columns.yaml
-      - ./dependencies/transformations/lag_columns.py
-      - ./configs/data_versions/v10.yaml
-    outs:
-      - ./data/v11/v11.csv
+???LINES MISSING
       - ./data/v11/v11_metadata.json
 
   v11_rolling_columns:
@@ -209,4 +129,13 @@ stages:
       - ./configs/transformations/ridge_optuna_trial.yaml
       - ./dependencies/modeling/ridge_optuna_trial.py
       - ./configs/data_versions/v13.yaml
+    outs: []
+  v14_ridge_optuna_trial:
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ridge_optuna_trial transformations=ridge_optuna_trial data_versions.data_version_input=v14 data_versions.data_version_output=v14 io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
+    desc: Refer to deps/outs for details.
+    deps:
+      - scripts/universal_step.py
+      - ./configs/transformations/ridge_optuna_trial.yaml
+      - ./dependencies/modeling/ridge_optuna_trial.py
+      - ./configs/data_versions/v14.yaml
     outs: []
