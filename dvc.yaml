@@ -211,12 +211,12 @@ stages:
       - ./dependencies/modeling/ridge_optuna_trial.py
       - ./configs/data_versions/v13.yaml
     outs: []
-  v14_ridge_optuna_trial:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ridge_optuna_trial transformations=ridge_optuna_trial data_versions.data_version_input=v14 data_versions.data_version_output=v14 io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
+  v14_rf_optuna_trial:
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v14 data_versions.data_version_output=v14 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params logging_utils.level=10
     desc: Refer to deps/outs for details.
     deps:
       - scripts/universal_step.py
-      - ./configs/transformations/ridge_optuna_trial.yaml
-      - ./dependencies/modeling/ridge_optuna_trial.py
-      - ./configs/data_versions/v1j.yaml
+      - ./configs/transformations/rf_optuna_trial.yaml
+      - ./dependencies/modeling/rf_optuna_trial.py
+      - ./configs/data_versions/v14.yaml
     outs: []

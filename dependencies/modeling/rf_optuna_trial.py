@@ -3,8 +3,11 @@ import logging
 import os
 from dataclasses import dataclass
 from math import sqrt
+import sys
+from typing import Any, Dict
 
 import mlflow
+from omegaconf import OmegaConf
 import numpy as np
 import optuna
 import pandas as pd
@@ -43,6 +46,7 @@ class RfOptunaTrialConfig:
     n_jobs_cv: int
     n_jobs_final_model: int
     random_state: int
+    model_tags: Any
 
 
 def rf_optuna_trial(
@@ -64,6 +68,7 @@ def rf_optuna_trial(
     n_jobs_cv: int,
     n_jobs_final_model: int,
     random_state: int,
+    model_tags: Any
 ) -> None:
     """Minimal version using MLflow's default local './mlruns' directory.
     We do not use any output/experiment paths from the config.
@@ -71,15 +76,23 @@ def rf_optuna_trial(
     validate_parallelism(n_jobs_cv=n_jobs_cv, n_jobs_study=n_jobs_study)
     logger.info("Starting rf_optuna_trial with %i trials to run", n_trials)
 
+    model_tags = OmegaConf.to_container(model_tags,resolve=True)
+    logger.debug("type of model_tags: %s", type(model_tags))
     # Always use the default local mlruns folder
     mlflow.set_tracking_uri("file:./mlruns")
 
     # Create or set experiment by name
     existing = mlflow.get_experiment_by_name(experiment_name)
+    logger.debug("Value for existing experiment: %s", existing)
     if existing is None:
-        mlflow.create_experiment(experiment_name)
-    mlflow.set_experiment(experiment_name)
+        logger.debug("existing is None")
+        experiment_id = mlflow.create_experiment(experiment_name)
+    logger.debug("experiment_id: %s", experiment_id)
+    experiment = mlflow.set_experiment(experiment_name)
+    logger.debug("experiment_id: %s, experiment: %s", experiment_id, experiment)
     logger.info("MLflow experiment set to '%s'", experiment_name)
+    logger.debug(f"Experiment_id: {experiment.experiment_id}")
+    logger.debug(f"Artifact Location: {experiment.artifact_location}")
 
     if "index" in df.columns:
         feature_cols = [c for c in df.columns if c not in [target_col, "index"]]
@@ -126,8 +139,9 @@ def rf_optuna_trial(
         rmse = -np.mean(results["test_rmse"])
         r2 = np.mean(results["test_r2"])
 
-        with mlflow.start_run(run_name=f"trial_{trial.number}", nested=True):
+        with mlflow.start_run(experiment_id=experiment_id, tags=model_tags, nested=True):
             mlflow.log_params(final_params)
+            mlflow.log_param("child", "yes")
             mlflow.log_metrics({"rmse": rmse, "r2": r2})
 
         completed = [
