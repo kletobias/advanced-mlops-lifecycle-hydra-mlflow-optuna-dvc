@@ -6,7 +6,9 @@ defaults:
 
 RETURNS: null
 
-mlflow_tags:
+model_tags:
+  run_id_tag: ${ml_experiments.mlflow_tags.run_id_tag}
+  data_version_tag: ${ml_experiments.mlflow_tags.data_version_tag}
   model_tag: RandomForestRegressor
 
 rf_optuna_trial:
@@ -29,4 +31,4 @@ rf_optuna_trial:
   n_jobs_cv: 1
   n_jobs_final_model: 1
   random_state: ${ml_experiments.rng_seed}
-  rfr_mlflow_tags: ${..mlflow_tags}
+  model_tags: ${..model_tags}
