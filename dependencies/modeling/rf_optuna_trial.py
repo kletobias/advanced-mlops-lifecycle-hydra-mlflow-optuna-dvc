@@ -3,14 +3,13 @@ import logging
 import os
 from dataclasses import dataclass
 from math import sqrt
-import sys
-from typing import Any, Dict
+from typing import Any
 
 import mlflow
-from omegaconf import OmegaConf
 import numpy as np
 import optuna
 import pandas as pd
+from omegaconf import OmegaConf
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import TimeSeriesSplit, cross_validate
@@ -68,7 +67,7 @@ def rf_optuna_trial(
     n_jobs_cv: int,
     n_jobs_final_model: int,
     random_state: int,
-    model_tags: Any
+    model_tags: Any,
 ) -> None:
     """Minimal version using MLflow's default local './mlruns' directory.
     We do not use any output/experiment paths from the config.
@@ -76,7 +75,7 @@ def rf_optuna_trial(
     validate_parallelism(n_jobs_cv=n_jobs_cv, n_jobs_study=n_jobs_study)
     logger.info("Starting rf_optuna_trial with %i trials to run", n_trials)
 
-    model_tags = OmegaConf.to_container(model_tags,resolve=True)
+    model_tags = OmegaConf.to_container(model_tags, resolve=True)
     logger.debug("type of model_tags: %s", type(model_tags))
     # Always use the default local mlruns folder
     mlflow.set_tracking_uri("file:./mlruns")
@@ -139,7 +138,9 @@ def rf_optuna_trial(
         rmse = -np.mean(results["test_rmse"])
         r2 = np.mean(results["test_r2"])
 
-        with mlflow.start_run(experiment_id=experiment_id, tags=model_tags, nested=True):
+        with mlflow.start_run(
+            experiment_id=experiment_id, tags=model_tags, nested=True
+        ):
             mlflow.log_params(final_params)
             mlflow.log_param("child", "yes")
             mlflow.log_metrics({"rmse": rmse, "r2": r2})
