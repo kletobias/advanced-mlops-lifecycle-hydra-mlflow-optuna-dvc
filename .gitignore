@@ -21,10 +21,10 @@
 *.pdf
 *.tiff
 files/
-*.txt
 /.troubleshoot/
 portfolio_article
 .ruff_cache/
+.mypy_cache/
 .prefectignore
 notebooks/
 TODO.txt
@@ -36,3 +36,4 @@ gather_content/
 /logs/runs/2025-04-23_14-05-11/
 logs/runs/
 mlruns/
+portfolio_medical_drg_ny_gh_ny_311.egg-info/
