@@ -1,4 +1,4 @@
-AWS_PROFILE ?= mlops-prod
+AWS_PROFILE ?= tobias
 TF_DIR      := infra/terraform/prod
 
 tf-init:      ; cd $(TF_DIR) && terraform init
