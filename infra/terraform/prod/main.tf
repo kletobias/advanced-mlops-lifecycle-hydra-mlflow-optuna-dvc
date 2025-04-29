@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 module "ghcicd_bucket" {
-  source               = "../modules/s3_bucket"
+  source               = "../modules/existing_s3_bucket"
   bucket_name          = "ghcicd"
   public_read_prefixes = ["dvc", "mlruns"]
   tags = {
