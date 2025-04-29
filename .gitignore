@@ -32,3 +32,4 @@ bin/
 gather_content/
 .envrc
 .env
+**/.null-ls*.py
