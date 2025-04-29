@@ -33,3 +33,6 @@ gather_content/
 .envrc
 .env
 **/.null-ls*.py
+/logs/runs/2025-04-23_14-05-11/
+logs/runs/
+mlruns/
