@@ -37,3 +37,8 @@ gather_content/
 logs/runs/
 mlruns/
 portfolio_medical_drg_ny_gh_ny_311.egg-info/
+
+# Terraform
+infra/terraform/*/.terraform/
+infra/terraform/*/terraform.tfstate*
+infra/terraform/*/terraform.tfvars
