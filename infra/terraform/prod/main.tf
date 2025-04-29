@@ -1,6 +1,7 @@
 # infra/terraform/prod/main.tf
 provider "aws" {
   region = "eu-central-1"
+  profile = "tobias"
 }
 
 module "ghcicd_bucket" {
