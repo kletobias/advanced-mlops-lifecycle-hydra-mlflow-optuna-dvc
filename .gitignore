@@ -21,10 +21,10 @@
 *.pdf
 *.tiff
 files/
-*.txt
 /.troubleshoot/
 portfolio_article
 .ruff_cache/
+.mypy_cache/
 .prefectignore
 notebooks/
 TODO.txt
@@ -32,3 +32,13 @@ bin/
 gather_content/
 .envrc
 .env
+**/.null-ls*.py
+/logs/runs/2025-04-23_14-05-11/
+logs/runs/
+mlruns/
+portfolio_medical_drg_ny_gh_ny_311.egg-info/
+
+# Terraform
+infra/terraform/*/.terraform/
+infra/terraform/*/terraform.tfstate*
+infra/terraform/*/terraform.tfvars
