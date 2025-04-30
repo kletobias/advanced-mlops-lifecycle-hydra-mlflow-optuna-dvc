@@ -1,6 +1,6 @@
 <!-- README.md -->
 [![CI](https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/actions/workflows/ci.yaml/badge.svg)](https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/actions/workflows/ci.yaml)
-
+[![Infrastructure: Terraform](https://img.shields.io/badge/Infrastructure-Terraform-623CE4?logo=terraform&logoColor=white)](https://www.terraform.io/)
 ![abstract_city_data_visualization_neon_blue-2](https://github.com/user-attachments/assets/a064a912-e270-47fb-afb8-2ef861c9ae32)
 
 
