@@ -77,22 +77,13 @@ def rf_optuna_trial(
     logger.info("Starting rf_optuna_trial with %i trials to run", n_trials)
 
     model_tags = OmegaConf.to_container(model_tags, resolve=True)
-    logger.debug("type of model_tags: %s", type(model_tags))
     # Always use the default local mlruns folder
     mlflow.set_tracking_uri("file:./mlruns")
 
     # Create or set experiment by name
     existing = mlflow.get_experiment_by_name(experiment_name)
-    logger.debug("Value for existing experiment: %s", existing)
     if existing is None:
-        logger.debug("existing is None")
         experiment_id = mlflow.create_experiment(experiment_name)
-    logger.debug("experiment_id: %s", experiment_id)
-    experiment = mlflow.set_experiment(experiment_name)
-    logger.debug("experiment_id: %s, experiment: %s", experiment_id, experiment)
-    logger.info("MLflow experiment set to '%s'", experiment_name)
-    logger.debug(f"Experiment_id: {experiment.experiment_id}")
-    logger.debug(f"Artifact Location: {experiment.artifact_location}")
 
     if "index" in df.columns:
         feature_cols = [c for c in df.columns if c not in [target_col, "index"]]
@@ -151,8 +142,8 @@ def rf_optuna_trial(
             nested=True,
         ):
             mlflow.log_input(dataset, context="training")
-            mlflow.log_param("training", True)
-            mlflow.log_param("cv_score", True)
+            mlflow.log_param("training", "True")
+            mlflow.log_param("cv_score", "True")
             mlflow.log_param("data_partition", "train")
             mlflow.log_params(results)
             mlflow.log_params(final_params)
@@ -208,10 +199,10 @@ def rf_optuna_trial(
         tags=model_tags,
     ):
         mlflow.log_input(dataset, context="validation")
-        mlflow.log_param("validation", True)
+        mlflow.log_param("validation", "True")
         mlflow.log_param("data_partition", "val")
-        mlflow.log_metric("rmse",val_rmse)
-        mlflow.log_metric("mae",val_mae)
+        mlflow.log_metric("rmse", val_rmse)
+        mlflow.log_metric("mae", val_mae)
         mlflow.log_metrics(
             {"val_rmse": np.round(val_rmse, 0), "val_mae": np.round(val_mae, 0)}
         )
@@ -261,8 +252,8 @@ def rf_optuna_trial(
                 {"test_rmse": np.round(test_rmse, 0), "test_mae": np.round(test_mae, 0)}
             )
             mlflow.log_input(dataset, context="test")
-            mlflow.log_metric("rmse",test_rmse)
-            mlflow.log_metric("mae",test_mae)
+            mlflow.log_metric("rmse", test_rmse)
+            mlflow.log_metric("mae", test_mae)
             mlflow.log_param("test", "True")
             mlflow.log_param("data_partition", "test")
 
