@@ -3,11 +3,14 @@ import logging
 import os
 from dataclasses import dataclass
 from math import sqrt
+from typing import Any
 
 import mlflow
 import numpy as np
 import optuna
 import pandas as pd
+from mlflow.data.pandas_dataset import PandasDataset
+from omegaconf import OmegaConf
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import TimeSeriesSplit, cross_validate
@@ -43,6 +46,7 @@ class RfOptunaTrialConfig:
     n_jobs_cv: int
     n_jobs_final_model: int
     random_state: int
+    model_tags: Any
 
 
 def rf_optuna_trial(
@@ -64,6 +68,7 @@ def rf_optuna_trial(
     n_jobs_cv: int,
     n_jobs_final_model: int,
     random_state: int,
+    model_tags: Any,
 ) -> None:
     """Minimal version using MLflow's default local './mlruns' directory.
     We do not use any output/experiment paths from the config.
@@ -71,20 +76,32 @@ def rf_optuna_trial(
     validate_parallelism(n_jobs_cv=n_jobs_cv, n_jobs_study=n_jobs_study)
     logger.info("Starting rf_optuna_trial with %i trials to run", n_trials)
 
+    model_tags = OmegaConf.to_container(model_tags, resolve=True)
+    logger.debug("type of model_tags: %s", type(model_tags))
     # Always use the default local mlruns folder
     mlflow.set_tracking_uri("file:./mlruns")
 
     # Create or set experiment by name
     existing = mlflow.get_experiment_by_name(experiment_name)
+    logger.debug("Value for existing experiment: %s", existing)
     if existing is None:
-        mlflow.create_experiment(experiment_name)
-    mlflow.set_experiment(experiment_name)
+        logger.debug("existing is None")
+        experiment_id = mlflow.create_experiment(experiment_name)
+    logger.debug("experiment_id: %s", experiment_id)
+    experiment = mlflow.set_experiment(experiment_name)
+    logger.debug("experiment_id: %s, experiment: %s", experiment_id, experiment)
     logger.info("MLflow experiment set to '%s'", experiment_name)
+    logger.debug(f"Experiment_id: {experiment.experiment_id}")
+    logger.debug(f"Artifact Location: {experiment.artifact_location}")
 
     if "index" in df.columns:
         feature_cols = [c for c in df.columns if c not in [target_col, "index"]]
     else:
         feature_cols = [c for c in df.columns if c != target_col]
+
+    dataset: PandasDataset = mlflow.data.from_pandas(
+        df, source=model_tags.get("input_file_path_csv", "")
+    )
 
     def partition_data() -> dict[str, pd.DataFrame]:
         df_train = df[
@@ -105,6 +122,7 @@ def rf_optuna_trial(
     data_part = partition_data()
     X_train, y_train = data_part["X_train"], data_part["y_train"]
     X_val, y_val = data_part["X_val"], data_part["y_val"]
+    X_test, y_test = data_part["X_test"], data_part["y_test"]
 
     def objective(trial: optuna.Trial) -> float:
         # sample hyperparams from config
@@ -126,9 +144,19 @@ def rf_optuna_trial(
         rmse = -np.mean(results["test_rmse"])
         r2 = np.mean(results["test_r2"])
 
-        with mlflow.start_run(run_name=f"trial_{trial.number}", nested=True):
+        with mlflow.start_run(
+            experiment_id=experiment_id,
+            run_name="training",
+            tags=model_tags,
+            nested=True,
+        ):
+            mlflow.log_input(dataset, context="training")
+            mlflow.log_param("training", True)
+            mlflow.log_param("cv_score", True)
+            mlflow.log_param("data_partition", "train")
+            mlflow.log_params(results)
             mlflow.log_params(final_params)
-            mlflow.log_metrics({"rmse": rmse, "r2": r2})
+            mlflow.log_metrics({"rmse": np.round(rmse, 0), "r2": r2})
 
         completed = [
             t for t in trial.study.trials if t.state == optuna.trial.TrialState.COMPLETE
@@ -173,9 +201,22 @@ def rf_optuna_trial(
     val_rmse = sqrt(mean_squared_error(y_val, y_pred_val))
     val_mae = mean_absolute_error(y_val, y_pred_val)
 
-    with mlflow.start_run(run_name="final_model"):
-        mlflow.log_metrics({"val_rmse": val_rmse, "val_mae": val_mae})
+    with mlflow.start_run(
+        run_name="final_model",
+        experiment_id=experiment_id,
+        nested=True,
+        tags=model_tags,
+    ):
+        mlflow.log_input(dataset, context="validation")
+        mlflow.log_param("validation", True)
+        mlflow.log_param("data_partition", "val")
+        mlflow.log_metric("rmse",val_rmse)
+        mlflow.log_metric("mae",val_mae)
+        mlflow.log_metrics(
+            {"val_rmse": np.round(val_rmse, 0), "val_mae": np.round(val_mae, 0)}
+        )
         mlflow.log_params(best_params)
+        mlflow.log_param("y_pred_val", y_pred_val)
         mlflow.sklearn.log_model(final_model, artifact_path="model")
 
         # Permutation importances
@@ -206,5 +247,23 @@ def rf_optuna_trial(
                 "Removed %s project root directory",
                 randomforest_importances_filename,
             )
+
+        y_pred_test = final_model.predict(X_test)
+        test_rmse = sqrt(mean_squared_error(y_test, y_pred_test))
+        test_mae = mean_absolute_error(y_test, y_pred_test)
+        with mlflow.start_run(
+            experiment_id=experiment_id,
+            run_name="final_model_predict_test",
+            tags=model_tags,
+            nested=True,
+        ):
+            mlflow.log_metrics(
+                {"test_rmse": np.round(test_rmse, 0), "test_mae": np.round(test_mae, 0)}
+            )
+            mlflow.log_input(dataset, context="test")
+            mlflow.log_metric("rmse",test_rmse)
+            mlflow.log_metric("mae",test_mae)
+            mlflow.log_param("test", "True")
+            mlflow.log_param("data_partition", "test")
 
     logger.info("Done with rf_optuna_trial. All outputs in ./mlruns/")
