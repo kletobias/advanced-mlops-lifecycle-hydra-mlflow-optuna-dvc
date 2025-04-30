@@ -1,6 +1,11 @@
 <!-- README.md -->
 [![CI](https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/actions/workflows/ci.yaml/badge.svg)](https://github.com/kletobias/advanced-mlops-lifecycle-hydra-mlflow-optuna-dvc/actions/workflows/ci.yaml)
 [![Infrastructure: Terraform](https://img.shields.io/badge/Infrastructure-Terraform-623CE4?logo=terraform&logoColor=white)](https://www.terraform.io/)
+[![MLflow](https://img.shields.io/badge/MLflow-0194EC?logo=mlflow&logoColor=white&style=for-the-badge)](https://mlflow.org)
+[![Optuna](https://img.shields.io/badge/Optuna-4C71F0?logo=optuna&logoColor=white&style=for-the-badge)](https://optuna.org)
+[![Hydra](https://img.shields.io/badge/Hydra-1F77B4?style=for-the-badge)](https://github.com/facebookresearch/hydra) <!-- no SimpleIcons logo yet -->
+[![DVC](https://img.shields.io/badge/DVC-945DD6?logo=dvc&logoColor=white&style=for-the-badge)](https://dvc.org)  [oai_citation:0‡Streamline](https://www.streamlinehq.com/icons/download/dvc--31088?utm_source=chatgpt.com)
+[![Prefect](https://img.shields.io/badge/Prefect-2E303D?logo=prefect&logoColor=white&style=for-the-badge)](https://prefect.io)  [oai_citation:1‡Streamline](https://www.streamlinehq.com/icons/download/prefect--31088?utm_source=chatgpt.com)
 ![abstract_city_data_visualization_neon_blue-2](https://github.com/user-attachments/assets/a064a912-e270-47fb-afb8-2ef861c9ae32)
 
 
