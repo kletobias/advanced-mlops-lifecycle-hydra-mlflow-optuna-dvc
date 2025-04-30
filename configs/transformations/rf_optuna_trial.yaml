@@ -6,6 +6,7 @@ defaults:
 
 RETURNS: null
 
+
 rf_optuna_trial:
   target_col: ${ml_experiments.target_col_modeling}
   year_col: ${ml_experiments.year_col}
@@ -22,7 +23,12 @@ rf_optuna_trial:
   rfr_options:
     bootstrap: true
     oob_score: true
-  n_jobs_study: 5
-  n_jobs_cv: 1
-  n_jobs_final_model: 1
+  n_jobs_study: 1
+  n_jobs_cv: -1
+  n_jobs_final_model: -1
   random_state: ${ml_experiments.rng_seed}
+  model_tags:
+    run_id_tag: ${ml_experiments.mlflow_tags.run_id_tag}
+    data_version_tag: ${ml_experiments.mlflow_tags.data_version_tag}
+    model_tag: RandomForestRegressor
+
