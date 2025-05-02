@@ -248,6 +248,20 @@ stages:
       - ./dependencies/modeling/ridge_optuna_trial.py
       - ./configs/data_versions/v13.yaml
     outs: []
+  - name: v14_rf_optuna_trial
+    desc: |
+      TEST
+      Run rf_optuna_trial on the down scaled data 
+    cmd_python: ${cmd_python}
+    script: ${universal_step_script}
+    overrides: setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v14 data_versions.data_version_output=
+    deps:
+      - ${universal_step_script}
+      - ./configs/transformations/rf_optuna_trial.yaml
+      - ./dependencies/transformations/rf_optuna_trial.py
+      - ./configs/data_versions/v14.yaml
+    outs: []
+
 plots:
   - mlruns/267770527945916909/c0265242dba948829ad10cae3c7e55d8/artifacts/importances/permutation_importances.csv:
       template: bar_horizontal_sorted
