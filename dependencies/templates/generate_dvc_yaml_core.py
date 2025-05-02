@@ -1,10 +1,10 @@
-# dependencies/templates/generate_dvc_yaml_core.py
 from __future__ import annotations
 
 import logging
 
 import jinja2
-from logging_utils.log_function_call import log_function_call
+
+from dependencies.logging_utils.log_function_call import log_function_call
 
 logger = logging.getLogger(__name__)
 
