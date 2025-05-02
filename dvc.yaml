@@ -1,8 +1,7 @@
-# dvc.yaml
 stages:
   v0_download_and_save_data:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=download_and_save_data transformations=download_and_save_data io_policy.READ_INPUT=False
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     frozen: true
     deps:
       - scripts/universal_step.py
@@ -15,7 +14,7 @@ stages:
 
   v0_sanitize_column_names:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/sanitize_column_names.yaml
@@ -27,7 +26,7 @@ stages:
 
   v1_drop_description_columns:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/drop_description_columns.yaml
@@ -39,7 +38,7 @@ stages:
 
   v2_median_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/median_profit.yaml
@@ -51,7 +50,7 @@ stages:
 
   v3_mean_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/mean_profit.yaml
@@ -63,7 +62,7 @@ stages:
 
   v4_total_mean_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/total_mean_profit.yaml
@@ -75,7 +74,7 @@ stages:
 
   v5_total_median_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/total_median_profit.yaml
@@ -87,7 +86,7 @@ stages:
 
   v5_1_total_median_cost:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/total_median_cost.yaml
@@ -99,7 +98,7 @@ stages:
 
   v5_2_total_mean_cost:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/total_mean_cost.yaml
@@ -111,7 +110,7 @@ stages:
 
   v6_drop_rare_drgs:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/drop_rare_drgs.yaml
@@ -123,7 +122,7 @@ stages:
 
   v7_agg_severities:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/agg_severities.yaml
@@ -135,7 +134,7 @@ stages:
 
   v8_ratio_drg_facility_vs_year:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/ratio_drg_facility_vs_year.yaml
@@ -147,7 +146,7 @@ stages:
 
   v9_yearly_discharge_bin:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/yearly_discharge_bin.yaml
@@ -159,7 +158,7 @@ stages:
 
   v10_lag_columns:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/lag_columns.yaml
@@ -171,7 +170,7 @@ stages:
 
   v11_rolling_columns:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/rolling_columns.yaml
@@ -183,7 +182,7 @@ stages:
 
   v12_drop_non_lag_columns:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/drop_non_lag_columns.yaml
@@ -195,7 +194,7 @@ stages:
 
   v13_rf_optuna_trial:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v13 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/rf_optuna_trial.yaml
@@ -204,7 +203,7 @@ stages:
     outs: []
   v13_ridge_optuna_trial:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ridge_optuna_trial transformations=ridge_optuna_trial data_versions.data_version_input=v13 data_versions.data_version_output=v13 io_policy.WRITE_OUTPUT=false model_params=ridge_optuna_trial_params
-    desc: Refer to deps/outs for details.
+    desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/ridge_optuna_trial.yaml
@@ -213,10 +212,15 @@ stages:
     outs: []
   v14_rf_optuna_trial:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v14 data_versions.data_version_output=v14 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params logging_utils.level=10
-    desc: Refer to deps/outs for details.
+    desc: "TEST: Run rf_optuna_trial on the down scaled dataset v14."
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/rf_optuna_trial.yaml
-      - ./dependencies/modeling/rf_optuna_trial.py
+      - ./dependencies/transformations/rf_optuna_trial.py
       - ./configs/data_versions/v14.yaml
     outs: []
+plots:
+  - mlruns/267770527945916909/c0265242dba948829ad10cae3c7e55d8/artifacts/importances/permutation_importances.csv:
+      template: bar_horizontal_sorted
+      x: importances
+      y: feature
