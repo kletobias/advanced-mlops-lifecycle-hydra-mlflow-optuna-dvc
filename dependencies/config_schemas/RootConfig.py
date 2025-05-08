@@ -169,14 +169,24 @@ class StageConfig:
     cmd_python: str | None = None
     script: str | None = None
     overrides: dict[str, Any] | None = field(default_factory=dict)
+    desc: str | None = None
+    frozen: bool | None = None
     deps: list[str] | None = field(default_factory=list)
     outs: list[str] | None = field(default_factory=list)
 
 
 @dataclass
+class PlotConfig:
+    # Number of fields: 3
+    template: str | None = None
+    x: str | None = None
+    y: str | None = None
+
+
+@dataclass
 class Pipeline:
     stages: list[StageConfig] | None = field(default_factory=list)
-    stages_list: list[StageConfig] | None = field(default_factory=list)
+    plots: list[PlotConfig] | None = field(default_factory=list)
     stages_to_run: list[str] | None = field(default_factory=list)
     force_run: bool | None = None
     pipeline_run: bool | None = None
