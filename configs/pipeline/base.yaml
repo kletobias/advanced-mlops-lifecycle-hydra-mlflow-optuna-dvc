@@ -1,15 +1,15 @@
 # configs/pipeline/base.yaml
 stages:
-  - name: v0_download_and_save_data
+  - name: v0_ingest_data
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=download_and_save_data transformations=download_and_save_data io_policy.READ_INPUT=False
+    overrides: setup.script_base_name=ingest_data transformations=ingest_data io_policy.READ_INPUT=False
     desc: ${dvc_default_desc}
     frozen: true
     deps:
       - ${universal_step_script}
-      - ./configs/transformations/download_and_save_data.yaml
-      - ./dependencies/ingestion/download_and_save_data.py
+      - ./configs/transformations/ingest_data.yaml
+      - ./dependencies/ingestion/ingest_data.py
       - ./configs/data_versions/v0.yaml
     outs:
       - ./data/v0/v0.csv

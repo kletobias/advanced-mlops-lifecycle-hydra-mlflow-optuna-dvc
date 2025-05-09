@@ -7,9 +7,9 @@ import pandas as pd
 
 from dependencies.cleaning.sanitize_column_names import sanitize_column_names
 from dependencies.config_schemas.RootConfig import RootConfig
-from dependencies.ingestion.download_and_save_data import (
+from dependencies.ingestion.ingest_data import (
     DownloadAndSaveDataConfig,
-    download_and_save_data,
+    ingest_data,
 )
 from dependencies.io.csv_to_dataframe import csv_to_dataframe
 from dependencies.io.dataframe_to_csv import dataframe_to_csv
@@ -71,8 +71,8 @@ from dependencies.transformations.yearly_discharge_bin import (
 )
 
 TRANSFORMATIONS = {
-    "download_and_save_data": {
-        "transform": log_function_call(download_and_save_data),
+    "ingest_data": {
+        "transform": log_function_call(ingest_data),
         "Config": DownloadAndSaveDataConfig,
     },
     "sanitize_column_names": {
@@ -176,7 +176,7 @@ def universal_step(cfg: RootConfig) -> None:
     read_input = cfg.io_policy.READ_INPUT
     write_output = cfg.io_policy.WRITE_OUTPUT
 
-    if transform_name == "download_and_save_data":
+    if transform_name == "ingest_data":
         if step_cls:
             cfg_obj = step_cls(**step_params)
             step_fn(**cfg_obj.__dict__)
