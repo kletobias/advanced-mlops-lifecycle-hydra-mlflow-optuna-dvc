@@ -530,3 +530,32 @@ stages:
       md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
       size: 7179
       isexec: true
+  v0_ingest_data:
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ingest_data
+      transformations=ingest_data io_policy.READ_INPUT=False
+    deps:
+    - path: ./configs/data_versions/v0.yaml
+      hash: md5
+      md5: 258d575cae7fabdf3e1e6dd3f35a66e9
+      size: 19
+    - path: ./configs/transformations/ingest_data.yaml
+      hash: md5
+      md5: 39cffe3f5b2ffc42892da74f72d9a27a
+      size: 525
+    - path: ./dependencies/ingestion/ingest_data.py
+      hash: md5
+      md5: 91ae12a49f1f33d4ca4123c5fb3decbe
+      size: 2513
+    - path: scripts/universal_step.py
+      hash: md5
+      md5: a79d4b5d726d6b33e62b037d1a32817b
+      size: 7106
+    outs:
+    - path: ./data/v0/v0.csv
+      hash: md5
+      md5: 8c19c69cfa38a46003a14250479790e5
+      size: 154786484
+    - path: ./data/v0/v0_metadata.json
+      hash: md5
+      md5: c40c60628b11c2b7fd4a06e8ca52ca95
+      size: 3076
