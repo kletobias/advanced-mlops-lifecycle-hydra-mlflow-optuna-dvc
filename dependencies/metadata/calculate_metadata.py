@@ -3,7 +3,7 @@ import hashlib
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 import pandas as pd
@@ -44,7 +44,6 @@ def get_index_metadata(df: pd.DataFrame) -> dict[str, Any]:
     elif isinstance(df.index, pd.DatetimeIndex):
         start_ts = df.index.min()
         end_ts = df.index.max()
-        # Safely convert any valid Timestamps to ISO strings
         start_iso = start_ts.isoformat() if not pd.isnull(start_ts) else None
         end_iso = end_ts.isoformat() if not pd.isnull(end_ts) else None
         index_info.update(
@@ -60,7 +59,7 @@ def get_index_metadata(df: pd.DataFrame) -> dict[str, Any]:
 
 
 def calculate_metadata(df: pd.DataFrame, data_file_path: str) -> dict[str, Any]:
-    timestamp = datetime.datetime.now(tz="utc") + "Z"
+    timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     try:
         file_size = os.path.getsize(data_file_path)
     except OSError:
