@@ -1,12 +1,12 @@
 stages:
-  v0_download_and_save_data:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=download_and_save_data transformations=download_and_save_data io_policy.READ_INPUT=False
+  v0_ingest_data:
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ingest_data transformations=ingest_data io_policy.READ_INPUT=False
     desc: "Refer to deps/outs for details."
     frozen: true
     deps:
       - scripts/universal_step.py
-      - ./configs/transformations/download_and_save_data.yaml
-      - ./dependencies/ingestion/download_and_save_data.py
+      - ./configs/transformations/ingest_data.yaml
+      - ./dependencies/ingestion/ingest_data.py
       - ./configs/data_versions/v0.yaml
     outs:
       - ./data/v0/v0.csv

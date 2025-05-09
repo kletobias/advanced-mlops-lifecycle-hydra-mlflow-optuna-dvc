@@ -297,7 +297,7 @@ def universal_step(cfg: RootConfig) -> None:
     read_input = cfg.io_policy.READ_INPUT
     write_output = cfg.io_policy.WRITE_OUTPUT
 
-    if transform_name == "download_and_save_data": # False
+    if transform_name == "ingest_data": # False
         if step_cls:
             cfg_obj = step_cls(**step_params)
             step_fn(**cfg_obj.__dict__)
@@ -394,7 +394,7 @@ If you need the data from Kaggle instead of S3, and have a Kaggle API key:
 
 ```sh
 python scripts/universal_step.py \
-    +setup.script_base_name=download_and_save_data \
+    +setup.script_base_name=ingest_data \
     data_versions=v0  \
     io_policy.READ_INPUT=False
 ```
@@ -767,10 +767,10 @@ By orchestrating the entire DVC pipeline with Prefect, you gain a robust control
 
 ### Pipeline Log Example
 
-Below is part of the pipeline log showing each stage run sequentially (e.g., `v0_download_and_save_data`, `v0_sanitize_column_names`), including how metadata is calculated and saved. It highlights:
+Below is part of the pipeline log showing each stage run sequentially (e.g., `v0_ingest_data`, `v0_sanitize_column_names`), including how metadata is calculated and saved. It highlights:
 
 - **Stage Execution**  
-  Each DVC stage prints a “Running stage” message. Hydra overrides (e.g., `setup.script_base_name=download_and_save_data`) appear in the command, indicating which transformation or step is being executed.
+  Each DVC stage prints a “Running stage” message. Hydra overrides (e.g., `setup.script_base_name=ingest_data`) appear in the command, indicating which transformation or step is being executed.
 
 - **File I/O and Metadata**  
   The pipeline logs read/write operations along with file hashes. For example:

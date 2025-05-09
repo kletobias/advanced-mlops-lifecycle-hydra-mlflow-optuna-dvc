@@ -1,4 +1,4 @@
-# dependencies/ingestion/download_and_save_data.py
+# dependencies/ingestion/ingest_data.py
 import glob
 import logging
 import os
@@ -24,7 +24,7 @@ class DownloadAndSaveDataConfig:
     output_metadata_file_path: str
 
 
-def download_and_save_data(
+def ingest_data(
     dataset: str,
     target_dir: str,
     v0_csv_file_path: str,
