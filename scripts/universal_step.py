@@ -8,7 +8,7 @@ import pandas as pd
 from dependencies.cleaning.sanitize_column_names import sanitize_column_names
 from dependencies.config_schemas.RootConfig import RootConfig
 from dependencies.ingestion.ingest_data import (
-    DownloadAndSaveDataConfig,
+    IngestDataConfig,
     ingest_data,
 )
 from dependencies.io.csv_to_dataframe import csv_to_dataframe
@@ -73,7 +73,7 @@ from dependencies.transformations.yearly_discharge_bin import (
 TRANSFORMATIONS = {
     "ingest_data": {
         "transform": log_function_call(ingest_data),
-        "Config": DownloadAndSaveDataConfig,
+        "Config": IngestDataConfig,
     },
     "sanitize_column_names": {
         "transform": log_function_call(sanitize_column_names),
