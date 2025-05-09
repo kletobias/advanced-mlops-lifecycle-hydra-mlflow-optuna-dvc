@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class DownloadAndSaveDataConfig:
+class IngestDataConfig:
     dataset: str
     target_dir: str
     v0_csv_file_path: str
