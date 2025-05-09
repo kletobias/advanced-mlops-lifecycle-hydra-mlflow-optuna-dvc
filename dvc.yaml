@@ -2,7 +2,7 @@ stages:
   v0_ingest_data:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ingest_data transformations=ingest_data io_policy.READ_INPUT=False
     desc: "Refer to deps/outs for details."
-    frozen: true
+    frozen: false
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/ingest_data.yaml
