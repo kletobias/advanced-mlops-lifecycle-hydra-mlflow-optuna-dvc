@@ -5,7 +5,7 @@ import os
 import subprocess
 from dataclasses import dataclass
 
-from dependencies.general.mkdir_if_not_exists import mkdir_
+from dependencies.general.mkdir_if_not_exists import mkdir_if_not_exists
 from dependencies.io.csv_to_dataframe import csv_to_dataframe
 from dependencies.metadata.calculate_metadata import calculate_and_save_metadata
 
@@ -37,7 +37,7 @@ def ingest_data(
     """Downloads a dataset from Kaggle, extracts it,
     and renames the CSV file if needed.
     """
-    mkdir_(target_dir)
+    mkdir_if_not_exists(target_dir)
     try:
         subprocess.run(
             ["kaggle", "datasets", "download", dataset, "-p", target_dir],

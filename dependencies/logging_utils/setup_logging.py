@@ -9,7 +9,7 @@ except ImportError:
     colorlog = None
 
 from dependencies.config_schemas.RootConfig import RootConfig
-from dependencies.general.mkdir_if_not_exists import mkdir_
+from dependencies.general.mkdir_if_not_exists import mkdir_if_not_exists
 from dependencies.logging_utils.log_function_call import log_function_call
 
 _REPO_ROOT = Path(__file__).resolve()
@@ -44,7 +44,7 @@ def setup_logging(cfg: RootConfig) -> logging.Logger:
     formatter_str = cfg.logging_utils.formatter
     level = cfg.logging_utils.level
 
-    mkdir_(log_directory_path)
+    mkdir_if_not_exists(log_directory_path)
 
     logger = logging.getLogger()
     if logger.hasHandlers():
