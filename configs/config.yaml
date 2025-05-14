@@ -5,7 +5,7 @@ defaults:
   - setup: base
   - project_sections: 3_transformation
   - data_versions: base
-  - data_storage: base
+  - data_storage: single_file
   - remote_storage: base
   - utility_functions: base
   - logging_utils: base
