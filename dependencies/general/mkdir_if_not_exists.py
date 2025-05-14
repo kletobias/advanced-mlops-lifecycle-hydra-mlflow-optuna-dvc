@@ -4,7 +4,7 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def mkdir_(directory: str) -> None:
+def mkdir_if_not_exists(directory: str) -> None:
     if not os.path.isdir(directory):
         os.makedirs(directory)
         logger.info("Created new directory: %s", directory)
