@@ -250,6 +250,7 @@ stages:
     outs: []
   - name: v14_rf_optuna_trial
     desc: 'TEST: Run rf_optuna_trial on the down scaled dataset v14.'
+    frozen: true
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
     overrides: setup.script_base_name=rf_optuna_trial transformations=rf_optuna_trial data_versions.data_version_input=v14 data_versions.data_version_output=v14 io_policy.WRITE_OUTPUT=false model_params=rf_optuna_trial_params logging_utils.level=10
