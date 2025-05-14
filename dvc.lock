@@ -47,8 +47,8 @@ stages:
       size: 531
     - path: scripts/universal_step.py
       hash: md5
-      md5: d9fcae3a85cea6b95e0eeaca5d09b5a7
-      size: 7179
+      md5: a79d4b5d726d6b33e62b037d1a32817b
+      size: 7106
     outs:
     - path: ./data/v1/v1.csv
       hash: md5
@@ -56,8 +56,8 @@ stages:
       size: 153299121
     - path: ./data/v1/v1_metadata.json
       hash: md5
-      md5: 27f25aca3f68b7e4e785bcc0df98900c
-      size: 3075
+      md5: 2375b385871e94a582dedd632ecfa621
+      size: 3076
   v1_drop_description_columns:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_description_columns
       transformations=drop_description_columns data_versions.data_version_input=v1
