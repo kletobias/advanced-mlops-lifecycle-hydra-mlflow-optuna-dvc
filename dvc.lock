@@ -540,12 +540,12 @@ stages:
       size: 19
     - path: ./configs/transformations/ingest_data.yaml
       hash: md5
-      md5: 39cffe3f5b2ffc42892da74f72d9a27a
-      size: 525
+      md5: 4ca102c70723d871dfccd0632b5a6a70
+      size: 521
     - path: ./dependencies/ingestion/ingest_data.py
       hash: md5
-      md5: 91ae12a49f1f33d4ca4123c5fb3decbe
-      size: 2513
+      md5: 2542c86e8e5d406982f63f45e03f2399
+      size: 2515
     - path: scripts/universal_step.py
       hash: md5
       md5: a79d4b5d726d6b33e62b037d1a32817b
