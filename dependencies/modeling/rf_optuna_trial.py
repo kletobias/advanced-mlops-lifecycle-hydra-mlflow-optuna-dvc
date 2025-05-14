@@ -91,7 +91,7 @@ def rf_optuna_trial(
         feature_cols = [c for c in df.columns if c != target_col]
 
     dataset: PandasDataset = mlflow.data.from_pandas(
-        df, source=model_tags.get("input_file_path_csv", "")
+        df, source=model_tags.get("input_file_path", "")
     )
 
     def partition_data() -> dict[str, pd.DataFrame]:

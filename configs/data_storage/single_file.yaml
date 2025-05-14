@@ -1,0 +1,13 @@
+defaults:
+  - base
+  - _self_
+
+
+# File paths input data
+input_file_path: ${paths.directories.data}/${datasets.dataset.directory_name}/${data_versions.data_version_input}/${data_versions.data_version_input}${data_storage.input_file_extension}
+input_metadata_file_path: ${paths.directories.data}/${datasets.dataset.directory_name}/${data_versions.data_version_input}/${data_versions.data_version_input}_metadata${data_storage.input_metadata_file_extension}
+
+# File paths output data
+output_file_path: ${paths.directories.data}/${datasets.dataset.directory_name}/${data_versions.data_version_output}/${data_versions.data_version_output}.${data_storage.output_file_extension}
+output_metadata_file_path: ${paths.directories.data}/${datasets.dataset.directory_name}/${data_versions.data_version_output}/${data_versions.data_version_output}_metadata${data_storage.output_metadata_file_extension}
+
