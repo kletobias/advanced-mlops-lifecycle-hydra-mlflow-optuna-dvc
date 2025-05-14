@@ -256,7 +256,7 @@ stages:
     deps:
       - ${universal_step_script}
       - ./configs/transformations/rf_optuna_trial.yaml
-      - ./dependencies/transformations/rf_optuna_trial.py
+      - ./dependencies/modeling/rf_optuna_trial.py
       - ./configs/data_versions/v14.yaml
     outs: []
 
