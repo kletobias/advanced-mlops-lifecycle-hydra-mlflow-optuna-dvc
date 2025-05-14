@@ -1,0 +1,8 @@
+file_type: csv
+input_file_extension: .${.file_type}
+output_file_extension: ${.input_file_extension}
+input_metadata_file_extension: .json
+output_metadata_file_extension: ${.input_metadata_file_extension}
+train: false
+test: false
+single_file: true
