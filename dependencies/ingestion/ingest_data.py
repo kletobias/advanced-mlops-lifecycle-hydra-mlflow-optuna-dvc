@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class IngestDataConfig:
     dataset: str
     target_dir: str
-    v0_csv_file_path: str
+    v0_file_path: str
     v0_zip_file_path: str
     glob_pattern_csv_files: str
     glob_pattern_zip_files: str
@@ -27,7 +27,7 @@ class IngestDataConfig:
 def ingest_data(
     dataset: str,
     target_dir: str,
-    v0_csv_file_path: str,
+    v0_file_path: str,
     v0_zip_file_path: str,
     glob_pattern_csv_files: str,
     glob_pattern_zip_files: str,
@@ -71,10 +71,10 @@ def ingest_data(
         raise FileNotFoundError
     extracted_csv = csv_files[0]
 
-    if os.path.abspath(extracted_csv) != v0_csv_file_path:
-        os.rename(extracted_csv, v0_csv_file_path)
+    if os.path.abspath(extracted_csv) != v0_file_path:
+        os.rename(extracted_csv, v0_file_path)
 
     os.remove(v0_zip_file_path)
     logger.info("Successfully removed ZIP file after extraction.")
-    df = csv_to_dataframe(v0_csv_file_path, low_memory=low_memory)
-    calculate_and_save_metadata(df, v0_csv_file_path, output_metadata_file_path)
+    df = csv_to_dataframe(v0_file_path, low_memory=low_memory)
+    calculate_and_save_metadata(df, v0_file_path, output_metadata_file_path)

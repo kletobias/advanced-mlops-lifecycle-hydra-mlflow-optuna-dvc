@@ -128,13 +128,13 @@ class TransformationsConfig:
 
 @dataclass
 class CsvToDataframeConfig:
-    csv_file_path: str
+    file_path: str
     low_memory: bool
 
 
 @dataclass
 class DataframeToCsvConfig:
-    output_file_path_csv: str
+    output_file_path: str
     include_index: bool
 
 
@@ -153,13 +153,9 @@ class UtilityFunctionsConfig:
 
 @dataclass
 class DataStorageConfig:
-    input_file_path_csv: str
-    input_file_path_json: str
-    input_file_path_db: str
+    input_file_path: str
     input_metadata_file_path: str
-    output_file_path_csv: str
-    output_file_path_json: str
-    output_file_path_db: str
+    output_file_path: str
     output_metadata_file_path: str
 
 
