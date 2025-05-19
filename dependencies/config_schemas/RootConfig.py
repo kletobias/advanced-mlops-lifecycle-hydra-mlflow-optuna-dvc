@@ -263,7 +263,7 @@ class TestsConfig:
 class TestParamsConfig:
     # Number of fields: 2
     required_columns: list[str] | None = field(default_factory=list)
-    row_count: int = 0
+    row_count: int | list[int] = field(default_factory=list)
 
 
 @dataclass
