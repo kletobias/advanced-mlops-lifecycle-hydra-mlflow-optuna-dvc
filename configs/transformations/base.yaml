@@ -1,2 +1,5 @@
 # configs/transformations/base.yaml
+check_required_columns: true
+check_row_count: true
+
 return_type: df
