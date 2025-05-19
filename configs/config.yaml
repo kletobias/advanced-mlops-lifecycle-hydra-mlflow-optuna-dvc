@@ -6,6 +6,8 @@ defaults:
   - project_sections: 3_transformation
   - data_versions: base
   - data_storage: single_file
+  - tests: base
+  - test_params: base
   - remote_storage: base
   - utility_functions: base
   - logging_utils: base
