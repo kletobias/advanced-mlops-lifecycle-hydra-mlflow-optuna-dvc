@@ -244,11 +244,11 @@ def universal_step(cfg: RootConfig) -> None:
                 raise TypeError
             df = returned_value
 
-    for test_key, test_dict in TESTS.items():
-        if transform_config.get(test_key, False):
-            test_fn: Callable[..., pd.DataFrame] = test_dict["test"]
-            test_params_dict = tests_config.get(test_key, {})
-            df = test_fn(df, **test_params_dict)
+        for test_key, test_dict in TESTS.items():
+            if transform_config.get(test_key, False):
+                test_fn: Callable[..., pd.DataFrame] = test_dict["test"]
+                test_params_dict = tests_config.get(test_key, {})
+                df = test_fn(df, **test_params_dict)
 
         if write_output:
             dataframe_to_csv(df, **write_params)
