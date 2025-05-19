@@ -1,11 +1,11 @@
-csv_to_dataframe:
-  file_path: ${data_storage.input_file_path}
+utility_function_read:
+  input_file_path: ${data_storage.input_file_path}
   low_memory: false
 
-dataframe_to_csv:
+utility_function_write:
   output_file_path: ${data_storage.output_file_path}
   include_index: false
 
-calculate_and_save_metadata:
+utility_function_metadata:
   data_file_path: ${data_storage.output_file_path}
   output_metadata_file_path: ${data_storage.output_metadata_file_path}
