@@ -3,7 +3,7 @@ import glob
 import logging
 import os
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from dependencies.general.mkdir_if_not_exists import mkdir_if_not_exists
 from dependencies.io.csv_to_dataframe import csv_to_dataframe
@@ -14,14 +14,14 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class IngestDataConfig:
-    dataset: str
-    target_dir: str
-    v0_file_path: str
-    v0_zip_file_path: str
-    glob_pattern_csv_files: str
-    glob_pattern_zip_files: str
-    low_memory: bool
-    output_metadata_file_path: str
+    dataset: str = field(default_factory=str)
+    target_dir: str = field(default_factory=str)
+    v0_file_path: str = field(default_factory=str)
+    v0_zip_file_path: str = field(default_factory=str)
+    glob_pattern_csv_files: str = field(default_factory=str)
+    glob_pattern_zip_files: str = field(default_factory=str)
+    low_memory: bool = field(default_factory=bool)
+    output_metadata_file_path: str = field(default_factory=str)
 
 
 def ingest_data(
