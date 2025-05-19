@@ -19,24 +19,27 @@ class CheckRowCountConfig:
 def check_row_count(
     df: pd.DataFrame,
     row_count: int | list[int],
-    data_version_output: str = "",
+    data_version_output: str,
 ) -> pd.DataFrame:
     n = df.shape[0]
-    data_version_output_int = int(data_version_output[1:])
-    if not data_version_output_int:
-        logger.error("data_version_output must be a string starting with 'v'")
+
+    try:
+        data_version_output_int = int(data_version_output[1:])
+    except (TypeError, ValueError):
+        logger.error(
+            "Failed to convert data_version_output to int: %s", data_version_output
+        )
         raise ValueError
 
-    if isinstance(row_count, int) and (row_count > 0 and n != row_count):
-        logger.error("Row count mismatch: %s != %s", n, row_count)
-        raise pe.SchemaError(schema=None, data=df)
-
-    if isinstance(row_count, list) and len(row_count) != 2:
-        logger.error("row_count list must contain exactly two integers")
-        raise ValueError
-
-    if data_version_output:
-        expected = row_count[0] if int(data_version_output_int) < 8 else row_count[1]
+    if isinstance(row_count, int):
+        if row_count > 0 and n != row_count:
+            logger.error("Row count mismatch: %s != %s", n, row_count)
+            raise pe.SchemaError(schema=None, data=df)
+    else:
+        if len(row_count) != 2:
+            logger.error("row_count list must contain exactly two integers")
+            raise ValueError
+        expected = row_count[0] if data_version_output_int < 8 else row_count[1]
         if n != expected:
             logger.error("Row count mismatch: %s != %s", n, expected)
             raise pe.SchemaError(schema=None, data=df)
