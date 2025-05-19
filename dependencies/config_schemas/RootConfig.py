@@ -5,7 +5,11 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from hydra.core.config_store import ConfigStore
+from omegaconf import MISSING
 
+from dependencies.ingestion.ingest_data import IngestDataConfig
+from dependencies.tests.check_required_columns import CheckRequiredColumnsConfig
+from dependencies.tests.check_row_count import CheckRowCountConfig
 from dependencies.transformations.agg_severities import AggSeveritiesConfig
 from dependencies.transformations.drop_description_columns import (
     DropDescriptionColumnsConfig,
@@ -27,89 +31,114 @@ from dependencies.transformations.yearly_discharge_bin import YearlyDischargeBin
 
 
 @dataclass
+class IOPolicyConfig:
+    READ_INPUT: bool = True
+    WRITE_OUTPUT: bool = True
+
+
+@dataclass
 class DataVersionsConfig:
-    name: str
-    data_version_input: str
-    data_version_output: str
-    description: str
-    dataset_url: str
+    name: str = MISSING
+    data_version_input: str = MISSING
+    data_version_output: str = MISSING
+    description: str = MISSING
+    dataset_url: str = MISSING
     data_version: str | None = None
 
 
 @dataclass
 class HydraConfig:
-    job: dict[str, str]
-    run: dict[str, str]
-    sweep: dict[str, str]
+    job: dict[str, str] | None = field(default_factory=dict)
+    run: dict[str, str] | None = field(default_factory=dict)
+    sweep: dict[str, str] | None = field(default_factory=dict)
+
+
+@dataclass
+class LogCfgJobConfig:
+    log_for_each_step: bool = False
+    output_cfg_job_directory_path: str = MISSING
+    output_cfg_job_file_path: str = MISSING
+    resolve: bool = True
 
 
 @dataclass
 class LoggingUtilsConfig:
-    log_directory_path: str
-    log_file_path: str
-    formatter: str
-    level: int
-    log_cfg_job: dict[str, Any]
+    log_directory_path: str = MISSING
+    log_file_path: str = MISSING
+    formatter: str = "%(asctime)s %(levelname)s:%(message)s"
+    level: int = 20
+    log_cfg_job: LogCfgJobConfig = field(default_factory=LogCfgJobConfig)
 
 
 @dataclass
 class MLExperimentsConfig:
-    rng_seed: int
-    n_jobs_study: int
-    n_jobs_final_model: int
-    target_col_modeling: str
-    year_col: str
-    train_range: list[int]
-    val_range: list[int]
-    test_range: list[int]
-    experiment_prefix: str
-    experiment_id: str
-    artifact_directory_path: str
-    permutation_importances_filename: str
-    randomforest_importances_filename: str
-    top_n_importances: int
-    optuna_n_trials: int
-    cv_splits: int
-    direction: str
-    scoring: dict[str, str]
+    rng_seed: int = MISSING
+    n_jobs_study: int = MISSING
+    n_jobs_final_model: int = MISSING
+    target_col_modeling: str = MISSING
+    year_col: str = MISSING
+    train_range: list[int] | None = field(default_factory=list)
+    val_range: list[int] | None = field(default_factory=list)
+    test_range: list[int] | None = field(default_factory=list)
+    experiment_prefix: str = MISSING
+    experiment_id: str = MISSING
+    artifact_directory_path: str = MISSING
+    permutation_importances_filename: str = MISSING
+    randomforest_importances_filename: str = MISSING
+    top_n_importances: int = MISSING
+    optuna_n_trials: int = MISSING
+    cv_splits: int = MISSING
+    direction: str = MISSING
+    scoring: dict[str, str] | None = field(default_factory=dict)
 
 
 @dataclass
 class PathsDirectoriesConfig:
-    project_root: str
-    bin: str
-    configs: str
-    data: str
-    dependencies: str
-    documentation: str
-    logs: str
-    outputs: str
-    scripts: str
-    templates: str
+    project_root: str = MISSING
+    bin: str = MISSING
+    configs: str = MISSING
+    data: str = MISSING
+    dependencies: str = MISSING
+    documentation: str = MISSING
+    logs: str = MISSING
+    outputs: str = MISSING
+    scripts: str = MISSING
+    templates: str = MISSING
 
 
 @dataclass
 class PathsConfig:
-    directories: PathsDirectoriesConfig
+    directories: PathsDirectoriesConfig | None = field(
+        default_factory=PathsDirectoriesConfig
+    )
 
 
 @dataclass
 class ProjectSectionConfig:
-    id: int
-    name: str
-    alias: str
+    id: int = MISSING
+    name: str = MISSING
+    alias: str = MISSING
 
 
 @dataclass
 class SetupConfig:
-    script_base_name: str
+    script_base_name: str = MISSING
+
+
+@dataclass
+class ColumnNamesConfig:
+    unit_col_name: str = "unit"
 
 
 # Each field is an optional typed config for that transformation,
 # plus "name" to specify which transform to run in universal_step.
 @dataclass
 class TransformationsConfig:
+    check_required_columns: bool = True
+    check_row_count: bool = True
+    return_type: str = "df"
     name: str = "none"  # which transform is active (e.g. 'mean_profit')
+    ingest_data: IngestDataConfig | None = None
     drop_description_columns: DropDescriptionColumnsConfig | None = None
     drop_non_lag_columns: DropNonLagColumnsConfig | None = None
     drop_rare_drgs: DropRareDrgsConfig | None = None
@@ -127,41 +156,70 @@ class TransformationsConfig:
 
 
 @dataclass
-class CsvToDataframeConfig:
-    file_path: str
-    low_memory: bool
+class UtilityFunctionReadConfig:
+    """Parameters for reading CSV."""
+
+    input_file_path: str = MISSING
+    low_memory: bool = False
 
 
 @dataclass
-class DataframeToCsvConfig:
-    output_file_path: str
-    include_index: bool
+class UtilityFunctionWriteConfig:
+    """Parameters for writing to CSV."""
+
+    output_file_path: str = MISSING
+    include_index: bool = False
 
 
 @dataclass
-class CalculateAndSaveMetadataConfig:
-    data_file_path: str
-    output_metadata_file_path: str
+class UtilityFunctionMetadataConfig:
+    """Parameters for generating and saving metadata."""
+
+    data_file_path: str = MISSING
+    output_metadata_file_path: str = MISSING
 
 
 @dataclass
 class UtilityFunctionsConfig:
-    csv_to_dataframe: CsvToDataframeConfig
-    dataframe_to_csv: DataframeToCsvConfig
-    calculate_and_save_metadata: CalculateAndSaveMetadataConfig
+    """
+    Combines read, write, and metadata config under a single Hydra group,
+    to keep them together but still allow dictionary unpacking in universal_step.
+    """
+
+    utility_function_read: UtilityFunctionReadConfig = field(
+        default_factory=UtilityFunctionReadConfig
+    )
+    utility_function_write: UtilityFunctionWriteConfig = field(
+        default_factory=UtilityFunctionWriteConfig
+    )
+    utility_function_metadata: UtilityFunctionMetadataConfig = field(
+        default_factory=UtilityFunctionMetadataConfig
+    )
 
 
 @dataclass
 class DataStorageConfig:
-    input_file_path: str
-    input_metadata_file_path: str
-    output_file_path: str
-    output_metadata_file_path: str
+    # Number of fields: 10
+    split: str = MISSING
+    suffix: str = MISSING
+    input_file_extension: str = MISSING
+    output_file_extension: str = MISSING
+    input_metadata_file_extension: str = MISSING
+    output_metadata_file_extension: str = MISSING
+    input_params_file_extension: str = "yaml"
+    output_params_file_extension: str = "yaml"
+    input_params_file_path: str = MISSING
+    output_params_file_path: str = MISSING
+    input_file_path: str = MISSING
+    input_metadata_file_path: str = MISSING
+    output_file_path: str = MISSING
+    output_metadata_file_path: str = MISSING
+    run_id_outputs_directory_path: str = MISSING
 
 
 @dataclass
 class StageConfig:
-    name: str
+    name: str = MISSING
     cmd_python: str | None = None
     script: str | None = None
     overrides: dict[str, Any] | None = field(default_factory=dict)
@@ -173,7 +231,6 @@ class StageConfig:
 
 @dataclass
 class PlotConfig:
-    # Number of fields: 3
     template: str | None = None
     x: str | None = None
     y: str | None = None
@@ -195,30 +252,54 @@ class Pipeline:
 
 
 @dataclass
-class PipelineConfig:
-    pipeline: Pipeline | None = None
+class TestsConfig:
+    check_required_columns: CheckRequiredColumnsConfig = field(
+        default_factory=CheckRequiredColumnsConfig
+    )
+    check_row_count: CheckRowCountConfig = field(default_factory=CheckRowCountConfig)
+
+
+@dataclass
+class TestParamsConfig:
+    # Number of fields: 2
+    required_columns: list[str] | None = field(default_factory=list)
+    row_count: int = 0
 
 
 @dataclass
 class RootConfig:
-    data_storage: DataStorageConfig
-    data_versions: DataVersionsConfig
-    hydra: HydraConfig
-    logging_utils: LoggingUtilsConfig
-    ml_experiments: MLExperimentsConfig
-    paths: PathsConfig
-    setup: SetupConfig
-    project_sections: ProjectSectionConfig
-    transformations: TransformationsConfig
-    utility_functions: UtilityFunctionsConfig
-    pipeline: PipelineConfig
+    cmd_python: str = "$CMD_PYTHON"
+    universal_step_script: str = "scripts/universal_step.py"
+    dvc_default_desc: str = "Refer to deps/outs for details."
+    rng_seed: int = 42
+    data_versions: DataVersionsConfig = field(default_factory=DataVersionsConfig)
+    hydra: HydraConfig = field(default_factory=HydraConfig)
+    logging_utils: LoggingUtilsConfig = field(default_factory=LoggingUtilsConfig)
+    ml_experiments: MLExperimentsConfig = field(default_factory=MLExperimentsConfig)
+    paths: PathsConfig = field(default_factory=PathsConfig)
+    setup: SetupConfig = field(default_factory=SetupConfig)
+    project_sections: ProjectSectionConfig = field(default_factory=ProjectSectionConfig)
+    pipeline: Pipeline = field(default_factory=Pipeline)
+    io_policy: IOPolicyConfig = field(default_factory=IOPolicyConfig)
+    transformations: TransformationsConfig = field(
+        default_factory=TransformationsConfig
+    )
+    utility_functions: UtilityFunctionsConfig = field(
+        default_factory=UtilityFunctionsConfig
+    )
+    data_storage: DataStorageConfig = field(default_factory=DataStorageConfig)
+    tests: TestsConfig = field(default_factory=TestsConfig)
+    test_params: TestParamsConfig = field(default_factory=TestParamsConfig)
 
 
 cs = ConfigStore.instance()
 
+cs.store(group="io_policy", name="base_schema", node=IOPolicyConfig)
 cs.store(group="utility_functions", name="base_schema", node=UtilityFunctionsConfig)
 cs.store(group="transformations", name="base_schema", node=TransformationsConfig)
 cs.store(group="data_storage", name="base_schema", node=DataStorageConfig)
+cs.store(group="tests", name="base_schema", node=TestsConfig)
+cs.store(group="test_params", name="base_schema", node=TestParamsConfig)
 cs.store(group="data_versions", name="base_schema", node=DataVersionsConfig)
 cs.store(group="hydra", name="default_schema", node=HydraConfig)
 cs.store(group="logging_utils", name="default_schema", node=LoggingUtilsConfig)
@@ -226,7 +307,7 @@ cs.store(group="ml_experiments", name="base_schema", node=MLExperimentsConfig)
 cs.store(group="paths", name="default_schema", node=PathsConfig)
 cs.store(group="project_sections", name="example", node=ProjectSectionConfig)
 cs.store(group="setup", name="base_schema", node=SetupConfig)
-cs.store(group="pipeline", name="base_schema", node=PipelineConfig)
+cs.store(group="pipeline", name="base_schema", node=Pipeline)
 
 # Register the final RootConfig so Hydra knows how to instantiate it
 cs.store(name="root_config", node=RootConfig)
