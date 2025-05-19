@@ -1,0 +1,6 @@
+check_required_columns:
+  required_columns: ${test_params.required_columns}
+
+check_row_count:
+  row_count: ${test_params.row_count}
+  data_version_output: ${data_versions.data_version_output}
