@@ -200,7 +200,7 @@ def universal_step(cfg: RootConfig) -> None:
         cfg_obj = step_cls(**step_params) if step_cls else None
         returned_value = step_fn(df, **(cfg_obj.__dict__ if cfg_obj else {}))
 
-        if cfg.transformations.RETURNS == "df" and returned_value is not None:
+        if cfg.transformations.return_type == "df" and returned_value is not None:
             if not isinstance(returned_value, pd.DataFrame):
                 msg = f"{transform_name} did not return a DataFrame."
                 raise TypeError(msg)

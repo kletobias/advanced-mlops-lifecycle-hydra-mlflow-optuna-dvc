@@ -320,7 +320,7 @@ def universal_step(cfg: RootConfig) -> None:
             **(cfg_obj.__dict__ if cfg_obj else {})
         )
 
-        if cfg.transformations.RETURNS == "df": # True
+        if cfg.transformations.return_type == "df": # True
             if returned_value is not None: # True
                 # Validation: Return type must either be pd.DataFrame or None
                 if not isinstance(returned_value, pd.DataFrame):

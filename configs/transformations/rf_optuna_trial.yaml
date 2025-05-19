@@ -4,7 +4,7 @@ defaults:
   - /model_params: rf_optuna_trial_params
   - _self_
 
-RETURNS: null
+return_type: null
 
 
 rf_optuna_trial:

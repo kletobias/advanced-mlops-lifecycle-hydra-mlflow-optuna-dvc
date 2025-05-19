@@ -1,2 +1,2 @@
 # configs/transformations/base.yaml
-RETURNS: df
+return_type: df

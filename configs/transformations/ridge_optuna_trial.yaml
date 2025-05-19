@@ -4,7 +4,7 @@ defaults:
   - /model_params: ridge_optuna_trial_params
   - _self_
 
-RETURNS: null
+return_type: null
 
 ridge_optuna_trial:
   target_col: ${ml_experiments.target_col_modeling}
