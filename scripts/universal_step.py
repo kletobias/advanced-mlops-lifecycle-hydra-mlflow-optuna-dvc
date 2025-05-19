@@ -229,15 +229,15 @@ def universal_step(cfg: RootConfig) -> None:
 
     if transform_name == "ingest_data":
         if step_cls:
-            cfg_obj: dict[str, Any] = step_cls(**step_params.__dict__)
-            step_fn(**cfg_obj)
+            cfg_obj: dict[str, Any] = step_cls(**step_params)
+            step_fn(**cfg_obj.__dict__)
         else:
             step_fn()
     else:
         df = csv_to_dataframe(**read_params) if read_input else pd.DataFrame()
         if step_cls:
             cfg_obj = step_cls(**step_params)
-            returned_value = step_fn(df, **cfg_obj)
+            returned_value = step_fn(df, **cfg_obj.__dict__)
         else:
             returned_value = step_fn(df)
         return_type = transform_config.get("return_type")
