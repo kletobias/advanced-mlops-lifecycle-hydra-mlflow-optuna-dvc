@@ -1,19 +1,19 @@
+from __future__ import annotations
+
 import logging
 import os
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class PullMlrunsS3Config:
-    bucket_name: str
-    prefix: str
-    local_mlruns_dir: str
-    remote_uri: str
-    sync_command: list[str]
-    overwrite_local: bool
+    local_mlruns_dir: str = field(default_factory=str)
+    remote_uri: str = field(default_factory=str)
+    sync_command: list[str] = field(default_factory=list)
+    overwrite_local: bool = field(default_factory=bool)
 
 
 def pull_mlruns_s3(
