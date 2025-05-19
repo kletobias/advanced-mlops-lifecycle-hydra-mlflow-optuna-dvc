@@ -3,27 +3,43 @@
 This script reads/writes data, applies transformations, and runs tests as configured."""
 
 import logging
+from typing import Any, Callable
 
 import hydra
 import pandas as pd
+from omegaconf import OmegaConf
 
+# Transformation imports
 from dependencies.cleaning.sanitize_column_names import sanitize_column_names
 from dependencies.config_schemas.RootConfig import RootConfig
 from dependencies.ingestion.ingest_data import (
     IngestDataConfig,
     ingest_data,
 )
+
+# io imports
 from dependencies.io.csv_to_dataframe import csv_to_dataframe
 from dependencies.io.dataframe_to_csv import dataframe_to_csv
+
+# Logging imports
 from dependencies.logging_utils.log_cfg_job import log_cfg_job
 from dependencies.logging_utils.log_function_call import log_function_call
 from dependencies.logging_utils.setup_logging import setup_logging
+
+# Metadata imports
 from dependencies.metadata.calculate_metadata import calculate_and_save_metadata
 from dependencies.modeling.rf_optuna_trial import RfOptunaTrialConfig, rf_optuna_trial
 from dependencies.modeling.ridge_optuna_trial import (
     RidgeOptunaTrialConfig,
     ridge_optuna_trial,
 )
+
+# Test imports
+from dependencies.tests.check_required_columns import (
+    CheckRequiredColumnsConfig,
+    check_required_columns,
+)
+from dependencies.tests.check_row_count import CheckRowCountConfig, check_row_count
 from dependencies.transformations.agg_severities import (
     AggSeveritiesConfig,
     agg_severities,
@@ -72,7 +88,7 @@ from dependencies.transformations.yearly_discharge_bin import (
     yearly_discharge_bin,
 )
 
-TRANSFORMATIONS = {
+TRANSFORMATIONS: dict[str, dict[str, Any]] = {
     "ingest_data": {
         "transform": log_function_call(ingest_data),
         "Config": IngestDataConfig,
@@ -147,6 +163,17 @@ TRANSFORMATIONS = {
     },
 }
 
+TESTS: dict[str, dict[str, Any]] = {
+    "check_required_columns": {
+        "test": log_function_call(check_required_columns),
+        "Config": CheckRequiredColumnsConfig,
+    },
+    "check_row_count": {
+        "test": log_function_call(check_row_count),
+        "Config": CheckRowCountConfig,
+    },
+}
+
 
 @hydra.main(version_base=None, config_path="../configs", config_name="config")
 def universal_step(cfg: RootConfig) -> None:
@@ -171,6 +198,21 @@ def universal_step(cfg: RootConfig) -> None:
             bool(log_cfg_job_flag),
         )
 
+    # Convert Hydra configs to dict
+    transform_config: dict[str, Any] = OmegaConf.to_container(
+        cfg.transformations, resolve=True
+    )
+    read_params = OmegaConf.to_container(
+        cfg.utility_functions.utility_function_read, resolve=True
+    )
+    write_params = OmegaConf.to_container(
+        cfg.utility_functions.utility_function_write, resolve=True
+    )
+    meta_params = OmegaConf.to_container(
+        cfg.utility_functions.utility_function_metadata, resolve=True
+    )
+    tests_config: dict[str, Any] = OmegaConf.to_container(cfg.tests, resolve=True)
+
     transform_name = cfg.setup.script_base_name
     if transform_name not in TRANSFORMATIONS:
         logger.error("'%s' is not recognized in TRANSFORMATIONS.", transform_name)
@@ -180,38 +222,37 @@ def universal_step(cfg: RootConfig) -> None:
     step_fn = step_info["transform"]
     step_cls = step_info["Config"]
 
-    step_params = cfg.transformations[transform_name]
+    step_params = transform_config[transform_name]
 
     read_input = cfg.io_policy.READ_INPUT
     write_output = cfg.io_policy.WRITE_OUTPUT
 
     if transform_name == "ingest_data":
         if step_cls:
-            cfg_obj = step_cls(**step_params)
+            cfg_obj: dict[str, Any] = step_cls(**step_params)
             step_fn(**cfg_obj.__dict__)
         else:
             step_fn()
     else:
-        if read_input:
-            df = csv_to_dataframe(**cfg.utility_functions.csv_to_dataframe)
-        else:
-            df = pd.DataFrame()
-
-        cfg_obj = step_cls(**step_params) if step_cls else None
-        returned_value = step_fn(df, **(cfg_obj.__dict__ if cfg_obj else {}))
-
-        if cfg.transformations.return_type == "df" and returned_value is not None:
+        df = csv_to_dataframe(**read_params) if read_input else pd.DataFrame()
+        cfg_obj = step_cls(**step_params)
+        returned_value = step_fn(df, **cfg_obj)
+        return_type = transform_config.get("return_type")
+        if return_type == "df" and returned_value is not None:
             if not isinstance(returned_value, pd.DataFrame):
-                msg = f"{transform_name} did not return a DataFrame."
-                raise TypeError(msg)
+                logger.error("%s did not return a DataFrame.", transform_name)
+                raise TypeError
             df = returned_value
 
+    for test_key, test_dict in TESTS.items():
+        if transform_config.get(test_key, False):
+            test_fn: Callable[..., pd.DataFrame] = test_dict["test"]
+            test_params_dict = tests_config.get(test_key, {})
+            df = test_fn(df, **test_params_dict)
+
         if write_output:
-            dataframe_to_csv(df, **cfg.utility_functions.dataframe_to_csv)
-            calculate_and_save_metadata(
-                df,
-                **cfg.utility_functions.calculate_and_save_metadata,
-            )
+            dataframe_to_csv(df, **write_params)
+            calculate_and_save_metadata(df, **meta_params)
 
     logger.info("Sucessfully executed step: %s", transform_name)
 
