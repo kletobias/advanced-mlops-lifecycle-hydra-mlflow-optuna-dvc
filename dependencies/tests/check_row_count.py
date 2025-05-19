@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import pandas as pd
 import pandera.errors as pe
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class CheckRowCountConfig:
     row_count: int | list[int] = 0  # int or two-element list
-    data_version_output: str = ""  # e.g. "v0" … "v13"
+    data_version_output: str = field(default_factory=str)
 
 
 def check_row_count(
