@@ -2,7 +2,7 @@
 import logging
 import subprocess
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import hydra
 
@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 class DvcPullS3Config:
     """Holds the config needed to pull from a DVC remote on S3."""
 
-    remote_uri: str
-    remote_name: str
+    remote_uri: str = field(default_factory=str)
+    remote_name: str = field(default_factory=str)
 
 
 def pull_dvc_s3(
