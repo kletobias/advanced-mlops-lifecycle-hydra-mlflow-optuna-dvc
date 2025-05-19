@@ -229,8 +229,8 @@ def universal_step(cfg: RootConfig) -> None:
 
     if transform_name == "ingest_data":
         if step_cls:
-            cfg_obj: dict[str, Any] = step_cls(**step_params)
-            step_fn(**cfg_obj.__dict__)
+            cfg_obj: dict[str, Any] = step_cls(**step_params.__dict__)
+            step_fn(**cfg_obj)
         else:
             step_fn()
     else:
