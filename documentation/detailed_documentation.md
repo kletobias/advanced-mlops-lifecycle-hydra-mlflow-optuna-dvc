@@ -308,7 +308,7 @@ def universal_step(cfg: RootConfig) -> None:
             # Reads v1.csv and returns DataFrame
             # Values come from config group utility_functions.csv_to_dataframe
             # Also uses data_versions.data_version_input (v1) for the actual path
-            df = csv_to_dataframe(**cfg.utility_functions.csv_to_dataframe)
+            df = csv_to_dataframe(**cfg.utility_functions.utility_function_read)
         else:
             df = pd.DataFrame()
 
@@ -331,7 +331,7 @@ def universal_step(cfg: RootConfig) -> None:
         if write_output: # True
             # Write pd.DataFrame to v2.csv
             # Also uses data_versions.data_version_output (v2) for the actual path
-            dataframe_to_csv(df, **cfg.utility_functions.dataframe_to_csv)
+            dataframe_to_csv(df, **cfg.utility_functions.utility_function_write)
             # After saving v2.csv, calculate and save metadata
             # calculate_and_save_metadata also uses data_versions.data_version_output (v2) for file paths
             calculate_and_save_metadata(
