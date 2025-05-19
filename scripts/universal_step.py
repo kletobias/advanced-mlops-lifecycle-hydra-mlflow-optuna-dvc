@@ -220,7 +220,7 @@ def universal_step(cfg: RootConfig) -> None:
 
     step_info = TRANSFORMATIONS[transform_name]
     step_fn = step_info["transform"]
-    step_cls = step_info["Config"]
+    step_cls = step_info["Config"] if step_info["Config"] else None
 
     step_params = transform_config[transform_name]
 
@@ -235,8 +235,11 @@ def universal_step(cfg: RootConfig) -> None:
             step_fn()
     else:
         df = csv_to_dataframe(**read_params) if read_input else pd.DataFrame()
-        cfg_obj = step_cls(**step_params)
-        returned_value = step_fn(df, **cfg_obj)
+        if step_cls:
+            cfg_obj = step_cls(**step_params)
+            returned_value = step_fn(df, **cfg_obj)
+        else:
+            returned_value = step_fn(df)
         return_type = transform_config.get("return_type")
         if return_type == "df" and returned_value is not None:
             if not isinstance(returned_value, pd.DataFrame):
