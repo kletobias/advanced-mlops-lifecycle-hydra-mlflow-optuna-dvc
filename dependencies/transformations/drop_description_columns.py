@@ -2,14 +2,15 @@ import logging
 from dataclasses import dataclass
 
 import pandas as pd
+from omegaconf import MISSING
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class DropDescriptionColumnsConfig:
-    pattern: str
-    inplace: bool
+    pattern: str = MISSING
+    inplace: bool = MISSING
 
 
 def drop_description_columns(
