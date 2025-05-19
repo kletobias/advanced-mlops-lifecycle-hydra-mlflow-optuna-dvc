@@ -1,5 +1,7 @@
 # scripts/universal_step.py
-"""Run one data-pipeline step chosen by Hydra config."""
+"""Execute a pipeline step specified by Hydra configuration.
+This script reads/writes data, applies transformations, and runs tests as configured."""
+
 import logging
 
 import hydra
@@ -148,7 +150,14 @@ TRANSFORMATIONS = {
 
 @hydra.main(version_base=None, config_path="../configs", config_name="config")
 def universal_step(cfg: RootConfig) -> None:
-    """Dispatch to the step in `TRANSFORMATIONS`, handle I/O, log, exit."""
+    """
+    Orchestrate a universal pipeline step using the provided RootConfig:
+    1) Identify the transformation to run.
+    2) Optionally read data from Parquet.
+    3) Validate transformation output if it should be a DataFrame.
+    4) Execute configured tests on the resulting data.
+    5) Optionally write the resulting data and metadata.
+    """
     setup_logging(cfg)
     logger = logging.getLogger(__name__)
 
