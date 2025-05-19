@@ -3,6 +3,7 @@
 This script reads/writes data, applies transformations, and runs tests as configured."""
 
 import logging
+from dataclasses import asdict
 from typing import Any, Callable
 
 import hydra
@@ -229,15 +230,15 @@ def universal_step(cfg: RootConfig) -> None:
 
     if transform_name == "ingest_data":
         if step_cls:
-            cfg_obj: dict[str, Any] = step_cls(**step_params)
-            step_fn(**cfg_obj.__dict__)
+            cfg_obj = step_cls(**step_params)
+            step_fn(**asdict(cfg_obj))
         else:
             step_fn()
     else:
         df = csv_to_dataframe(**read_params) if read_input else pd.DataFrame()
         if step_cls:
             cfg_obj = step_cls(**step_params)
-            returned_value = step_fn(df, **cfg_obj.__dict__)
+            returned_value = step_fn(df, **asdict(cfg_obj))
         else:
             returned_value = step_fn(df)
         return_type = transform_config.get("return_type")
