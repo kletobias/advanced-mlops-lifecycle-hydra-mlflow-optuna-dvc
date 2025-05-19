@@ -1,0 +1,6 @@
+required_columns:
+  - year
+  - facility_id
+  - apr_drg_code
+
+row_count: [1081672, 309684]
