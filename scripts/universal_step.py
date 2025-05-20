@@ -200,9 +200,7 @@ def universal_step(cfg: RootConfig) -> None:
         )
 
     # Convert Hydra configs to dict
-    transform_config: dict[str, Any] = OmegaConf.to_container(
-        cfg.transformations, resolve=True
-    )
+    transform_config = OmegaConf.to_container(cfg.transformations, resolve=True)
     read_params = OmegaConf.to_container(
         cfg.utility_functions.utility_function_read, resolve=True
     )
@@ -212,7 +210,7 @@ def universal_step(cfg: RootConfig) -> None:
     meta_params = OmegaConf.to_container(
         cfg.utility_functions.utility_function_metadata, resolve=True
     )
-    tests_config: dict[str, Any] = OmegaConf.to_container(cfg.tests, resolve=True)
+    tests_config = OmegaConf.to_container(cfg.tests, resolve=True)
 
     transform_name = cfg.setup.script_base_name
     if transform_name not in TRANSFORMATIONS:
@@ -248,13 +246,13 @@ def universal_step(cfg: RootConfig) -> None:
                 raise TypeError
             df = returned_value
 
-        for test_key, test_dict in TESTS.items():
-            if transform_config.get(test_key, False):
-                test_fn: Callable[..., pd.DataFrame] = test_dict["test"]
-                test_params_dict = tests_config.get(test_key, {})
-                df = test_fn(df, **test_params_dict)
-
         if write_output:
+            for test_key, test_dict in TESTS.items():
+                if transform_config.get(test_key, False):
+                    test_fn: Callable[..., pd.DataFrame] = test_dict["test"]
+                    test_params_dict = tests_config.get(test_key, {})
+                    df = test_fn(df, **test_params_dict)
+
             dataframe_to_csv(df, **write_params)
             calculate_and_save_metadata(df, **meta_params)
 
