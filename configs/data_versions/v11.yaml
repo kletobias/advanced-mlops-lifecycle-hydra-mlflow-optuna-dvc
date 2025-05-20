@@ -1,7 +1,9 @@
 defaults:
   - base
+  - _self_
 
 data_version: v11
+row_count: ${test_params.row_count_aggregated}
 description: |
   Difference to v10:
   New columns get added for each listed column, shifted by 1 year (_lag1) within each [facility_id, apr_drg_code] group.

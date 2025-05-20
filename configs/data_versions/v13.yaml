@@ -1,4 +1,7 @@
 defaults:
   - base
+  - _self_
+
 data_version: v13
+row_count: ${test_params.row_count_aggregated}
 description: "Difference to v12: Removes the original columns that got transformed by v11, v12 to prevent data leakage."
