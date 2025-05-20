@@ -8,6 +8,8 @@ from hydra.core.config_store import ConfigStore
 from omegaconf import MISSING
 
 from dependencies.ingestion.ingest_data import IngestDataConfig
+from dependencies.modeling.rf_optuna_trial import RfOptunaTrialConfig
+from dependencies.modeling.ridge_optuna_trial import RidgeOptunaTrialConfig
 from dependencies.tests.check_required_columns import CheckRequiredColumnsConfig
 from dependencies.tests.check_row_count import CheckRowCountConfig
 from dependencies.transformations.agg_severities import AggSeveritiesConfig
@@ -153,6 +155,8 @@ class TransformationsConfig:
     total_median_profit: TotalMedianProfitConfig | None
     lag_columns: LagColumnsConfig | None
     rolling_columns: RollingColumnsConfig | None
+    rf_optuna_trial: RfOptunaTrialConfig | None
+    ridge_optuna_trial: RidgeOptunaTrialConfig | None
 
 
 @dataclass
