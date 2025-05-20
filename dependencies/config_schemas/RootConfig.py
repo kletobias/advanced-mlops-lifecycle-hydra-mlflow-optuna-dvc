@@ -134,25 +134,25 @@ class ColumnNamesConfig:
 # plus "name" to specify which transform to run in universal_step.
 @dataclass
 class TransformationsConfig:
-    check_required_columns: bool = True
-    check_row_count: bool = True
-    return_type: str = "df"
-    name: str = "none"  # which transform is active (e.g. 'mean_profit')
-    ingest_data: IngestDataConfig | None = None
-    drop_description_columns: DropDescriptionColumnsConfig | None = None
-    drop_non_lag_columns: DropNonLagColumnsConfig | None = None
-    drop_rare_drgs: DropRareDrgsConfig | None = None
-    ratio_drg_facility_vs_year: RatioDrgFacilityVsYearConfig | None = None
-    yearly_discharge_bin: YearlyDischargeBinConfig | None = None
-    agg_severities: AggSeveritiesConfig | None = None
-    mean_profit: MeanProfitConfig | None = None
-    median_profit: MedianProfitConfig | None = None
-    total_mean_cost: TotalMeanCostConfig | None = None
-    total_mean_profit: TotalMeanProfitConfig | None = None
-    total_median_cost: TotalMedianCostConfig | None = None
-    total_median_profit: TotalMedianProfitConfig | None = None
-    lag_columns: LagColumnsConfig | None = None
-    rolling_columns: RollingColumnsConfig | None = None
+    check_required_columns: bool
+    check_row_count: bool
+    return_type: str
+    name: str
+    ingest_data: IngestDataConfig | None
+    drop_description_columns: DropDescriptionColumnsConfig | None
+    drop_non_lag_columns: DropNonLagColumnsConfig | None
+    drop_rare_drgs: DropRareDrgsConfig | None
+    ratio_drg_facility_vs_year: RatioDrgFacilityVsYearConfig | None
+    yearly_discharge_bin: YearlyDischargeBinConfig | None
+    agg_severities: AggSeveritiesConfig | None
+    mean_profit: MeanProfitConfig | None
+    median_profit: MedianProfitConfig | None
+    total_mean_cost: TotalMeanCostConfig | None
+    total_mean_profit: TotalMeanProfitConfig | None
+    total_median_cost: TotalMedianCostConfig | None
+    total_median_profit: TotalMedianProfitConfig | None
+    lag_columns: LagColumnsConfig | None
+    rolling_columns: RollingColumnsConfig | None
 
 
 @dataclass
@@ -253,12 +253,8 @@ class Pipeline:
 
 @dataclass
 class TestsConfig:
-    check_required_columns: CheckRequiredColumnsConfig = field(
-        default_factory=CheckRequiredColumnsConfig
-    )
-    check_row_count: CheckRowCountConfig | None = field(
-        default_factory=CheckRowCountConfig
-    )
+    check_required_columns: CheckRequiredColumnsConfig | None
+    check_row_count: CheckRowCountConfig | None
 
 
 @dataclass
@@ -270,6 +266,8 @@ class TestParamsConfig:
 
 @dataclass
 class RootConfig:
+    transformations: TransformationsConfig | None
+    tests: TestsConfig | None
     cmd_python: str = "$CMD_PYTHON"
     universal_step_script: str = "scripts/universal_step.py"
     dvc_default_desc: str = "Refer to deps/outs for details."
@@ -283,14 +281,10 @@ class RootConfig:
     project_sections: ProjectSectionConfig = field(default_factory=ProjectSectionConfig)
     pipeline: Pipeline = field(default_factory=Pipeline)
     io_policy: IOPolicyConfig = field(default_factory=IOPolicyConfig)
-    transformations: TransformationsConfig = field(
-        default_factory=TransformationsConfig
-    )
     utility_functions: UtilityFunctionsConfig = field(
         default_factory=UtilityFunctionsConfig
     )
     data_storage: DataStorageConfig = field(default_factory=DataStorageConfig)
-    tests: TestsConfig = field(default_factory=TestsConfig)
     test_params: TestParamsConfig = field(default_factory=TestParamsConfig)
 
 
