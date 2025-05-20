@@ -1,0 +1,8 @@
+defaults:
+  - base
+  - _self_
+
+data_version: v6
+description: |
+  Difference to v5_2:
+  Adds column `total_mean_cost` = `mean_cost` * `discharges`
