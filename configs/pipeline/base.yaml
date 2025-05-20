@@ -18,7 +18,7 @@ stages:
   - name: v0_sanitize_column_names
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1
+    overrides: setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1 test_params=v1
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -32,7 +32,7 @@ stages:
   - name: v1_drop_description_columns
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2
+    overrides: setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2 test_params=v2
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -46,7 +46,7 @@ stages:
   - name: v2_median_profit
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3
+    overrides: setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3 test_params=v3
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -60,7 +60,7 @@ stages:
   - name: v3_mean_profit
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4
+    overrides: setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4 test_params=v4
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -74,7 +74,7 @@ stages:
   - name: v4_total_mean_profit
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5
+    overrides: setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5 test_params=v5
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -88,7 +88,7 @@ stages:
   - name: v5_total_median_profit
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
+    overrides: setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1 test_params=v5_1
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -102,7 +102,7 @@ stages:
   - name: v5_1_total_median_cost
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
+    overrides: setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2 test_params=v5_2
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -116,7 +116,7 @@ stages:
   - name: v5_2_total_mean_cost
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
+    overrides: setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6 test_params=v6
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -130,7 +130,7 @@ stages:
   - name: v6_drop_rare_drgs
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
+    overrides: setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7 test_params=v7
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -144,7 +144,7 @@ stages:
   - name: v7_agg_severities
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
+    overrides: setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8 test_params=v8
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -158,7 +158,7 @@ stages:
   - name: v8_ratio_drg_facility_vs_year
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9
+    overrides: setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9 test_params=v9
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -172,7 +172,7 @@ stages:
   - name: v9_yearly_discharge_bin
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
+    overrides: setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10 test_params=v10
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -186,7 +186,7 @@ stages:
   - name: v10_lag_columns
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
+    overrides: setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11 test_params=v11
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -200,7 +200,7 @@ stages:
   - name: v11_rolling_columns
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
+    overrides: setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12 test_params=v12
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
@@ -214,7 +214,7 @@ stages:
   - name: v12_drop_non_lag_columns
     cmd_python: ${cmd_python}
     script: ${universal_step_script}
-    overrides: setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
+    overrides: setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13 test_params=v13
     desc: ${dvc_default_desc}
     deps:
       - ${universal_step_script}
