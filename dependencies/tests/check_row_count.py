@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class CheckRowCountConfig:
-    row_count: int
+    row_count: int = 0
 
 
 def check_row_count(
