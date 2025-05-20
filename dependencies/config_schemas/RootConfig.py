@@ -256,13 +256,16 @@ class TestsConfig:
     check_required_columns: CheckRequiredColumnsConfig = field(
         default_factory=CheckRequiredColumnsConfig
     )
-    check_row_count: CheckRowCountConfig = field(default_factory=CheckRowCountConfig)
+    check_row_count: CheckRowCountConfig | None = field(
+        default_factory=CheckRowCountConfig
+    )
 
 
 @dataclass
 class TestParamsConfig:
     required_columns: list[str] | None = field(default_factory=list)
-    row_count: list[int] = field(default_factory=lambda: [0, 0])
+    row_count_original: int | None = None
+    row_count_aggregated: int | None = None
 
 
 @dataclass
