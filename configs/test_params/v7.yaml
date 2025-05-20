@@ -1,0 +1,6 @@
+# configs/data_versions/v7.yaml
+defaults:
+  - base
+  - _self_
+
+row_count: 1039994

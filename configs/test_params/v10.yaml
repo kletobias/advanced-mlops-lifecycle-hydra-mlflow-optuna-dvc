@@ -1,0 +1,4 @@
+defaults:
+  - base
+  - v8
+  - _self_
