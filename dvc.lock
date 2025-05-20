@@ -47,8 +47,8 @@ stages:
       size: 531
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v1/v1.csv
       hash: md5
@@ -56,7 +56,7 @@ stages:
       size: 153299121
     - path: ./data/v1/v1_metadata.json
       hash: md5
-      md5: 2375b385871e94a582dedd632ecfa621
+      md5: 152020c2ccb76dbf9c65ac7a4a10ee37
       size: 3076
   v1_drop_description_columns:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_description_columns
@@ -73,12 +73,12 @@ stages:
       size: 97
     - path: ./dependencies/transformations/drop_description_columns.py
       hash: md5
-      md5: 2fd5c0a63fdb530661daf3805bd3a821
-      size: 506
+      md5: 3b71868f4759b90a3f4ab1deecaa571f
+      size: 556
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v2/v2.csv
       hash: md5
@@ -86,7 +86,7 @@ stages:
       size: 92476810
     - path: ./data/v2/v2_metadata.json
       hash: md5
-      md5: 77c45128ac609c7c0206f59cdcfbc342
+      md5: 95fa63a3bd432330be3d9b147a32036d
       size: 2489
   v2_median_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=median_profit
@@ -106,8 +106,8 @@ stages:
       size: 565
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v3/v3.csv
       hash: md5
@@ -115,7 +115,7 @@ stages:
       size: 105198573
     - path: ./data/v3/v3_metadata.json
       hash: md5
-      md5: 7ef4ac8fdcbce0a971e8ad6e42cd2ed6
+      md5: cd4ced1106c19a5c5a63be1d7dba158f
       size: 2673
   v3_mean_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=mean_profit
@@ -135,8 +135,8 @@ stages:
       size: 541
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v4/v4.csv
       hash: md5
@@ -144,7 +144,7 @@ stages:
       size: 117118387
     - path: ./data/v4/v4_metadata.json
       hash: md5
-      md5: 84e16e7356c18c728e376a854ec801bb
+      md5: 2e91e8c966c864b4253d49dd5a20d1b6
       size: 2854
   v4_total_mean_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_profit
@@ -164,8 +164,8 @@ stages:
       size: 580
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v5/v5.csv
       hash: md5
@@ -173,7 +173,7 @@ stages:
       size: 129165962
     - path: ./data/v5/v5_metadata.json
       hash: md5
-      md5: 0470ed55c6e20a59e6125fc5c48a202b
+      md5: e14f6d87108b776712ff7a676c3af16b
       size: 3041
   v5_total_median_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_profit
@@ -543,12 +543,12 @@ stages:
       size: 521
     - path: ./dependencies/ingestion/ingest_data.py
       hash: md5
-      md5: 2542c86e8e5d406982f63f45e03f2399
-      size: 2515
+      md5: 79a229d15d7bcc61a287b0dc304e2a08
+      size: 2755
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v0/v0.csv
       hash: md5
@@ -556,5 +556,5 @@ stages:
       size: 154786484
     - path: ./data/v0/v0_metadata.json
       hash: md5
-      md5: c40c60628b11c2b7fd4a06e8ca52ca95
+      md5: 21ada2b96ef86f3ccb29e1e4180caf58
       size: 3076
