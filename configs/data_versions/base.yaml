@@ -1,4 +1,5 @@
 name: hospital_inpatient_cost_data_by_new_york_state
+row_count: 1081672
 data_version_input: v0
 data_version_output: ${.data_version_input}
 description: |
