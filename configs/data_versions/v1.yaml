@@ -1,5 +1,7 @@
+# configs/data_versions/v1.yaml
 defaults:
   - base
+  - _self_
 
 data_version: v1
 description: "difference v0: data with column names sanitized using `slugify` function."

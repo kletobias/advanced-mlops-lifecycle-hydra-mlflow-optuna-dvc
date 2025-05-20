@@ -1,5 +1,6 @@
 defaults:
   - base
+  - _self_
 
 data_version: v5_1
 description: 'Difference to v5: Adds feature `total_median_profit` = `median_profit` * `discharges`'

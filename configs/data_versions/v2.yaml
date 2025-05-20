@@ -1,4 +1,7 @@
+# configs/data_versions/v2.yaml
 defaults:
   - base
+  - _self_
+
 data_version: v2
 description: 'Difference to v1: Removed all columns that end with `description`.'

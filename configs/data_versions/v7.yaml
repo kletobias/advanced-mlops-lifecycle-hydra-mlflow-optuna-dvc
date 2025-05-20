@@ -1,4 +1,7 @@
+# configs/data_versions/v7.yaml
 defaults:
   - base
+  - _self_
+
 data_version: v7
 description: 'Difference to v6: Removes rows with any `apr_drg_code` that is among those that have less than or equal to 5000 discharges in sum over all years.'
