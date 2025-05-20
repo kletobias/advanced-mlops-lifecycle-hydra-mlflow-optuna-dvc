@@ -3,7 +3,6 @@ defaults:
   - _self_
 
 data_version: v12
-row_count: ${test_params.row_count_aggregated}
 description: |
   Difference to v11:
   New columns get added for each column listed in version v11 under `columns_to_transform`, shifted by 1 year with a window of 2 years, min_period is 1 so only the first year gets dropped in the dataset (_rolling2) within each [facility_id, apr_drg_code] group.
