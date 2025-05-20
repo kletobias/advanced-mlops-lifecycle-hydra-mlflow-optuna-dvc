@@ -2,7 +2,7 @@ stages:
   v0_ingest_data:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ingest_data transformations=ingest_data io_policy.READ_INPUT=False
     desc: "Refer to deps/outs for details."
-    frozen: false
+    frozen: true
     deps:
       - scripts/universal_step.py
       - ./configs/transformations/ingest_data.yaml
@@ -13,7 +13,7 @@ stages:
       - ./data/v0/v0_metadata.json
 
   v0_sanitize_column_names:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=sanitize_column_names transformations=sanitize_column_names data_versions.data_version_output=v1 test_params=v1
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -25,7 +25,7 @@ stages:
       - ./data/v1/v1_metadata.json
 
   v1_drop_description_columns:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_description_columns transformations=drop_description_columns data_versions.data_version_input=v1 data_versions.data_version_output=v2 test_params=v2
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -37,7 +37,7 @@ stages:
       - ./data/v2/v2_metadata.json
 
   v2_median_profit:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=median_profit transformations=median_profit data_versions.data_version_input=v2 data_versions.data_version_output=v3 test_params=v3
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -49,7 +49,7 @@ stages:
       - ./data/v3/v3_metadata.json
 
   v3_mean_profit:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=mean_profit transformations=mean_profit data_versions.data_version_input=v3 data_versions.data_version_output=v4 test_params=v4
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -61,7 +61,7 @@ stages:
       - ./data/v4/v4_metadata.json
 
   v4_total_mean_profit:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_profit transformations=total_mean_profit data_versions.data_version_input=v4 data_versions.data_version_output=v5 test_params=v5
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -73,7 +73,7 @@ stages:
       - ./data/v5/v5_metadata.json
 
   v5_total_median_profit:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_profit transformations=total_median_profit data_versions.data_version_input=v5 data_versions.data_version_output=v5_1 test_params=v5_1
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -85,7 +85,7 @@ stages:
       - ./data/v5_1/v5_1_metadata.json
 
   v5_1_total_median_cost:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_cost transformations=total_median_cost data_versions.data_version_input=v5_1 data_versions.data_version_output=v5_2 test_params=v5_2
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -97,7 +97,7 @@ stages:
       - ./data/v5_2/v5_2_metadata.json
 
   v5_2_total_mean_cost:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_cost transformations=total_mean_cost data_versions.data_version_input=v5_2 data_versions.data_version_output=v6 test_params=v6
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -109,7 +109,7 @@ stages:
       - ./data/v6/v6_metadata.json
 
   v6_drop_rare_drgs:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_rare_drgs transformations=drop_rare_drgs data_versions.data_version_input=v6 data_versions.data_version_output=v7 test_params=v7
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -121,7 +121,7 @@ stages:
       - ./data/v7/v7_metadata.json
 
   v7_agg_severities:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=agg_severities transformations=agg_severities data_versions.data_version_input=v7 data_versions.data_version_output=v8 test_params=v8
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -133,7 +133,7 @@ stages:
       - ./data/v8/v8_metadata.json
 
   v8_ratio_drg_facility_vs_year:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=ratio_drg_facility_vs_year transformations=ratio_drg_facility_vs_year data_versions.data_version_input=v8 data_versions.data_version_output=v9 test_params=v9
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -145,7 +145,7 @@ stages:
       - ./data/v9/v9_metadata.json
 
   v9_yearly_discharge_bin:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=yearly_discharge_bin transformations=yearly_discharge_bin data_versions.data_version_input=v9 data_versions.data_version_output=v10 test_params=v10
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -157,7 +157,7 @@ stages:
       - ./data/v10/v10_metadata.json
 
   v10_lag_columns:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=lag_columns transformations=lag_columns data_versions.data_version_input=v10 data_versions.data_version_output=v11 test_params=v11
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -169,7 +169,7 @@ stages:
       - ./data/v11/v11_metadata.json
 
   v11_rolling_columns:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=rolling_columns transformations=rolling_columns data_versions.data_version_input=v11 data_versions.data_version_output=v12 test_params=v12
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
@@ -181,7 +181,7 @@ stages:
       - ./data/v12/v12_metadata.json
 
   v12_drop_non_lag_columns:
-    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13
+    cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_non_lag_columns transformations=drop_non_lag_columns data_versions.data_version_input=v12 data_versions.data_version_output=v13 test_params=v13
     desc: "Refer to deps/outs for details."
     deps:
       - scripts/universal_step.py
