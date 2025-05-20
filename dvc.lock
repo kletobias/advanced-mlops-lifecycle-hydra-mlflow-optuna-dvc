@@ -35,8 +35,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v0.yaml
       hash: md5
-      md5: 258d575cae7fabdf3e1e6dd3f35a66e9
-      size: 19
+      md5: 2f7a7def306d8f094d1b698428fccff5
+      size: 62
     - path: ./configs/transformations/sanitize_column_names.yaml
       hash: md5
       md5: 28cac61da69b878256e8a12b4153bd6b
@@ -56,7 +56,7 @@ stages:
       size: 153299121
     - path: ./data/v1/v1_metadata.json
       hash: md5
-      md5: 152020c2ccb76dbf9c65ac7a4a10ee37
+      md5: 425af33393390c4c64e332eb1a3c1fa5
       size: 3076
   v1_drop_description_columns:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_description_columns
@@ -65,8 +65,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v1.yaml
       hash: md5
-      md5: 19b8629e96887a87256d1adecbb2d973
-      size: 126
+      md5: 7c83dcdaa25414baa9782c4c734763ad
+      size: 169
     - path: ./configs/transformations/drop_description_columns.yaml
       hash: md5
       md5: 72501a54f29f6848c7899ba02b973b8b
@@ -86,7 +86,7 @@ stages:
       size: 92476810
     - path: ./data/v2/v2_metadata.json
       hash: md5
-      md5: 95fa63a3bd432330be3d9b147a32036d
+      md5: 407db3d9f9c4f96b5239b310aa950d40
       size: 2489
   v2_median_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=median_profit
@@ -94,8 +94,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v2.yaml
       hash: md5
-      md5: 69ed71262306fd89d4be6aa1741c3abb
-      size: 118
+      md5: 0c57d26e3755397b046c0ff0e28d5fb7
+      size: 162
     - path: ./configs/transformations/median_profit.yaml
       hash: md5
       md5: bbf2e5bb570a73d0af96fd6abe4c36ef
@@ -115,7 +115,7 @@ stages:
       size: 105198573
     - path: ./data/v3/v3_metadata.json
       hash: md5
-      md5: cd4ced1106c19a5c5a63be1d7dba158f
+      md5: d43e175b7bb7cad3d16c043539fb7452
       size: 2673
   v3_mean_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=mean_profit
@@ -123,8 +123,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v3.yaml
       hash: md5
-      md5: 9d770f84ad565d4110a13af10bc5c279
-      size: 170
+      md5: aa2cf013f0d640b296d5527f45f4b351
+      size: 182
     - path: ./configs/transformations/mean_profit.yaml
       hash: md5
       md5: 7809236b5e1bad7157aa0a5f6fa3d5da
@@ -144,7 +144,7 @@ stages:
       size: 117118387
     - path: ./data/v4/v4_metadata.json
       hash: md5
-      md5: 2e91e8c966c864b4253d49dd5a20d1b6
+      md5: ddfeea47c23068c6550e3e4beaa45c6a
       size: 2854
   v4_total_mean_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_profit
@@ -152,8 +152,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v4.yaml
       hash: md5
-      md5: 6260689b743d28729f022d02ceef3bcc
-      size: 127
+      md5: 194c8b17789574fb31829579985a98b0
+      size: 139
     - path: ./configs/transformations/total_mean_profit.yaml
       hash: md5
       md5: 71dfe5ec7bb89c35ddec24f80d7e6d08
@@ -173,7 +173,7 @@ stages:
       size: 129165962
     - path: ./data/v5/v5_metadata.json
       hash: md5
-      md5: e14f6d87108b776712ff7a676c3af16b
+      md5: 7081bccc12c2d3518b6214a0e7eec34b
       size: 3041
   v5_total_median_profit:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_profit
@@ -181,8 +181,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v5.yaml
       hash: md5
-      md5: 1cb6ef98cde0cd2d44933d52624b5f0b
-      size: 135
+      md5: 93a00bfff24076cbd9a559a80be73883
+      size: 146
     - path: ./configs/transformations/total_median_profit.yaml
       hash: md5
       md5: 75491c9f01837ff536772d46ee840250
@@ -193,8 +193,8 @@ stages:
       size: 731
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v5_1/v5_1.csv
       hash: md5
@@ -202,7 +202,7 @@ stages:
       size: 141512178
     - path: ./data/v5_1/v5_1_metadata.json
       hash: md5
-      md5: 87876c31f1f354f22980e5d543b9e71c
+      md5: 4b9a419d2ed15becdb4da97a7765b342
       size: 3234
   v5_1_total_median_cost:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_median_cost
@@ -210,8 +210,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v5.yaml
       hash: md5
-      md5: 1cb6ef98cde0cd2d44933d52624b5f0b
-      size: 135
+      md5: 93a00bfff24076cbd9a559a80be73883
+      size: 146
     - path: ./configs/transformations/total_median_cost.yaml
       hash: md5
       md5: 021e9228b65a59ef3b5c0502b9dee694
@@ -222,8 +222,8 @@ stages:
       size: 580
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v5_2/v5_2.csv
       hash: md5
@@ -231,7 +231,7 @@ stages:
       size: 151682980
     - path: ./data/v5_2/v5_2_metadata.json
       hash: md5
-      md5: 9e82fb89b6bf317c646db7319a312148
+      md5: 6bb89d7cd99643212c69db698403cd1f
       size: 3421
   v5_2_total_mean_cost:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=total_mean_cost
@@ -239,8 +239,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v5_2.yaml
       hash: md5
-      md5: eddebe535fd5d65b4bdaadb183247efa
-      size: 138
+      md5: 114da624f39d404172f70075b8a36f02
+      size: 149
     - path: ./configs/transformations/total_mean_cost.yaml
       hash: md5
       md5: 0cbdad5655f7fb9e82e032c80836f562
@@ -251,8 +251,8 @@ stages:
       size: 562
     - path: scripts/universal_step.py
       hash: md5
-      md5: a79d4b5d726d6b33e62b037d1a32817b
-      size: 7106
+      md5: 993f41e0b95f8b3cde86f48451a5508a
+      size: 9015
     outs:
     - path: ./data/v6/v6.csv
       hash: md5
@@ -260,7 +260,7 @@ stages:
       size: 161936326
     - path: ./data/v6/v6_metadata.json
       hash: md5
-      md5: 1a8f856db5b0863d762a009cc0b66dea
+      md5: 5c489633a17694899d2dc7ee45c03111
       size: 3602
   v6_drop_rare_drgs:
     cmd: $CMD_PYTHON scripts/universal_step.py setup.script_base_name=drop_rare_drgs
@@ -535,8 +535,8 @@ stages:
     deps:
     - path: ./configs/data_versions/v0.yaml
       hash: md5
-      md5: 258d575cae7fabdf3e1e6dd3f35a66e9
-      size: 19
+      md5: 2f7a7def306d8f094d1b698428fccff5
+      size: 62
     - path: ./configs/transformations/ingest_data.yaml
       hash: md5
       md5: 4ca102c70723d871dfccd0632b5a6a70
@@ -556,5 +556,5 @@ stages:
       size: 154786484
     - path: ./data/v0/v0_metadata.json
       hash: md5
-      md5: 21ada2b96ef86f3ccb29e1e4180caf58
+      md5: c8dc058b4f9351a2039e8b54f19ac481
       size: 3076
