@@ -3,7 +3,6 @@ defaults:
   - _self_
 
 data_version: v9
-row_count: ${test_params.row_count_aggregated}
 description: |
   Difference to v8:
   New column ratio_drg_facility_vs_year added. It is the coefficient of count unique values in `apr_drg_code` for each unique `facility_id` divided by the count of unique `apr_drg_code` values for the year and is broadcast to all (year, facility_id) for each year.

@@ -3,5 +3,4 @@ defaults:
   - _self_
 
 data_version: v14
-row_count: none
 description: "Difference to v13: Filters the dataset to ~60k rows for troubleshooting mlflow"

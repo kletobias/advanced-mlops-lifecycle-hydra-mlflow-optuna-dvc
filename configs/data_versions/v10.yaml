@@ -3,5 +3,4 @@ defaults:
   - _self_
 
 data_version: v10
-row_count: ${test_params.row_count_aggregated}
 description: 'Difference to v9: New column yearly_discharge_bin added, splitting facilities by annual sum_discharges into 5 equally sized quantile bins.'
