@@ -4,4 +4,5 @@ required_columns:
   - apr_drg_code
 
 row_count_original: 1081672
+row_count_drop_rare_drgs: 1039994
 row_count_aggregated: 309184
