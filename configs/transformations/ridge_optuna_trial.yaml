@@ -20,4 +20,7 @@ ridge_optuna_trial:
   n_jobs_study: 5
   n_jobs_cv: 1
   random_state: ${ml_experiments.rng_seed}
-  model_tags: ${ml_experiments.model_tags}
+  model_tags:
+    run_id_tag: ${ml_experiments.mlflow_tags.run_id_tag}
+    data_version_tag: ${ml_experiments.mlflow_tags.data_version_tag}
+    model_tag: RandomForestRegressor
