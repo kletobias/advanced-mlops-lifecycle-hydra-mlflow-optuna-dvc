@@ -1,3 +1,5 @@
+chore(ridge_optuna_trial.yaml): update model_tags structure
+Add new keys for model_tags to separate run_id_tag, data_version_tag, and model_tag for improved configuration clarity
 # configs/transformations/ridge_optuna_trial.yaml
 defaults:
   - base
@@ -23,4 +25,4 @@ ridge_optuna_trial:
   model_tags:
     run_id_tag: ${ml_experiments.mlflow_tags.run_id_tag}
     data_version_tag: ${ml_experiments.mlflow_tags.data_version_tag}
-    model_tag: RandomForestRegressor
+    model_tag: Ridge
