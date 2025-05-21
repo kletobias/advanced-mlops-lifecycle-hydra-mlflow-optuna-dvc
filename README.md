@@ -68,6 +68,32 @@ Links to every Spotlight post and deep-dive project note on each MLOps pipeline 
 
 ---
 
+## Tests & Validation
+
+This project supports data validation through Pandera-based checks.  
+The `universal_step.py` script automatically runs tests whenever the relevant test flags (e.g., `check_required_columns`, `check_row_count`) are set to `True` in `configs/transformations/`.  
+
+**How it Works**  
+- **Test Definitions**: Located in `dependencies/tests/check_required_columns.py` and `dependencies/tests/check_row_count.py`.  
+- **Test Config**: Global YAML configs in `configs/tests/base.yaml` specify the required columns and expected row counts (these can be overridden in `configs/test_params/`).  
+- **Automatic Execution**: Once a transformation step completes, the script checks if any test flags are `True`. If so, it calls the corresponding test function with the parameters from `cfg.tests`.  
+- **Failure Handling**: Any mismatch or missing column triggers a Pandera `SchemaError`, halting the pipeline.
+
+**Example**  
+To enable the column and row-count checks, set:
+```yaml
+transformations:
+check_required_columns: true
+check_row_count: true
+tests:
+check_required_columns:
+  required_columns: ["year", "facility_id", "apr_drg_code"]
+check_row_count:
+  row_count: 1081672
+```
+
+This ensures the pipeline data is consistent and trustworthy throughout each processing stage.
+
 ## Infrastructure (IaC via Terraform)
 
 ```text
