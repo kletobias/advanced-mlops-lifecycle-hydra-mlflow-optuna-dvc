@@ -126,7 +126,7 @@ def ridge_optuna_trial(
             tags=model_tags,
             nested=True,
         ):
-            mlflow.log_input(dataset, context="training")
+            mlflow.log_input(dataset, context="training", tags=model_tags)
             mlflow.log_param("training", "True")
             mlflow.log_param("cv_score", "True")
             mlflow.log_param("data_partition", "train")
@@ -179,7 +179,7 @@ def ridge_optuna_trial(
         nested=True,
         tags=model_tags,
     ):
-        mlflow.log_input(dataset, context="validation")
+        mlflow.log_input(dataset, context="validation", tags=model_tags)
         mlflow.log_param("validation", "True")
         mlflow.log_param("data_partition", "val")
         mlflow.log_metric("rmse", val_rmse)
@@ -211,7 +211,7 @@ def ridge_optuna_trial(
             mlflow.log_metrics(
                 {"test_rmse": np.round(test_rmse, 0), "test_mae": np.round(test_mae, 0)}
             )
-            mlflow.log_input(dataset, context="test")
+            mlflow.log_input(dataset, context="test", tags=model_tags)
             mlflow.log_metric("rmse", test_rmse)
             mlflow.log_metric("mae", test_mae)
             mlflow.log_param("test", "True")
