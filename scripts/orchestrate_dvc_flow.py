@@ -7,6 +7,7 @@ import subprocess
 from typing import Any
 
 import hydra
+from omegaconf import OmegaConf
 from prefect import flow, get_run_logger, task
 
 from dependencies.config_schemas.RootConfig import RootConfig
@@ -211,7 +212,8 @@ def main(cfg: RootConfig):
     logging.getLogger("prefect").setLevel(cfg.logging_utils.level)
 
     logger.info("Reading config, validating user stages")
-    defined_stages = [stage.name for stage in cfg.pipeline.stages]
+    dvc_stages_list = OmegaConf.to_container(cfg.pipeline.stages, resolve=True)
+    defined_stages = [stage.get("name", None) for stage in dvc_stages_list]
     user_stages = cfg.get("stages_to_run", [])
 
     invalid = [s for s in user_stages if s not in defined_stages]
