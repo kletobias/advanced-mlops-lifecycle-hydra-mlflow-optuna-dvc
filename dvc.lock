@@ -514,8 +514,8 @@ stages:
       size: 896
     - path: ./dependencies/modeling/ridge_optuna_trial.py
       hash: md5
-      md5: bcb36486f487f206f353e90c150f044e
-      size: 8465
+      md5: 1dc1218f15f575d7b39799f30ec1670f
+      size: 8979
     - path: scripts/universal_step.py
       hash: md5
       md5: b96ad9c6903974cfd9cbecea372e42b8
