@@ -103,16 +103,12 @@ def ridge_optuna_trial(
     X_val, y_val = data_part["X_val"], data_part["y_val"]
     X_test, y_test = data_part["X_test"], data_part["y_test"]
 
-    X_train_dataset: PandasDataset = mlflow.data.from_pandas(
-        X_train, targets=target_col
-    )
-    y_train_dataset: PandasDataset = mlflow.data.from_pandas(
-        y_train, targets=target_col
-    )
-    X_val_dataset: PandasDataset = mlflow.data.from_pandas(X_val, targets=target_col)
-    y_val_dataset: PandasDataset = mlflow.data.from_pandas(y_val, targets=target_col)
-    X_test_dataset: PandasDataset = mlflow.data.from_pandas(X_test, targets=target_col)
-    y_test_dataset: PandasDataset = mlflow.data.from_pandas(y_test, targets=target_col)
+    X_train_dataset: PandasDataset = mlflow.data.from_pandas(pd.DataFrame(X_train))
+    y_train_dataset: PandasDataset = mlflow.data.from_pandas(pd.DataFrame(y_train))
+    X_val_dataset: PandasDataset = mlflow.data.from_pandas(pd.DataFrame(X_val))
+    y_val_dataset: PandasDataset = mlflow.data.from_pandas(pd.DataFrame(y_val))
+    X_test_dataset: PandasDataset = mlflow.data.from_pandas(pd.DataFrame(X_test))
+    y_test_dataset: PandasDataset = mlflow.data.from_pandas(pd.DataFrame(y_test))
 
     def objective(trial: optuna.Trial) -> float:
         final_params = optuna_random_search_util(trial, hyperparameters)
@@ -139,8 +135,16 @@ def ridge_optuna_trial(
             nested=True,
         ):
             mlflow.log_input(dataset, context="training", tags=model_tags)
-            mlflow.log_input(X_train_dataset, context="training", tags=model_tags)
-            mlflow.log_input(y_train_dataset, context="training", tags=model_tags)
+            mlflow.log_input(
+                X_train_dataset,
+                context="training",
+                tags=model_tags.update({"split": "X_train"}),
+            )
+            mlflow.log_input(
+                y_train_dataset,
+                context="training",
+                tags=model_tags.update({"split": "y_train"}),
+            )
             mlflow.log_param("training", "True")
             mlflow.log_param("cv_score", "True")
             mlflow.log_param("data_partition", "train")
@@ -194,8 +198,16 @@ def ridge_optuna_trial(
         tags=model_tags,
     ):
         mlflow.log_input(dataset, context="validation", tags=model_tags)
-        mlflow.log_input(X_val_dataset, context="validation", tags=model_tags)
-        mlflow.log_input(y_val_dataset, context="validation", tags=model_tags)
+        mlflow.log_input(
+            X_val_dataset,
+            context="validation",
+            tags=model_tags.update({"split": "X_val"}),
+        )
+        mlflow.log_input(
+            y_val_dataset,
+            context="validation",
+            tags=model_tags.update({"split": "y_val"}),
+        )
         mlflow.log_param("validation", "True")
         mlflow.log_param("data_partition", "val")
         mlflow.log_metric("rmse", val_rmse)
@@ -228,8 +240,16 @@ def ridge_optuna_trial(
                 {"test_rmse": np.round(test_rmse, 0), "test_mae": np.round(test_mae, 0)}
             )
             mlflow.log_input(dataset, context="test", tags=model_tags)
-            mlflow.log_input(X_test_dataset, context="test", tags=model_tags)
-            mlflow.log_input(y_test_dataset, context="test", tags=model_tags)
+            mlflow.log_input(
+                X_test_dataset,
+                context="test",
+                tags=model_tags.update({"split": "X_test"}),
+            )
+            mlflow.log_input(
+                y_test_dataset,
+                context="test",
+                tags=model_tags.update({"split": "y_test"}),
+            )
             mlflow.log_metric("rmse", test_rmse)
             mlflow.log_metric("mae", test_mae)
             mlflow.log_param("test", "True")
