@@ -83,15 +83,21 @@ The `universal_step.py` script automatically runs tests whenever the relevant te
 - **Failure Handling**: Any mismatch or missing column triggers a Pandera `SchemaError`, halting the pipeline.
 
 **Example**  
-To enable the column and row-count checks, set:
+To enable the column and row-count checks, set in the respective YAML config:
 
 ```yaml
-transformations:
+# transformations/base.yaml
 check_required_columns: true
 check_row_count: true
-tests:
+```
+```yaml
+# tests_params/base.yaml
+
+# test_params/v0...v13.yaml set version specific values where needed.
+
 check_required_columns:
   required_columns: ["year", "facility_id", "apr_drg_code"]
+
 check_row_count:
   row_count: 1081672
 ```
@@ -115,10 +121,12 @@ Each experiment uses a dynamically generated `run_id` (from `${run_id_outputs}`)
 **Example**
 
 ```yaml
+# configs/transformations/rf_optuna_trial.yaml
+
 model_tags:
-run_id_tag: ${ml_experiments.mlflow_tags.run_id_tag}
-data_version_tag: ${ml_experiments.mlflow_tags.data_version_tag}
-model_tag: RandomForestRegressor
+  run_id_tag: ${ml_experiments.mlflow_tags.run_id_tag}
+  data_version_tag: ${ml_experiments.mlflow_tags.data_version_tag}
+  model_tag: RandomForestRegressor # gets updated automatically for each trial
 ```
 
 This ensures each MLflow run is fully traceable to both a particular pipeline execution (via run_id_tag) and the underlying dataset (via data_version_tag). When your experiments scale up, searching and grouping by these tags provides a clear lineage of how each result was produced.
