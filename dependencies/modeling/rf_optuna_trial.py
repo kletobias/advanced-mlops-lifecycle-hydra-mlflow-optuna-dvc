@@ -10,7 +10,6 @@ import numpy as np
 import optuna
 import pandas as pd
 from mlflow.data.pandas_dataset import PandasDataset
-from omegaconf import OmegaConf
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import TimeSeriesSplit, cross_validate
@@ -76,7 +75,6 @@ def rf_optuna_trial(
     validate_parallelism(n_jobs_cv=n_jobs_cv, n_jobs_study=n_jobs_study)
     logger.info("Starting rf_optuna_trial with %i trials to run", n_trials)
 
-    model_tags = OmegaConf.to_container(model_tags, resolve=True)
     # Always use the default local mlruns folder
     mlflow.set_tracking_uri("file:./mlruns")
 
