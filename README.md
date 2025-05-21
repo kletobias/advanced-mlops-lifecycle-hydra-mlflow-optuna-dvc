@@ -86,14 +86,14 @@ The `universal_step.py` script automatically runs tests whenever the relevant te
 To enable the column and row-count checks, set in the respective YAML config:
 
 ```yaml
-# transformations/base.yaml
+# configs/transformations/base.yaml
 check_required_columns: true
 check_row_count: true
 ```
 ```yaml
-# tests_params/base.yaml
+# configs/tests_params/base.yaml
 
-# test_params/v0...v13.yaml set version specific values where needed.
+# configs/test_params/v0...v13.yaml set version specific values where needed.
 
 check_required_columns:
   required_columns: ["year", "facility_id", "apr_drg_code"]
