@@ -1,37 +1,39 @@
 import json
 import os
-import plotly.express as px
-import plotly.graph_objects as go
+
 import pandas as pd
-from dash import Dash, dcc, html, dash_table
+import plotly.express as px
+from dash import Dash, dash_table, dcc, html
 
 # Modify these paths as needed or dynamically discover them.
 project_root = os.getenv("PROJECT_ROOT")
 if not project_root:
     raise ValueError
 
-METADATA_FILES = sorted([
-    os.path.join(project_root,"data/v0/v0_metadata.json"),
-    os.path.join(project_root,"data/v1/v1_metadata.json"),
-    os.path.join(project_root,"data/v2/v2_metadata.json"),
-    os.path.join(project_root,"data/v3/v3_metadata.json"),
-    os.path.join(project_root,"data/v4/v4_metadata.json"),
-    os.path.join(project_root,"data/v5/v5_metadata.json"),
-    os.path.join(project_root,"data/v5_1/v5_1_metadata.json"),
-    os.path.join(project_root,"data/v5_2/v5_2_metadata.json"),
-    os.path.join(project_root,"data/v6/v6_metadata.json"),
-    os.path.join(project_root,"data/v7/v7_metadata.json"),
-    os.path.join(project_root,"data/v9/v9_metadata.json"),
-    os.path.join(project_root,"data/v10/v10_metadata.json"),
-    os.path.join(project_root,"data/v11/v11_metadata.json"),
-    os.path.join(project_root,"data/v12/v12_metadata.json"),
-    os.path.join(project_root,"data/v13/v13_metadata.json"),
-])
+METADATA_FILES = [
+    os.path.join(project_root, "data/v0/v0_metadata.json"),
+    os.path.join(project_root, "data/v1/v1_metadata.json"),
+    os.path.join(project_root, "data/v2/v2_metadata.json"),
+    os.path.join(project_root, "data/v3/v3_metadata.json"),
+    os.path.join(project_root, "data/v4/v4_metadata.json"),
+    os.path.join(project_root, "data/v5/v5_metadata.json"),
+    os.path.join(project_root, "data/v5_1/v5_1_metadata.json"),
+    os.path.join(project_root, "data/v5_2/v5_2_metadata.json"),
+    os.path.join(project_root, "data/v6/v6_metadata.json"),
+    os.path.join(project_root, "data/v7/v7_metadata.json"),
+    os.path.join(project_root, "data/v8/v8_metadata.json"),
+    os.path.join(project_root, "data/v9/v9_metadata.json"),
+    os.path.join(project_root, "data/v10/v10_metadata.json"),
+    os.path.join(project_root, "data/v11/v11_metadata.json"),
+    os.path.join(project_root, "data/v12/v12_metadata.json"),
+    os.path.join(project_root, "data/v13/v13_metadata.json"),
+]
+
 
 def load_metadata(file_paths):
     records = []
     for p in file_paths:
-        with open(p, "r") as f:
+        with open(p) as f:
             meta = json.load(f)
         version = os.path.basename(p).split("_metadata.json")[0]  # e.g. "v10"
         record = {
@@ -47,7 +49,8 @@ def load_metadata(file_paths):
         records.append(record)
     return pd.DataFrame(records)
 
-df_main = load_metadata(METADATA_FILES).sort_values("version")
+
+df_main = load_metadata(METADATA_FILES)
 
 # Create figures
 fig_file_size = px.bar(
@@ -90,31 +93,32 @@ table_main = dash_table.DataTable(
 )
 
 # Build detail about columns from each version
-# We'll flatten out each version's column metadata into a long DataFrame
 details_records = []
 for p in METADATA_FILES:
-    with open(p, "r") as f:
+    with open(p) as f:
         meta = json.load(f)
     version = os.path.basename(p).split("_metadata.json")[0]
     columns_meta = meta.get("columns", {})
     for col_name, col_info in columns_meta.items():
-        details_records.append({
-            "version": version,
-            "column_name": col_name,
-            "data_type": col_info.get("data_type"),
-            "num_missing": col_info.get("num_missing"),
-            "unique_values": col_info.get("unique_values"),
-            "memory_usage_bytes": col_info.get("memory_usage_bytes"),
-        })
+        details_records.append(
+            {
+                "version": version,
+                "column_name": col_name,
+                "data_type": col_info.get("data_type"),
+                "num_missing": col_info.get("num_missing"),
+                "unique_values": col_info.get("unique_values"),
+                "memory_usage_bytes": col_info.get("memory_usage_bytes"),
+            }
+        )
 
-df_details = pd.DataFrame(details_records).sort_values(["version", "column_name"])
+df_details = pd.DataFrame(details_records)
 
 fig_missing = px.box(
     df_details,
     x="version",
     y="num_missing",
     points="all",
-    title="Distribution of 'num_missing' per Column by Version"
+    title="Distribution of 'num_missing' per Column by Version",
 )
 fig_missing.update_layout(xaxis_title="Version", yaxis_title="num_missing")
 
